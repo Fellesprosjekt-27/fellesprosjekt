@@ -1,0 +1,54 @@
+package com.gruppe27.fellesprosjekt;
+
+import java.util.ArrayList;
+
+/**
+ * Created by Andreas on 23.02.2015.
+ */
+public class Group {
+    private int groupNo;
+
+    private UserCalendar calendar;
+
+    private ArrayList<User> users;
+
+    public Group() {
+        this.calendar = new UserCalendar(this);
+    }
+
+    /**
+     * legger til en bruker i gruppens liste over brukere hvis denne ikke er i listen allerede
+     * @param user
+     */
+    public void addUser(User user) {
+        if(! users.contains(user)){
+            users.add(user);
+            user.addUserToGroup(this);
+        }
+    }
+    public void removeUser(User user) {
+        if(users.contains(user)){
+            users.remove(user);
+            user.removeUserFromGroup(this);
+        }
+    }
+
+    public ArrayList<User> getUsers() {
+        //Lager ny liste, slik at gruppens medlemmer er uforandret.
+        return new ArrayList<User>(this.users);
+    }
+    public UserCalendar getCalendar() {
+        return calendar;
+    }
+
+    public int getGroupNo() {
+        return groupNo;
+    }
+
+
+    public void setGroupNo(int groupNo) {
+        this.groupNo = groupNo;
+    }
+
+
+}
