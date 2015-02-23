@@ -1,0 +1,3 @@
+tasks:
+  - mvn -B package
+  - mvn -B test
