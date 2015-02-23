@@ -1,12 +1,13 @@
 package com.gruppe27.fellesprosjekt;
 
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by Andreas on 23.02.2015.
  */
-public class User {
+public class    User {
 
     private String username;
 
@@ -17,13 +18,14 @@ public class User {
     private int teamNo;
 
     private UserCalendar calendar;
-    private ArrayList<Group> groups;
+    private Set<Group> groups;
 
     public User(String username, String password, String name) {
         this.setName(name);
         this.setPassword(password);
         this.setUsername(username);
         this.calendar = new UserCalendar(this);
+        groups = new HashSet<>();
     }
 
     public UserCalendar getCalendar() {
@@ -35,7 +37,7 @@ public class User {
      * @param group
      */
     public void addUserToGroup(Group group) {
-        if(! groups.contains(group)) {
+        if(!groups.contains(group)) {
             groups.add(group);
             group.addUser(this);
         }

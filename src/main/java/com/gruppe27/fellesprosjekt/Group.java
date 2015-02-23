@@ -1,6 +1,7 @@
 package com.gruppe27.fellesprosjekt;
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by Andreas on 23.02.2015.
@@ -10,10 +11,11 @@ public class Group {
 
     private UserCalendar calendar;
 
-    private ArrayList<User> users;
+    private Set<User> users;
 
     public Group() {
         this.calendar = new UserCalendar(this);
+        users = new HashSet<User>(50);
     }
 
     /**
@@ -21,7 +23,7 @@ public class Group {
      * @param user
      */
     public void addUser(User user) {
-        if(! users.contains(user)){
+        if(!users.contains(user)){
             users.add(user);
             user.addUserToGroup(this);
         }
@@ -33,9 +35,9 @@ public class Group {
         }
     }
 
-    public ArrayList<User> getUsers() {
+    public Set<User> getUsers() {
         //Lager ny liste, slik at gruppens medlemmer er uforandret.
-        return new ArrayList<User>(this.users);
+        return new Set<User>(this.users);
     }
     public UserCalendar getCalendar() {
         return calendar;
