@@ -1,4 +1,4 @@
-package com.gruppe27.fellesprosjekt;
+package com.gruppe27.fellesprosjekt.common;
 
 
 import java.util.HashSet;
@@ -31,18 +31,20 @@ public class User {
     }
 
     /**
-     * tar inn en gruppe, og legger denne gruppe til blant brukerens grupper.
+     * Takes in a group and adds it to the user's other groups
      * @param group
      */
     public void addUserToGroup(Group group) {
-        if(!groups.contains(group)) {
+        if (!groups.contains(group)) {
             groups.add(group);
             group.addUser(this);
         }
     }
+
     public String getUsername() {
         return username;
     }
+
     public void setUsername(String username) {
         this.username = username;
     }
@@ -62,22 +64,19 @@ public class User {
     public void setTeamNo(int teamNo) {
         this.teamNo = teamNo;
     }
+
     public void setName(String name) {
         this.name = name;
     }
+
     public String getName() {
         return name;
     }
 
     public void removeUserFromGroup(Group group) {
-        if(groups.contains(group)) {
+        if (groups.contains(group)) {
             groups.remove(group);
             group.removeUser(this);
         }
     }
-
-    public boolean login(String username, String password) {
-        //TODO
-    }
-
 }

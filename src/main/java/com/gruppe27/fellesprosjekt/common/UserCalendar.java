@@ -1,12 +1,7 @@
-package com.gruppe27.fellesprosjekt;
-import java.util.ArrayList;
-
+package com.gruppe27.fellesprosjekt.common;
 
 
 public class UserCalendar {
-
-    //ArrayList<Event> events;
-
     private User owner;
 
     private Group group;
@@ -19,9 +14,11 @@ public class UserCalendar {
         this.group = group;
 
     }
+
     public User getOwner() {
         return owner;
     }
+
     public Group getGroup() {
         return group;
     }

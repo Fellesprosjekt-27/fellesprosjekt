@@ -1,4 +1,4 @@
-package com.gruppe27.fellesprosjekt;
+package com.gruppe27.fellesprosjekt.common;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -12,30 +12,31 @@ public class Group {
 
     public Group() {
         this.calendar = new UserCalendar(this);
-        users = new HashSet<User>(50);
+        users = new HashSet<>();
     }
 
     /**
-     * legger til en bruker i gruppens liste over brukere hvis denne ikke er i listen allerede
+     * Adds a user to the set of users, if it doesn't already exist
      * @param user
      */
     public void addUser(User user) {
-        if(!users.contains(user)){
+        if (!users.contains(user)) {
             users.add(user);
             user.addUserToGroup(this);
         }
     }
+
     public void removeUser(User user) {
-        if(users.contains(user)){
+        if (users.contains(user)) {
             users.remove(user);
             user.removeUserFromGroup(this);
         }
     }
 
     public Set<User> getUsers() {
-        //Lager ny liste, slik at gruppens medlemmer er uforandret.
-        return new HashSet<User>(this.users);
+        return new HashSet<>(this.users);
     }
+
     public UserCalendar getCalendar() {
         return calendar;
     }
