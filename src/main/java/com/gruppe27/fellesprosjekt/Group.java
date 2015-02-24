@@ -34,7 +34,7 @@ public class Group {
 
     public Set<User> getUsers() {
         //Lager ny liste, slik at gruppens medlemmer er uforandret.
-        return new Set<User>(this.users);
+        return new HashSet<User>(this.users);
     }
     public UserCalendar getCalendar() {
         return calendar;

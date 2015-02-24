@@ -44,15 +44,15 @@ public class User {
         return username;
     }
     public void setUsername(String username) {
-    this.username = username;
+        this.username = username;
     }
 
     public String getPassword() {
-    return password;
+        return password;
     }
 
     public void setPassword(String password) {
-    this.password = password;
+        this.password = password;
     }
 
     public int getTeamNo() {
@@ -63,7 +63,7 @@ public class User {
         this.teamNo = teamNo;
     }
     public void setName(String name) {
-    this.name = name;
+        this.name = name;
     }
     public String getName() {
         return name;
