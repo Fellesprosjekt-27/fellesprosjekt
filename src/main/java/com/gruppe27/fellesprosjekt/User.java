@@ -4,10 +4,8 @@ package com.gruppe27.fellesprosjekt;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * Created by Andreas on 23.02.2015.
- */
-public class    User {
+
+public class User {
 
     private String username;
 
