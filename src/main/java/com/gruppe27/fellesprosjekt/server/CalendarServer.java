@@ -5,6 +5,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.gruppe27.fellesprosjekt.common.Network;
 import com.gruppe27.fellesprosjekt.common.TestMessage;
+import com.gruppe27.fellesprosjekt.common.User;
 
 import java.io.IOException;
 
@@ -46,5 +47,15 @@ public class CalendarServer {
 
     public static void main(String[] args) throws IOException {
         CalendarServer server = new CalendarServer();
+        DatabaseConnector databaseConnector = new DatabaseConnector();
+
+        /*
+        String username = "username";
+        String name = "name";
+        User user = new User(username,name);
+        String password = "password";
+        databaseConnector.registerUser(user, password);
+        */
+
     }
 }

@@ -11,16 +11,13 @@ public class User {
 
     private String name;
 
-    private String password;
-
     private int teamNo;
 
     private UserCalendar calendar;
     private Set<Group> groups;
 
-    public User(String username, String password, String name) {
+    public User(String username, String name) {
         this.setName(name);
-        this.setPassword(password);
         this.setUsername(username);
         this.calendar = new UserCalendar(this);
         groups = new HashSet<>();
@@ -47,14 +44,6 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public int getTeamNo() {
