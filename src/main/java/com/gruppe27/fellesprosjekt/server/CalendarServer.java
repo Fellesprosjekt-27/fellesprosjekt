@@ -6,20 +6,35 @@ import com.esotericsoftware.kryonet.Server;
 import com.gruppe27.fellesprosjekt.common.Network;
 import com.gruppe27.fellesprosjekt.common.TestMessage;
 import com.gruppe27.fellesprosjekt.common.User;
+import com.gruppe27.fellesprosjekt.server.controllers.GroupController;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class CalendarServer {
     Server server;
+    DatabaseConnector connector;
+    GroupController groupController;
+    CalendarConnection connection;
 
-    public CalendarServer() throws IOException {
+    public CalendarServer() {
         server = new Server() {
             protected Connection newConnection() {
-                return new CalendarConnection();
+                connection = new CalendarConnection();
+                return connection;
             }
         };
 
         Network.register(server);
+
+        try {
+            connector = new DatabaseConnector();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+        connection.setDatabaseConnection(connector.getDatabaseConnection());
+        initializeControllers();
 
         server.addListener(new Listener() {
             public void received(Connection c, Object object) {
@@ -41,21 +56,21 @@ public class CalendarServer {
             }
         });
 
-        server.bind(Network.PORT);
+        try {
+            server.bind(Network.PORT);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+
         server.start();
     }
 
-    public static void main(String[] args) throws IOException {
+    private void initializeControllers() {
+        groupController = new GroupController(connection);
+    }
+
+    public static void main(String[] args) {
         CalendarServer server = new CalendarServer();
-        DatabaseConnector databaseConnector = new DatabaseConnector();
-
-        /*
-        String username = "username";
-        String name = "name";
-        User user = new User(username,name);
-        String password = "password";
-        databaseConnector.registerUser(user, password);
-        */
-
     }
 }
