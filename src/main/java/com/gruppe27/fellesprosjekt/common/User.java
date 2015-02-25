@@ -13,6 +13,7 @@ public class User {
 
     private int teamNo;
 
+    private HashSet<Event> events;
     private Set<Group> groups;
 
     public User() {}
@@ -25,13 +26,16 @@ public class User {
 
     @Override
     public String toString() {
+
         return "User{" +
                 "groups=" + groups +
                 ", username='" + username + '\'' +
                 ", name='" + name + '\'' +
                 ", teamNo=" + teamNo +
                 '}';
+
     }
+
 
     /**
      * Takes in a group and adds it to the user's other groups
@@ -72,6 +76,13 @@ public class User {
         if (groups.contains(group)) {
             groups.remove(group);
             group.removeUser(this);
+        }
+    }
+
+    public void addEvent(Event event) {
+        if(!events.contains(event)) {
+            events.add(event);
+            event.addParticipant(this);
         }
     }
 }

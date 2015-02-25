@@ -5,6 +5,7 @@ import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.util.HashSet;
 
 public class Event {
     private LocalDate date;
@@ -12,6 +13,38 @@ public class Event {
     private LocalTime endTime;
 
     private User creator;
+
+    private HashSet<User> userParticipants;
+    private HashSet<Group> groupParticipants;
+
+    public Event(User creator, LocalDate date, LocalTime startTime, LocalTime endTime) {
+        this.creator = creator;
+        setDate(date);
+        setStartTime(startTime);
+        setEndTime(endTime);
+    }
+
+    public void addParticipant(User participant) {
+        if(!userParticipants.contains(participant)) {
+            userParticipants.add(participant);
+            participant.addEvent(this);
+        }
+    }
+    public void addGroupParticipant(Group participant) {
+        if(!groupParticipants.contains(participant)) {
+            groupParticipants.add(participant);
+            participant.addEvent(this);
+        }
+    }
+
+    public HashSet<Group> getGroupParticipants() {
+        return new HashSet<Group>(groupParticipants);
+    }
+
+
+    public HashSet<User> getUserParticipants() {
+        return new HashSet<>(userParticipants);
+    }
 
     public LocalDate getDate() {
         return date;
