@@ -3,6 +3,8 @@ package com.gruppe27.fellesprosjekt.common;
 import com.esotericsoftware.kryonet.EndPoint;
 import com.esotericsoftware.kryo.Kryo;
 
+import java.util.HashSet;
+
 public class Network {
     public static final int PORT = 5000;
 
@@ -17,6 +19,7 @@ public class Network {
         kryo.register(GeneralMessage.class);
         kryo.register(GeneralMessage.Command.class);
         kryo.register(ErrorMessage.class);
+        kryo.register(HashSet.class);
     }
 
 }

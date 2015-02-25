@@ -15,10 +15,22 @@ public class User {
 
     private Set<Group> groups;
 
+    public User() {}
+
     public User(String username, String name) {
         this.setName(name);
         this.setUsername(username);
         groups = new HashSet<>();
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "groups=" + groups +
+                ", username='" + username + '\'' +
+                ", name='" + name + '\'' +
+                ", teamNo=" + teamNo +
+                '}';
     }
 
     /**
