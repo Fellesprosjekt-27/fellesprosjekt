@@ -14,7 +14,6 @@ import java.sql.SQLException;
 public class CalendarServer {
     Server server;
     DatabaseConnector connector;
-    GroupController groupController;
     CalendarConnection connection;
 
     public CalendarServer() {
@@ -34,27 +33,8 @@ public class CalendarServer {
             e.printStackTrace();
             System.exit(1);
         }
-        initializeControllers();
 
-        server.addListener(new Listener() {
-            public void received(Connection c, Object object) {
-                CalendarConnection connection = (CalendarConnection) c;
-
-                if (object instanceof TestMessage) {
-                    System.out.println("Received a testmessage");
-                    TestMessage received = (TestMessage) object;
-                    TestMessage newMessage = new TestMessage("Received message: " + received.getMessage());
-
-                    server.sendToAllTCP(newMessage);
-                }
-            }
-
-            public void connected(Connection c) {
-                CalendarConnection connection = (CalendarConnection) c;
-                TestMessage sendMessage = new TestMessage("Hi!");
-                connection.sendTCP(sendMessage);
-            }
-        });
+        server.addListener(new CalendarListener(server, connection));
 
         try {
             server.bind(Network.PORT);
@@ -66,9 +46,6 @@ public class CalendarServer {
         server.start();
     }
 
-    private void initializeControllers() {
-        groupController = new GroupController(connection);
-    }
 
     public static void main(String[] args) {
         CalendarServer server = new CalendarServer();
