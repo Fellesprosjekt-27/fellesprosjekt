@@ -24,3 +24,7 @@ release.properties
 .classpath
 .project
 .settings/
+
+# IntelliJ
+.idea/
+*.iml
