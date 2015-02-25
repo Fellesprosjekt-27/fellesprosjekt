@@ -1,9 +1,11 @@
 package com.gruppe27.fellesprosjekt.server.controllers;
 
 import com.gruppe27.fellesprosjekt.common.AuthMessage;
+import com.gruppe27.fellesprosjekt.common.ErrorMessage;
+import com.gruppe27.fellesprosjekt.common.GeneralMessage;
 import com.gruppe27.fellesprosjekt.common.User;
+import com.gruppe27.fellesprosjekt.common.UserMessage;
 import com.gruppe27.fellesprosjekt.server.CalendarConnection;
-import org.omg.PortableInterceptor.SUCCESSFUL;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -39,12 +41,18 @@ public class AuthController extends Controller {
                 String name = result.getString("name");
 
                 User user = new User(username, name);
-                System.out.println(user);
+                UserMessage userMessage = new UserMessage(UserMessage.Command.SUCCESSFUL_LOGIN, user);
+                calendarConnection.sendTCP(userMessage);
             } else {
                 System.out.println("fant ingen bruker");
+                GeneralMessage badAuthMessage = new GeneralMessage(GeneralMessage.Command.UNSUCCESSFUL_LOGIN,
+                        "Ugyldig brukernavn og/eller passord.");
+                calendarConnection.sendTCP(badAuthMessage);
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            ErrorMessage error = new ErrorMessage();
+            calendarConnection.sendTCP(error);
         }
     }
 }

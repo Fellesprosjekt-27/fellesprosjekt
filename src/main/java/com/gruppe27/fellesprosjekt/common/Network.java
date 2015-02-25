@@ -12,6 +12,11 @@ public class Network {
         kryo.register(User.class);
         kryo.register(AuthMessage.class);
         kryo.register(AuthMessage.Command.class);
+        kryo.register(UserMessage.class);
+        kryo.register(UserMessage.Command.class);
+        kryo.register(GeneralMessage.class);
+        kryo.register(GeneralMessage.Command.class);
+        kryo.register(ErrorMessage.class);
     }
 
 }
