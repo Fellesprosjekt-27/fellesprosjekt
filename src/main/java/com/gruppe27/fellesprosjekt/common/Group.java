@@ -4,14 +4,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Group {
-    private int groupNo;
-
-    private UserCalendar calendar;
+    private int number;
+    private String name;
 
     private Set<User> users;
 
-    public Group() {
-        this.calendar = new UserCalendar(this);
+    public Group(int number, String name) {
+        this.number = number;
+        this.name = name;
         users = new HashSet<>();
     }
 
@@ -37,18 +37,19 @@ public class Group {
         return new HashSet<>(this.users);
     }
 
-    public UserCalendar getCalendar() {
-        return calendar;
+    public String getName() {
+        return name;
     }
 
-    public int getGroupNo() {
-        return groupNo;
+    public void setName(String name) {
+        this.name = name;
     }
 
-
-    public void setGroupNo(int groupNo) {
-        this.groupNo = groupNo;
+    public int getNumber() {
+        return number;
     }
 
-
+    public void setNumber(int number) {
+        this.number = number;
+    }
 }

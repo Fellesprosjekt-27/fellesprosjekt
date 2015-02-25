@@ -1,50 +1,49 @@
 package com.gruppe27.fellesprosjekt.server;
 
 import com.esotericsoftware.kryonet.Connection;
-import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.gruppe27.fellesprosjekt.common.Network;
-import com.gruppe27.fellesprosjekt.common.TestMessage;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class CalendarServer {
     Server server;
+    DatabaseConnector connector;
+    CalendarConnection connection;
 
-    public CalendarServer() throws IOException {
+    public CalendarServer() {
+        connection = new CalendarConnection();
         server = new Server() {
             protected Connection newConnection() {
-                return new CalendarConnection();
+                return connection;
             }
         };
 
         Network.register(server);
 
-        server.addListener(new Listener() {
-            public void received(Connection c, Object object) {
-                CalendarConnection connection = (CalendarConnection) c;
+        try {
+            connector = new DatabaseConnector();
+            connection.setDatabaseConnection(connector.getDatabaseConnection());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
 
-                if (object instanceof TestMessage) {
-                    System.out.println("Received a testmessage");
-                    TestMessage received = (TestMessage) object;
-                    TestMessage newMessage = new TestMessage("Received message: " + received.getMessage());
+        server.addListener(new CalendarListener(server, connection));
 
-                    server.sendToAllTCP(newMessage);
-                }
-            }
+        try {
+            server.bind(Network.PORT);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
 
-            public void connected(Connection c) {
-                CalendarConnection connection = (CalendarConnection) c;
-                TestMessage sendMessage = new TestMessage("Hi!");
-                connection.sendTCP(sendMessage);
-            }
-        });
-
-        server.bind(Network.PORT);
         server.start();
     }
 
-    public static void main(String[] args) throws IOException {
+
+    public static void main(String[] args) {
         CalendarServer server = new CalendarServer();
     }
 }
