@@ -14,6 +14,8 @@ public class GroupController {
 
     public void createGroup(Group group) {
         // This should persist a group to the database, TODO
+
+
     }
 
     public ArrayList<Group> getAllGroups() {

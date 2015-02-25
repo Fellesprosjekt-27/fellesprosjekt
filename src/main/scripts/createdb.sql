@@ -1,0 +1,49 @@
+
+CREATE TABLE ACCOUNT(
+  username VARCHAR(32) NOT NULL,
+  personname VARCHAR(64) NOT NULL,
+  password VARCHAR(32) NOT NULL,
+  PRIMARY KEY(username)
+);
+
+CREATE TABLE TEAM(
+  teamnr INT NOT NULL AUTO_INCREMENT,
+  teamname VARCHAR(32) NOT NULL,
+  PRIMARY KEY(teamnr)
+);
+
+CREATE TABLE TEAM_MEMBER(
+  username VARCHAR(32) NOT NULL,
+  teamnr INT NOT NULL,
+  PRIMARY KEY(username,teamnr),
+  FOREIGN KEY(username) REFERENCES ACCOUNT(username),
+  FOREIGN KEY(teamnr) REFERENCES TEAM(teamnr)
+);
+
+CREATE TABLE EVENT(
+  eid INT NOT NULL AUTO_INCREMENT,
+  eventname VARCHAR(32) NOT NULL,
+  date DATE NOT NULL,
+  start TIME NOT NULL,
+  end TIME NOT NULL,
+  creator VARCHAR(32) NOT NULL,
+  PRIMARY KEY(eid),
+  FOREIGN KEY(creator) REFERENCES ACCOUNT(username)
+);
+
+CREATE TABLE TEAM_EVENT (
+  teamnr INT NOT NULL,
+  eid INT NOT NULL,
+  PRIMARY KEY(teamnr, eid),
+  FOREIGN KEY(teamnr) REFERENCES TEAM(teamnr),
+  FOREIGN KEY(eid) REFERENCES ACCOUNT(eid)
+);
+
+CREATE TABLE USER_EVENT(
+  username VARCHAR(32) NOT NULL,
+  eid INT NOT NULL,
+  PRIMARY KEY(username,eid),
+  FOREIGN KEY(username) REFERENCES ACCOUNT(username),
+  FOREIGN KEY(eid) REFERENCES EVENT(eid)
+);
+
