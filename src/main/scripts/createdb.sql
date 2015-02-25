@@ -1,49 +1,48 @@
-
-CREATE TABLE USER(
+CREATE TABLE User (
   username VARCHAR(32) NOT NULL,
   name VARCHAR(64) NOT NULL,
   password VARCHAR(32) NOT NULL,
   PRIMARY KEY(username)
 );
 
-CREATE TABLE TEAM(
-  teamnr INT NOT NULL AUTO_INCREMENT,
-  teamname VARCHAR(32) NOT NULL,
-  PRIMARY KEY(teamnr)
+CREATE TABLE Team (
+  number INT NOT NULL AUTO_INCREMENT,
+  name VARCHAR(32) NOT NULL,
+  PRIMARY KEY(number)
 );
 
-CREATE TABLE TEAM_MEMBER(
+CREATE TABLE TeamMember (
   username VARCHAR(32) NOT NULL,
-  teamnr INT NOT NULL,
-  PRIMARY KEY(username,teamnr),
-  FOREIGN KEY(username) REFERENCES USER(username),
-  FOREIGN KEY(teamnr) REFERENCES TEAM(teamnr)
+  team_number INT NOT NULL,
+  PRIMARY KEY(username, team_number),
+  FOREIGN KEY(username) REFERENCES User(username),
+  FOREIGN KEY(team_number) REFERENCES Team(number)
 );
 
-CREATE TABLE EVENT(
-  eid INT NOT NULL AUTO_INCREMENT,
-  eventname VARCHAR(32) NOT NULL,
+CREATE TABLE Event (
+  id INT NOT NULL AUTO_INCREMENT,
+  name VARCHAR(32) NOT NULL,
   date DATE NOT NULL,
   start TIME NOT NULL,
   end TIME NOT NULL,
   creator VARCHAR(32) NOT NULL,
-  PRIMARY KEY(eid),
-  FOREIGN KEY(creator) REFERENCES USER(username)
+  PRIMARY KEY(id),
+  FOREIGN KEY(creator) REFERENCES User(username)
 );
 
-CREATE TABLE TEAM_EVENT (
-  teamnr INT NOT NULL,
-  eid INT NOT NULL,
-  PRIMARY KEY(teamnr, eid),
-  FOREIGN KEY(teamnr) REFERENCES TEAM(teamnr),
-  FOREIGN KEY(eid) REFERENCES USER(eid)
+CREATE TABLE TeamEvent (
+  team_number INT NOT NULL,
+  event_id INT NOT NULL,
+  PRIMARY KEY(team_number, event_id),
+  FOREIGN KEY(team_number) REFERENCES Team(number),
+  FOREIGN KEY(event_id) REFERENCES Event(id)
 );
 
-CREATE TABLE USER_EVENT(
+CREATE TABLE UserEvent (
   username VARCHAR(32) NOT NULL,
-  eid INT NOT NULL,
-  PRIMARY KEY(username,eid),
-  FOREIGN KEY(username) REFERENCES USER(username),
-  FOREIGN KEY(eid) REFERENCES EVENT(eid)
+  event_id INT NOT NULL,
+  PRIMARY KEY(username, event_id),
+  FOREIGN KEY(username) REFERENCES User(username),
+  FOREIGN KEY(event_id) REFERENCES Event(id)
 );
 
