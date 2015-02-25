@@ -1,5 +1,6 @@
 package com.gruppe27.fellesprosjekt.client;
 
+import com.gruppe27.fellesprosjekt.common.AuthMessage;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
@@ -18,7 +19,8 @@ public class CalendarGUI extends Application {
         Button button = new Button();
         button.setText("Send test message");
         button.setOnAction((ActionEvent e) -> {
-            calendarClient.sendMessage("Clicked :)");
+            AuthMessage testMessage = new AuthMessage(AuthMessage.Command.LOGIN, "testbruker", "passord");
+            calendarClient.sendMessage(testMessage);
         });
 
         StackPane root = new StackPane();

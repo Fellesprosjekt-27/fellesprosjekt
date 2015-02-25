@@ -8,9 +8,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DatabaseConnector {
-    static final String DB_URL = "jdbc:mysql://mysql.stud.ntnu.no/andreahd_caltest";
-    static final String USER = "andreahd";
-    static final String PASS = "gurgle1";
+    static final String DB_URL = "jdbc:mysql://localhost/fellesprosjekt";
+    static final String USER = "root";
+    static final String PASS = "";
 
     private Connection databaseConnection;
 

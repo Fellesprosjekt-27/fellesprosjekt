@@ -1,12 +1,8 @@
 package com.gruppe27.fellesprosjekt.server;
 
 import com.esotericsoftware.kryonet.Connection;
-import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.gruppe27.fellesprosjekt.common.Network;
-import com.gruppe27.fellesprosjekt.common.TestMessage;
-import com.gruppe27.fellesprosjekt.common.User;
-import com.gruppe27.fellesprosjekt.server.controllers.GroupController;
 
 import java.io.IOException;
 import java.sql.SQLException;

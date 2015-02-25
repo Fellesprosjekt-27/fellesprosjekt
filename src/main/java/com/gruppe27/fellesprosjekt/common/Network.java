@@ -9,9 +9,9 @@ public class Network {
     public static void register(EndPoint endPoint) {
         Kryo kryo = endPoint.getKryo();
         kryo.register(TestMessage.class);
-        kryo.register(Group.class);
         kryo.register(User.class);
-        kryo.register(UserCalendar.class);
+        kryo.register(AuthMessage.class);
+        kryo.register(AuthMessage.Command.class);
     }
 
 }

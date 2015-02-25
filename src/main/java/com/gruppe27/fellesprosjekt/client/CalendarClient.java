@@ -46,8 +46,7 @@ public class CalendarClient {
         }
     }
 
-    public void sendMessage(String message) {
-        TestMessage testMessage = new TestMessage(message);
-        client.sendTCP(testMessage);
+    public void sendMessage(Object message) {
+        client.sendTCP(message);
     }
 }

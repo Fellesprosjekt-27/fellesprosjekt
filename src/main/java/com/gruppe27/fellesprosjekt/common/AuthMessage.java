@@ -9,10 +9,20 @@ public class AuthMessage {
     private String username;
     private String password;
 
-    public AuthMessage(Command command, String password, String username) {
+    public AuthMessage() {}
+
+    public AuthMessage(Command command, String username, String password) {
         this.command = command;
-        this.password = password;
         this.username = username;
+        this.password = password;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getUsername() {
+        return username;
     }
 
     public Command getCommand() {
