@@ -7,14 +7,11 @@ public class Group {
     private int number;
     private String name;
 
-    private UserCalendar calendar;
-
     private Set<User> users;
 
     public Group(int number, String name) {
         this.number = number;
         this.name = name;
-        this.calendar = new UserCalendar(this);
         users = new HashSet<>();
     }
 
@@ -38,10 +35,6 @@ public class Group {
 
     public Set<User> getUsers() {
         return new HashSet<>(this.users);
-    }
-
-    public UserCalendar getCalendar() {
-        return calendar;
     }
 
     public String getName() {

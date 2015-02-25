@@ -13,18 +13,12 @@ public class User {
 
     private int teamNo;
 
-    private UserCalendar calendar;
     private Set<Group> groups;
 
     public User(String username, String name) {
         this.setName(name);
         this.setUsername(username);
-        this.calendar = new UserCalendar(this);
         groups = new HashSet<>();
-    }
-
-    public UserCalendar getCalendar() {
-        return calendar;
     }
 
     /**
