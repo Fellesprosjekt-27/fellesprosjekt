@@ -1,7 +1,7 @@
 
-CREATE TABLE ACCOUNT(
+CREATE TABLE USER(
   username VARCHAR(32) NOT NULL,
-  personname VARCHAR(64) NOT NULL,
+  name VARCHAR(64) NOT NULL,
   password VARCHAR(32) NOT NULL,
   PRIMARY KEY(username)
 );
@@ -16,7 +16,7 @@ CREATE TABLE TEAM_MEMBER(
   username VARCHAR(32) NOT NULL,
   teamnr INT NOT NULL,
   PRIMARY KEY(username,teamnr),
-  FOREIGN KEY(username) REFERENCES ACCOUNT(username),
+  FOREIGN KEY(username) REFERENCES USER(username),
   FOREIGN KEY(teamnr) REFERENCES TEAM(teamnr)
 );
 
@@ -28,7 +28,7 @@ CREATE TABLE EVENT(
   end TIME NOT NULL,
   creator VARCHAR(32) NOT NULL,
   PRIMARY KEY(eid),
-  FOREIGN KEY(creator) REFERENCES ACCOUNT(username)
+  FOREIGN KEY(creator) REFERENCES USER(username)
 );
 
 CREATE TABLE TEAM_EVENT (
@@ -36,14 +36,14 @@ CREATE TABLE TEAM_EVENT (
   eid INT NOT NULL,
   PRIMARY KEY(teamnr, eid),
   FOREIGN KEY(teamnr) REFERENCES TEAM(teamnr),
-  FOREIGN KEY(eid) REFERENCES ACCOUNT(eid)
+  FOREIGN KEY(eid) REFERENCES USER(eid)
 );
 
 CREATE TABLE USER_EVENT(
   username VARCHAR(32) NOT NULL,
   eid INT NOT NULL,
   PRIMARY KEY(username,eid),
-  FOREIGN KEY(username) REFERENCES ACCOUNT(username),
+  FOREIGN KEY(username) REFERENCES USER(username),
   FOREIGN KEY(eid) REFERENCES EVENT(eid)
 );
 
