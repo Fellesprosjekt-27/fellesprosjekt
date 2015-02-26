@@ -1,8 +1,11 @@
 package com.gruppe27.fellesprosjekt.client;
 
 import com.gruppe27.fellesprosjekt.common.AuthMessage;
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
@@ -23,9 +26,8 @@ public class CalendarGUI extends Application {
             calendarClient.sendMessage(testMessage);
         });
 
-        StackPane root = new StackPane();
-        root.getChildren().add(button);
-
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/LogIn.fxml"));
+        
         Scene scene = new Scene(root, 500, 450);
         primaryStage.setScene(scene);
         primaryStage.show();
