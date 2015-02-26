@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.HBox?>
 
 <AnchorPane style="-fx-background-color: #FFF0BA;" xmlns:fx="http://javafx.com/fxml/1">
 	<VBox style="-fx-padding: 10;">
@@ -25,14 +22,6 @@
 		</GridPane>
 		<HBox>
 			<Button fx:id="saveButton" text="Save" translateX="70" />
-				<graphic>
-					<ImageView fitHeight="90.0" fitWidth="126.0" pickOnBounds="true"
-						preserveRatio="true">
-						<image>
-							<Image url="@post-it-notes1.jpg" />
-						</image>
-					</ImageView>
-				</graphic>
 			<Button fx:id="cancelButton" text="Cancel" translateX="100" />
 		</HBox>
 	</VBox>
