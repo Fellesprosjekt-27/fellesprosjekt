@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
 
-<AnchorPane style="-fx-background-color: #FFF0BA;" xmlns:fx="http://javafx.com/fxml/1">
-	<VBox style="-fx-padding: 10;">
+<AnchorPane style="-fx-background-color: #FFF0BA;" xmlns:fx="http://javafx.com/fxml/1" 
+fx:controller="com.gruppe27.fellesprosjekt.client.controllers.LogInController">
+	<VBox >
 		<GridPane style="-fx-padding: 10;" hgap="3" vgap="6">
 			<Text text="Logg inn" GridPane.columnSpan="2"
 				GridPane.halignment="CENTER">
@@ -17,12 +21,14 @@
 			<TextField fx:id="usernameField" GridPane.columnIndex="1"
 				GridPane.rowIndex="1" />
 			<Label text="Passord:" GridPane.rowIndex="2" />
-			<PasswordField fx:id="passwordField"
-				GridPane.columnIndex="1" GridPane.rowIndex="2" />
+			<PasswordField fx:id="passwordField" GridPane.columnIndex="1"
+				GridPane.rowIndex="2" />
 		</GridPane>
-		<HBox>
-			<Button fx:id="saveButton" text="Save" translateX="70" />
-			<Button fx:id="cancelButton" text="Cancel" translateX="100" />
+		<HBox >
+			<Button fx:id="okButton" text="OK" translateX="70"
+			onMouseReleased="#ok"/>
+			<Button fx:id="cancelButton" text="Cancel" translateX="100"
+			onMouseReleased="#cancel"/>
 		</HBox>
 	</VBox>
 </AnchorPane>

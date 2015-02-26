@@ -1,5 +1,6 @@
 package com.gruppe27.fellesprosjekt.client;
 
+import com.gruppe27.fellesprosjekt.client.controllers.LogInController;
 import com.gruppe27.fellesprosjekt.common.AuthMessage;
 
 import javafx.application.Application;
@@ -8,26 +9,29 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 public class CalendarGUI extends Application {
-
+	public void closeStage() {
+		
+	}
     @Override
     public void start(Stage primaryStage) throws Exception {
         CalendarClient calendarClient = new CalendarClient();
+//
+//        primaryStage.setTitle("Kalender");
+//
+//        Button button = new Button();
+//        button.setText("Send test message");
+//        button.setOnAction((ActionEvent e) -> {
+//            AuthMessage testMessage = new AuthMessage(AuthMessage.Command.LOGIN, "testbruker", "passord");
+//            calendarClient.sendMessage(testMessage);
+//        });
 
-        primaryStage.setTitle("Kalender");
-
-        Button button = new Button();
-        button.setText("Send test message");
-        button.setOnAction((ActionEvent e) -> {
-            AuthMessage testMessage = new AuthMessage(AuthMessage.Command.LOGIN, "testbruker", "passord");
-            calendarClient.sendMessage(testMessage);
-        });
-
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/LogIn.fxml"));
-        
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/LogIn.fxml"));
+        Parent root = (Parent)loader.load();
+        LogInController loginController = loader.<LogInController>getController();
+        loginController.setClient(calendarClient);
         Scene scene = new Scene(root, 500, 450);
         primaryStage.setScene(scene);
         primaryStage.show();

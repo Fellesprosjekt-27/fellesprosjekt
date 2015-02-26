@@ -1,45 +1,35 @@
 package com.gruppe27.fellesprosjekt.client.controllers;
 
-import javafx.application.Application;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.stage.Stage;
+import com.gruppe27.fellesprosjekt.client.CalendarClient;
+import com.gruppe27.fellesprosjekt.common.AuthMessage;
 
-public class LogInController extends Application{
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
+
+public class LogInController{
 	
-	private Stage stage;
+	@FXML
+	private TextField usernameField;
+	@FXML
+	private PasswordField passwordField;
+	@FXML
+	private Button okButton, cancelButton;
 	
-	@FXML
-	private TextField username;
-	@FXML
-	private PasswordField password;
-	@FXML
-	private Button ok, cancel;
+	private CalendarClient client;
 	
 	@FXML
 	private void ok(){
-		
+		AuthMessage testMessage = new AuthMessage(AuthMessage.Command.LOGIN, usernameField.getText(), passwordField.getText());
+        client.sendMessage(testMessage);
 	}
 	
 	@FXML
 	private void cancel(){
-		stage.close();
+		cancelButton.getScene().getWindow().hide();
 	}
 
-	@Override
-	public void start(Stage primaryStage) throws Exception {
-		this.stage = primaryStage;
-		Parent root = FXMLLoader.load(getClass().getResource("/fxml/LogIn.fxml"));
-		Scene scene = new Scene(root, 300, 200);
-		primaryStage.setScene(scene);
-		primaryStage.show();
-	}
-	
-	public static void main(String[] args) {
-		launch(args);
+	public void setClient(CalendarClient client) {
+		this.client = client;
 	}
 	
 
