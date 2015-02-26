@@ -8,6 +8,7 @@ import java.sql.SQLException;
 
 public class DatabaseConnector {
 
+
     /*
     static final String DB_URL = "jdbc:mysql://localhost/fellesprosjekt";
     static final String USER = "root";
@@ -16,6 +17,7 @@ public class DatabaseConnector {
     static final String DB_URL = "jdbc:mysql://mysql.stud.ntnu.no/andreahd_cal";
     static final String USER = "andreahd";
     static final String PASS = "gurgle1";
+
 
     private Connection databaseConnection;
 
