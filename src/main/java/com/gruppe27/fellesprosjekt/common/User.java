@@ -11,7 +11,7 @@ public class User {
 
     private String name;
 
-    private int teamNo;
+
 
     private HashSet<Event> events;
     private Set<Group> groups;
@@ -31,7 +31,6 @@ public class User {
                 "groups=" + groups +
                 ", username='" + username + '\'' +
                 ", name='" + name + '\'' +
-                ", teamNo=" + teamNo +
                 '}';
 
     }
@@ -56,13 +55,7 @@ public class User {
         this.username = username;
     }
 
-    public int getTeamNo() {
-        return teamNo;
-    }
 
-    public void setTeamNo(int teamNo) {
-        this.teamNo = teamNo;
-    }
 
     public void setName(String name) {
         this.name = name;
