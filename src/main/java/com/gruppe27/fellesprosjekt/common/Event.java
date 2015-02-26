@@ -8,16 +8,22 @@ import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 
 public class Event {
-    private LocalDate date;
-    private LocalTime startTime;
-    private LocalTime endTime;
+    public LocalDate date;
+    public LocalTime startTime;
+    public LocalTime endTime;
 
     private User creator;
 
     private HashSet<User> userParticipants;
     private HashSet<Group> groupParticipants;
+    private String name;
 
-    public Event(User creator, LocalDate date, LocalTime startTime, LocalTime endTime) {
+    public Event(){
+        this.creator = null;
+    }
+
+
+    public Event(String name, User creator, LocalDate date, LocalTime startTime, LocalTime endTime) {
         this.creator = creator;
         setDate(date);
         setStartTime(startTime);
@@ -61,7 +67,6 @@ public class Event {
         this.endTime = endTime;
     }
 
-
     public LocalTime getStartTime() {
         return startTime;
     }
@@ -73,5 +78,13 @@ public class Event {
         long amount = getStartTime().until(getEndTime(), ChronoUnit.MINUTES);
         return (double) amount;
 
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public User getCreator() {
+        return creator;
     }
 }

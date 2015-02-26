@@ -2,7 +2,7 @@ package com.gruppe27.fellesprosjekt.common.messages;
 
 public class GeneralMessage {
     public enum Command {
-        UNSUCCESSFUL_LOGIN
+        SUCCESSFUL_CREATE, UNSUCCESSFUL_LOGIN
     }
 
     private String message;

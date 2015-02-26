@@ -3,8 +3,10 @@ package com.gruppe27.fellesprosjekt.server;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.gruppe27.fellesprosjekt.common.messages.AuthMessage;
+import com.gruppe27.fellesprosjekt.common.messages.EventMessage;
 import com.gruppe27.fellesprosjekt.common.messages.TestMessage;
 import com.gruppe27.fellesprosjekt.server.controllers.AuthController;
+import com.gruppe27.fellesprosjekt.server.controllers.EventController;
 
 import java.sql.Connection;
 
@@ -13,6 +15,7 @@ public class CalendarListener extends Listener {
     Connection databaseConnection;
 
     AuthController authController;
+    EventController eventController;
 
     public CalendarListener(Server server, Connection databaseConnection) {
         this.databaseConnection = databaseConnection;
@@ -38,6 +41,11 @@ public class CalendarListener extends Listener {
             TestMessage newMessage = new TestMessage("Received message: " + received.getMessage());
 
             server.sendToAllTCP(newMessage);
+            return;
+        }
+
+        if(message instanceof EventMessage) {
+            eventController.handleMessage(message);
             return;
         }
     }
