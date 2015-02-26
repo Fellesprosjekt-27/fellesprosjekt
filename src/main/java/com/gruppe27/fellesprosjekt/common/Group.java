@@ -7,11 +7,14 @@ public class Group {
     private int number;
     private String name;
 
+
     private Set<User> users;
+    private HashSet<Event> events;
 
     public Group(int number, String name) {
         this.number = number;
         this.name = name;
+
         users = new HashSet<>();
     }
 
@@ -51,5 +54,12 @@ public class Group {
 
     public void setNumber(int number) {
         this.number = number;
+    }
+
+    public void addEvent(Event event) {
+        if(!events.contains(event)) {
+            events.add(event);
+            event.addGroupParticipant(this);
+        }
     }
 }

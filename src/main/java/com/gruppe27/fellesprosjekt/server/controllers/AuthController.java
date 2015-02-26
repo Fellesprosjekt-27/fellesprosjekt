@@ -1,17 +1,16 @@
 package com.gruppe27.fellesprosjekt.server.controllers;
 
-import com.gruppe27.fellesprosjekt.common.AuthMessage;
-import com.gruppe27.fellesprosjekt.common.ErrorMessage;
-import com.gruppe27.fellesprosjekt.common.GeneralMessage;
+import com.gruppe27.fellesprosjekt.common.messages.AuthMessage;
+import com.gruppe27.fellesprosjekt.common.messages.ErrorMessage;
+import com.gruppe27.fellesprosjekt.common.messages.GeneralMessage;
 import com.gruppe27.fellesprosjekt.common.User;
-import com.gruppe27.fellesprosjekt.common.UserMessage;
+import com.gruppe27.fellesprosjekt.common.messages.UserMessage;
 import com.gruppe27.fellesprosjekt.server.CalendarConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Calendar;
 
 public class AuthController extends Controller {
 
