@@ -1,4 +1,4 @@
-package com.gruppe27.fellesprosjekt.common;
+package com.gruppe27.fellesprosjekt.common.messages;
 
 public class GeneralMessage {
     public enum Command {

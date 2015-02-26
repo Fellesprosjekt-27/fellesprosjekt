@@ -1,4 +1,6 @@
-package com.gruppe27.fellesprosjekt.common;
+package com.gruppe27.fellesprosjekt.common.messages;
+
+import com.gruppe27.fellesprosjekt.common.User;
 
 public class UserMessage {
     public enum Command {

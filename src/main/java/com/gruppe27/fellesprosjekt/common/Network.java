@@ -2,6 +2,7 @@ package com.gruppe27.fellesprosjekt.common;
 
 import com.esotericsoftware.kryonet.EndPoint;
 import com.esotericsoftware.kryo.Kryo;
+import com.gruppe27.fellesprosjekt.common.messages.*;
 
 import java.util.HashSet;
 

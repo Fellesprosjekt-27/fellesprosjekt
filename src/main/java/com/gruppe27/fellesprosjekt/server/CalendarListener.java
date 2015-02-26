@@ -2,8 +2,8 @@ package com.gruppe27.fellesprosjekt.server;
 
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
-import com.gruppe27.fellesprosjekt.common.AuthMessage;
-import com.gruppe27.fellesprosjekt.common.TestMessage;
+import com.gruppe27.fellesprosjekt.common.messages.AuthMessage;
+import com.gruppe27.fellesprosjekt.common.messages.TestMessage;
 import com.gruppe27.fellesprosjekt.server.controllers.AuthController;
 
 import java.sql.Connection;

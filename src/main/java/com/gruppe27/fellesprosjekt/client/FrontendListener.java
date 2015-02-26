@@ -3,11 +3,9 @@ package com.gruppe27.fellesprosjekt.client;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import com.gruppe27.fellesprosjekt.common.AuthMessage;
-import com.gruppe27.fellesprosjekt.common.GeneralMessage;
-import com.gruppe27.fellesprosjekt.common.TestMessage;
-import com.gruppe27.fellesprosjekt.common.User;
-import com.gruppe27.fellesprosjekt.common.UserMessage;
+import com.gruppe27.fellesprosjekt.common.messages.GeneralMessage;
+import com.gruppe27.fellesprosjekt.common.messages.TestMessage;
+import com.gruppe27.fellesprosjekt.common.messages.UserMessage;
 
 public class FrontendListener extends Listener {
     private Client client;

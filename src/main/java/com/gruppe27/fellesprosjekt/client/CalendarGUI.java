@@ -1,6 +1,6 @@
 package com.gruppe27.fellesprosjekt.client;
 
-import com.gruppe27.fellesprosjekt.common.AuthMessage;
+import com.gruppe27.fellesprosjekt.common.messages.AuthMessage;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
