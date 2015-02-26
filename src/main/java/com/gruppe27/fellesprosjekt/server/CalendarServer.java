@@ -13,10 +13,9 @@ public class CalendarServer {
     CalendarConnection connection;
 
     public CalendarServer() {
-        connection = new CalendarConnection();
         server = new Server() {
             protected Connection newConnection() {
-                return connection;
+                return new CalendarConnection();
             }
         };
 
@@ -24,13 +23,12 @@ public class CalendarServer {
 
         try {
             connector = new DatabaseConnector();
-            connection.setDatabaseConnection(connector.getDatabaseConnection());
         } catch (SQLException e) {
             e.printStackTrace();
             System.exit(1);
         }
 
-        server.addListener(new CalendarListener(server, connection));
+        server.addListener(new CalendarListener(server, connector.getDatabaseConnection()));
 
         try {
             server.bind(Network.PORT);
