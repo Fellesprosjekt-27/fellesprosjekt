@@ -1,16 +1,14 @@
 package com.gruppe27.fellesprosjekt.common;
 
-
-import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 
 public class Event {
-    public LocalDate date;
-    public LocalTime startTime;
-    public LocalTime endTime;
+    private LocalDate date;
+    private LocalTime startTime;
+    private LocalTime endTime;
 
     private User creator;
 
@@ -24,6 +22,7 @@ public class Event {
 
 
     public Event(String name, User creator, LocalDate date, LocalTime startTime, LocalTime endTime) {
+        this.name = name;
         this.creator = creator;
         setDate(date);
         setStartTime(startTime);

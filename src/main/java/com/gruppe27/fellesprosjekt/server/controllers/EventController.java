@@ -5,31 +5,29 @@ import com.gruppe27.fellesprosjekt.common.User;
 import com.gruppe27.fellesprosjekt.common.messages.*;
 import com.gruppe27.fellesprosjekt.server.CalendarConnection;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+
 import java.sql.SQLException;
 
-/**
- * Created by Andreas on 26.02.2015.
- */
 public class EventController extends Controller {
 
-    public EventController(CalendarConnection connection) {super(connection);}
+    public EventController(Connection databaseConnection) {super(databaseConnection);}
 
-    public void handleMessage(Object message) {
+    public void handleMessage(CalendarConnection connection, Object message) {
         EventMessage eventMessage = (EventMessage) message;
         switch (eventMessage.getCommand()) {
             case CREATE_EVENT:
-                createEvent(eventMessage.getEvent());
+                createEvent(connection, eventMessage.getEvent());
                 break;
         }
     }
 
-    private void createEvent(Event event) {
+    private void createEvent(CalendarConnection connection, Event event) {
         try {
 
             PreparedStatement statement = databaseConnection.prepareStatement(
-                "INSERT INTO EVENT(name, date, start, end, creator) VALUES (?,?,?,?,?)"
+                "INSERT INTO Event(name, date, start, end, creator) VALUES (?,?,?,?,?)"
             );
 
             statement.setString(1, event.getName());
@@ -43,11 +41,12 @@ public class EventController extends Controller {
             System.out.println(result + " rows affected");
             GeneralMessage createdMessage = new GeneralMessage(GeneralMessage.Command.SUCCESSFUL_CREATE,
                     "Avtalen " + event.getName() + " opprettet.");
+            connection.sendTCP(createdMessage);
 
         } catch (SQLException e) {
             e.printStackTrace();
             ErrorMessage error = new ErrorMessage();
-            calendarConnection.sendTCP(error);
+            connection.sendTCP(error);
         }
     }
 }

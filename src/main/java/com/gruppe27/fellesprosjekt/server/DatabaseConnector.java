@@ -1,11 +1,10 @@
 package com.gruppe27.fellesprosjekt.server;
 
-import com.gruppe27.fellesprosjekt.common.User;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
+
 
 public class DatabaseConnector {
 
