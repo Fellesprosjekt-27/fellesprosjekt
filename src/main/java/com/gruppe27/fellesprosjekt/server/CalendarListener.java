@@ -1,31 +1,34 @@
 package com.gruppe27.fellesprosjekt.server;
 
-import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.gruppe27.fellesprosjekt.common.AuthMessage;
 import com.gruppe27.fellesprosjekt.common.TestMessage;
 import com.gruppe27.fellesprosjekt.server.controllers.AuthController;
 
+import java.sql.Connection;
+
 public class CalendarListener extends Listener {
     Server server;
-    CalendarConnection connection;
+    Connection databaseConnection;
 
     AuthController authController;
 
-    public CalendarListener(Server server, CalendarConnection connection) {
+    public CalendarListener(Server server, Connection databaseConnection) {
+        this.databaseConnection = databaseConnection;
         this.server = server;
-        this.connection = connection;
         this.initializeControllers();
     }
 
     private void initializeControllers() {
-        authController = new AuthController(connection);
+        authController = new AuthController(databaseConnection);
     }
 
-    public void received(Connection c, Object message) {
+    public void received(com.esotericsoftware.kryonet.Connection c, Object message) {
+        CalendarConnection connection = (CalendarConnection) c;
+
         if (message instanceof AuthMessage) {
-            authController.handleMessage(message);
+            authController.handleMessage(connection, message);
             return;
         }
 

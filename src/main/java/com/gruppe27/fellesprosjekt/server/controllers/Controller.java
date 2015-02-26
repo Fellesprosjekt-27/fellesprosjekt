@@ -2,14 +2,14 @@ package com.gruppe27.fellesprosjekt.server.controllers;
 
 import com.gruppe27.fellesprosjekt.server.CalendarConnection;
 
-public abstract class Controller {
-    protected CalendarConnection calendarConnection;
-    protected java.sql.Connection databaseConnection;
+import java.sql.Connection;
 
-    public Controller(CalendarConnection calendarConnection) {
-        this.calendarConnection = calendarConnection;
-        this.databaseConnection = calendarConnection.getDatabaseConnection();
+public abstract class Controller {
+    protected Connection databaseConnection;
+
+    public Controller(Connection databaseConnection) {
+        this.databaseConnection = databaseConnection;
     }
 
-    public abstract void handleMessage(Object message);
+    public abstract void handleMessage(CalendarConnection connection, Object message);
 }
