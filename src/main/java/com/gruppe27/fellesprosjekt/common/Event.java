@@ -20,7 +20,6 @@ public class Event {
         this.creator = null;
     }
 
-
     public Event(String name, User creator, LocalDate date, LocalTime startTime, LocalTime endTime) {
         this.name = name;
         this.creator = creator;
@@ -35,6 +34,7 @@ public class Event {
             participant.addEvent(this);
         }
     }
+
     public void addGroupParticipant(Group participant) {
         if(!groupParticipants.contains(participant)) {
             groupParticipants.add(participant);
@@ -46,7 +46,6 @@ public class Event {
         return new HashSet<Group>(groupParticipants);
     }
 
-
     public HashSet<User> getUserParticipants() {
         return new HashSet<>(userParticipants);
     }
@@ -54,6 +53,7 @@ public class Event {
     public LocalDate getDate() {
         return date;
     }
+
     public void setDate(LocalDate date) {
         this.date = date;
     }
@@ -73,6 +73,7 @@ public class Event {
     public void setStartTime(LocalTime startTime) {
         this.startTime = startTime;
     }
+
     public double getDuration() {
         long amount = getStartTime().until(getEndTime(), ChronoUnit.MINUTES);
         return (double) amount;

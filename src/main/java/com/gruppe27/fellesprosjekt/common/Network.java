@@ -3,6 +3,8 @@ package com.gruppe27.fellesprosjekt.common;
 import com.esotericsoftware.kryonet.EndPoint;
 import com.esotericsoftware.kryo.Kryo;
 import com.gruppe27.fellesprosjekt.common.messages.*;
+import com.gruppe27.fellesprosjekt.common.serializers.LocalDateSerializer;
+import com.gruppe27.fellesprosjekt.common.serializers.LocalTimeSerializer;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -16,8 +18,8 @@ public class Network {
         kryo.register(TestMessage.class);
         kryo.register(User.class);
         kryo.register(Event.class);
-        kryo.register(LocalTime.class);
-        kryo.register(LocalDate.class);
+        kryo.register(LocalTime.class, new LocalTimeSerializer());
+        kryo.register(LocalDate.class, new LocalDateSerializer());
         kryo.register(String.class);
         kryo.register(AuthMessage.class);
         kryo.register(AuthMessage.Command.class);
