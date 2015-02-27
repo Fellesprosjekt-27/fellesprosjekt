@@ -1,1 +1,4 @@
-GridPane {-fx-background-color: #FFF0BA;}
+GridPane {-fx-background-color: #FFF0BA; -fx-grid-lines-visible: true;}
+Text {-fx-text-alignment: center;}
+VBox {-fx-alignment: center;}
+.newNotification {-fx-font-size: 20; -fx-fill: RED;}

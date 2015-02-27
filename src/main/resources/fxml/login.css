@@ -1,1 +1,5 @@
 AnchorPane {-fx-background-color: #FFF0BA;}
+VBox {-fx-alignment: center; -fx-spacing: 10;}
+GridPane {-fx-alignment: center; -fx-vgap: 6; -fx-hgap: 6;}
+HBox {-fx-alignment: center; -fx-spacing: 10;}
+Text {-fx-font-size: 22;}

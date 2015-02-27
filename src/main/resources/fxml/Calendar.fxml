@@ -7,11 +7,10 @@
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import java.net.*?>
+<?import java.net.URL?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="479.0" prefWidth="673.0"
-    xmlns:fx="http://javafx.com/fxml/1">	        
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="450" prefWidth="700">	        
     <SplitPane dividerPositions="0.25" AnchorPane.bottomAnchor="0"
         AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
         AnchorPane.topAnchor="0">
@@ -19,15 +18,15 @@
             <TitledPane collapsible="false" text="Vis"
                 AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0"
                 AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
-                <VBox alignment="CENTER" spacing="45">
+                <VBox spacing="45">
                     <ListView />
-                    <Text text="Notifications!" />
+                    <Text text="Notifications!" wrappingWidth="100"/>
                     <Button text="Ny Event" contentDisplay="CENTER">
                         <graphic>
                             <ImageView fitHeight="90.0" fitWidth="175.0"
                                 preserveRatio="true">
                                 <image>
-                                    <Image url="@images/post-it-notes1.jpg" />
+                                    <Image url="/images/post-it-notes1.jpg"/>
                                 </image>
                             </ImageView>
                         </graphic>
@@ -40,9 +39,8 @@
                 AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0"
                 AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
                 <tabs>
-
                     <Tab text="Uke">
-                        <GridPane gridLinesVisible="true" >
+                        <GridPane >
                             <columnConstraints>
                                 <ColumnConstraints minWidth="10.0" prefWidth="100.0" />
                                 <ColumnConstraints />
@@ -81,84 +79,44 @@
                                 <RowConstraints minHeight="10.0" prefHeight="30.0"
                                     vgrow="SOMETIMES" />
                             </rowConstraints>
-                            <Text text="Mandag" textAlignment="CENTER" wrappingWidth="52.91015625"
-                                GridPane.columnIndex="2">
-                                <font>
-                                    <Font size="9.0" />
-                                </font>
+                            <Text text="Mandag"
+                                GridPane.columnIndex="2" GridPane.halignment="CENTER">
                             </Text>
-                            <Text text="Tirsdag" textAlignment="CENTER" wrappingWidth="51.91015625"
-                                GridPane.columnIndex="3">
-                                <font>
-                                    <Font size="9.0" />
-                                </font>
+                            <Text text="Tirsdag"
+                                GridPane.columnIndex="3" GridPane.halignment="CENTER">
                             </Text>
-                            <Text text="Onsdag" textAlignment="CENTER" wrappingWidth="51.91015625"
-                                GridPane.columnIndex="4">
-                                <font>
-                                    <Font size="9.0" />
-                                </font>
+                            <Text text="Onsdag"
+                                GridPane.columnIndex="4" GridPane.halignment="CENTER">
                             </Text>
-                            <Text text="Torsdag" textAlignment="CENTER" wrappingWidth="51.91015625"
-                                GridPane.columnIndex="5">
-                                <font>
-                                    <Font size="9.0" />
-                                </font>
+                            <Text text="Torsdag"
+                                GridPane.columnIndex="5" GridPane.halignment="CENTER">
                             </Text>
-                            <Text text="Fredag" textAlignment="CENTER" wrappingWidth="51.91015625"
-                                GridPane.columnIndex="6">
-                                <font>
-                                    <Font size="9.0" />
-                                </font>
+                            <Text text="Fredag"
+                                GridPane.columnIndex="6" GridPane.halignment="CENTER">
                             </Text>
-                            <Text text="Lørdag" textAlignment="CENTER" wrappingWidth="52.91015625"
-                                GridPane.columnIndex="7">
-                                <font>
-                                    <Font size="9.0" />
-                                </font>
+                            <Text text="Lørdag"
+                                GridPane.columnIndex="7" GridPane.halignment="CENTER">
                             </Text>
-                            <Text text="Søndag" textAlignment="CENTER" wrappingWidth="53.91015625"
-                                GridPane.columnIndex="8">
-                                <font>
-                                    <Font size="9.0" />
-                                </font>
+                            <Text text="Søndag"
+                                GridPane.columnIndex="8" GridPane.halignment="CENTER">
                             </Text>
-                            <Text text="00:30" textAlignment="CENTER" wrappingWidth="51.91015625"
-                                GridPane.rowIndex="2">
-                                <font>
-                                    <Font size="9.0" />
-                                </font>
+                            <Text text="00:30"
+                                GridPane.rowIndex="2" GridPane.halignment="CENTER">
                             </Text>
-                            <Text text="00:45" textAlignment="CENTER" wrappingWidth="51.91015625"
-                                GridPane.rowIndex="3">
-                                <font>
-                                    <Font size="9.0" />
-                                </font>
+                            <Text text="00:45"
+                                GridPane.rowIndex="3" GridPane.halignment="CENTER">
                             </Text>
-                            <Text text="01:00" textAlignment="CENTER" wrappingWidth="53.91015625"
-                                GridPane.rowIndex="4">
-                                <font>
-                                    <Font size="9.0" />
-                                </font>
+                            <Text text="01:00"
+                                GridPane.rowIndex="4" GridPane.halignment="CENTER">
                             </Text>
-                            <AnchorPane GridPane.rowIndex="1">
-                                <Text layoutX="-1.0" layoutY="17.0" text="00:00"
-                                    textAlignment="CENTER" wrappingWidth="52.91015625">
-                                    <font>
-                                        <Font size="9.0" />
-                                    </font>
-                                </Text>
-                                <Text layoutX="-1.0" layoutY="46.0" text="00:15"
-                                    textAlignment="CENTER" wrappingWidth="51.91015625">
-                                    <font>
-                                        <Font size="9.0" />
-                                    </font>
-                                </Text>
-                            </AnchorPane>
+                            <VBox GridPane.rowIndex="1" spacing="15">
+                                <Text text="00:00" />
+                                <Text text="00:15" />
+                            </VBox>
                         </GridPane>
                     </Tab>
                     <Tab text="Dag">
-                        <GridPane gridLinesVisible="true">
+                        <GridPane >
                             <columnConstraints>
                                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="153.0"
                                     minWidth="10.0" prefWidth="43.0" />
@@ -188,7 +146,7 @@
                         </GridPane>
                     </Tab>
                     <Tab text="Måned">
-                        <GridPane gridLinesVisible="true" />
+                        <GridPane />
                     </Tab>
                 </tabs>
             </TabPane>
