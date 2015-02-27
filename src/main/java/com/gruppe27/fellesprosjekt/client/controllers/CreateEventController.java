@@ -1,6 +1,5 @@
 package com.gruppe27.fellesprosjekt.client.controllers;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
 
 import com.gruppe27.fellesprosjekt.client.CalendarClient;
@@ -59,7 +58,8 @@ public class CreateEventController {
 		calendarClient.sendMessage(message);
 	}
 	
-	private void handleCancelAction(){
+	@SuppressWarnings("unused")
+	@FXML private void handleCancelAction(){
 		
 	}
 

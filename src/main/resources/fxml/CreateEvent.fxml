@@ -3,8 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
 <SplitPane xmlns:fx="http://javafx.com/fxml/1" dividerPositions="0.7" prefHeight="400.0" prefWidth="600.0"
-           xmlns="http://javafx.com/javafx/8" fx:controller="com.gruppe27.fellesprosjekt.client.controllers.CreateEvent
-           Controller">>
+           xmlns="http://javafx.com/javafx/8" fx:controller="com.gruppe27.fellesprosjekt.client.controllers.CreateEventController">
     <items>
         <AnchorPane prefHeight="160.0" prefWidth="100.0">
             <children>
@@ -47,8 +46,7 @@
             <children>
                 <Button fx:id="createEventButton" layoutX="26.0" layoutY="132.0" mnemonicParsing="false" prefHeight="45.0"
                         prefWidth="124.0" text="Opprett avtale" onAction="#handleCreateEventAction"/>
-                <Button fx:id="cancelButton" layoutX="58.0" layoutY="221.0" mnemonicParsing="false" text="Avbryt"
-                        onAction="#handleCancelAction"/>
+                <Button fx:id="cancelButton" layoutX="58.0" layoutY="221.0" mnemonicParsing="false" text="Avbryt" onAction="#handleCancelAction"/>
             </children>
         </AnchorPane>
     </items>
