@@ -87,4 +87,14 @@ public class Event {
     public User getCreator() {
         return creator;
     }
+
+	public void setName(String s) {
+		this.name = s;
+		
+		
+	}
+
+	public void setCreator(User user) {
+		this.creator = user;		
+	}
 }
