@@ -12,14 +12,10 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 public class CalendarGUI extends Application {
-	public void closeStage() {
-		
-	}
     @Override
     public void start(Stage primaryStage) throws Exception {
         CalendarClient calendarClient = new CalendarClient();
-//
-//        primaryStage.setTitle("Kalender");
+        primaryStage.setTitle("Kalender");
 //
 //        Button button = new Button();
 //        button.setText("Send test message");
