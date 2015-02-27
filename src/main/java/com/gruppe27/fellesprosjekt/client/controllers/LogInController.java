@@ -1,11 +1,13 @@
 package com.gruppe27.fellesprosjekt.client.controllers;
 
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
 import com.gruppe27.fellesprosjekt.client.CalendarApplication;
 import com.gruppe27.fellesprosjekt.client.CalendarClient;
+import com.gruppe27.fellesprosjekt.common.messages.AuthCompleteMessage;
 import com.gruppe27.fellesprosjekt.common.messages.AuthMessage;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
@@ -39,10 +41,31 @@ public class LogInController implements Initializable {
 
     @FXML
     private void submit() {
-        if (login(usernameField.getText(), passwordField.getText())) {
-            application.successfulLogin();
-        } else {
-            System.out.println("Dårlig login.");
-        }
+        AuthMessage testMessage = new AuthMessage(AuthMessage.Command.LOGIN,
+                usernameField.getText(), passwordField.getText());
+
+        CalendarClient client = CalendarClient.getInstance();
+
+        Listener loginListener = new Listener() {
+            public void received(Connection connection, Object object) {
+                if (object instanceof AuthCompleteMessage) {
+                    AuthCompleteMessage complete = (AuthCompleteMessage) object;
+
+                    switch (complete.getCommand()) {
+                        case SUCCESSFUL_LOGIN:
+                            application.successfulLogin();
+                            break;
+                        case UNSUCCESSFUL_LOGIN:
+                            // TODO: Show in GUI
+                            System.out.println("Ugyldig brukernavn og/eller passord");
+                            break;
+                    }
+                    client.removeListener(this);
+                }
+            }
+        };
+
+        client.addListener(loginListener);
+        client.sendMessage(testMessage);
     }
 }
