@@ -17,13 +17,19 @@ public class DatabaseConnector {
     static final String USER = "andreahd";
     static final String PASS = "gurgle1";
 
-    private Connection databaseConnection;
+    private static Connection connection = null;
 
-    public DatabaseConnector() throws SQLException {
-        databaseConnection = DriverManager.getConnection(DB_URL, USER, PASS);
-    }
+    protected DatabaseConnector() {}
 
-    public Connection getDatabaseConnection() {
-        return databaseConnection;
+    public static Connection getConnection() {
+        if (connection == null) {
+            try {
+                connection = DriverManager.getConnection(DB_URL, USER, PASS);
+            } catch (SQLException e) {
+                e.printStackTrace();
+                System.exit(1);
+            }
+        }
+        return connection;
     }
 }

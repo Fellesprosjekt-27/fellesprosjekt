@@ -6,16 +6,22 @@ import com.gruppe27.fellesprosjekt.common.messages.GeneralMessage;
 import com.gruppe27.fellesprosjekt.common.User;
 import com.gruppe27.fellesprosjekt.common.messages.UserMessage;
 import com.gruppe27.fellesprosjekt.server.CalendarConnection;
+import com.gruppe27.fellesprosjekt.server.DatabaseConnector;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class AuthController extends Controller {
+public class AuthController {
+    private static AuthController instance = null;
 
-    public AuthController(Connection databaseConnection) {
-        super(databaseConnection);
+    protected AuthController() {}
+
+    public static AuthController getInstance() {
+        if (instance == null) {
+            instance = new AuthController();
+        }
+        return instance;
     }
 
     public void handleMessage(CalendarConnection connection, Object message) {
@@ -29,7 +35,7 @@ public class AuthController extends Controller {
 
     private void login(CalendarConnection connection, AuthMessage authMessage) {
         try {
-            PreparedStatement statement = databaseConnection.prepareStatement(
+            PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement(
                     "SELECT username, name, password FROM User WHERE username=? AND password=?"
             );
 

@@ -20,14 +20,7 @@ public class CalendarServer {
 
         Network.register(server);
 
-        try {
-            connector = new DatabaseConnector();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
-
-        server.addListener(new CalendarListener(server, connector.getDatabaseConnection()));
+        server.addListener(new CalendarListener(server));
 
         try {
             server.bind(Network.PORT);

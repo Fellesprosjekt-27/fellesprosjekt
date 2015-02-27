@@ -16,28 +16,16 @@ import java.sql.Connection;
 
 public class CalendarListener extends Listener {
     Server server;
-    Connection databaseConnection;
 
-    AuthController authController;
-    EventController eventController;
-
-    public CalendarListener(Server server, Connection databaseConnection) {
-        this.databaseConnection = databaseConnection;
+    public CalendarListener(Server server) {
         this.server = server;
-        this.initializeControllers();
-    }
-
-    private void initializeControllers() {
-        authController = new AuthController(databaseConnection);
-        eventController = new EventController(databaseConnection);
     }
 
     public void received(com.esotericsoftware.kryonet.Connection c, Object message) {
         CalendarConnection connection = (CalendarConnection) c;
 
         if (message instanceof AuthMessage) {
-            authController.handleMessage(connection, message);
-
+            AuthController.getInstance().handleMessage(connection, message);
             return;
         }
 
@@ -52,7 +40,7 @@ public class CalendarListener extends Listener {
         }
 
         if(message instanceof EventMessage) {
-            eventController.handleMessage(connection, message);
+            EventController.getInstance().handleMessage(connection, message);
             return;
         }
     }
