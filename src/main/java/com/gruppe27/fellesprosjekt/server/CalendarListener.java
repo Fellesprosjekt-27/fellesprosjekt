@@ -16,51 +16,28 @@ import java.sql.Connection;
 
 public class CalendarListener extends Listener {
     Server server;
-    Connection databaseConnection;
 
-    AuthController authController;
-    EventController eventController;
-
-    public CalendarListener(Server server, Connection databaseConnection) {
-        this.databaseConnection = databaseConnection;
+    public CalendarListener(Server server) {
         this.server = server;
-        this.initializeControllers();
-    }
-
-    private void initializeControllers() {
-        authController = new AuthController(databaseConnection);
-        eventController = new EventController(databaseConnection);
     }
 
     public void received(com.esotericsoftware.kryonet.Connection c, Object message) {
         CalendarConnection connection = (CalendarConnection) c;
 
         if (message instanceof AuthMessage) {
-            authController.handleMessage(connection, message);
-
+            AuthController.getInstance().handleMessage(connection, message);
             return;
         }
 
-        if (message instanceof TestMessage) {
-            System.out.println("Received a testmessage");
-            TestMessage received = (TestMessage) message;
-            TestMessage newMessage = new TestMessage("Received message: " + received.getMessage());
-
-
-            server.sendToAllTCP(newMessage);
-            return;
-        }
-
-        if(message instanceof EventMessage) {
-            eventController.handleMessage(connection, message);
+        if (message instanceof EventMessage) {
+            EventController.getInstance().handleMessage(connection, message);
             return;
         }
     }
 
     public void connected(com.esotericsoftware.kryonet.Connection c) {
         CalendarConnection connection = (CalendarConnection) c;
-        TestMessage sendMessage = new TestMessage("Hi!");
-        connection.sendTCP(sendMessage);
+        System.out.println("User connected.");
     }
 }
 

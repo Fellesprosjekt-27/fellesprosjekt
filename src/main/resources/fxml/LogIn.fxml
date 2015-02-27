@@ -22,10 +22,8 @@
                            GridPane.rowIndex="2"/>
         </GridPane>
         <HBox>
-            <Button fx:id="okButton" text="OK" translateX="70"
-                    onMouseReleased="#ok"/>
-            <Button fx:id="cancelButton" text="Cancel" translateX="100"
-                    onMouseReleased="#cancel"/>
+            <Button fx:id="submitButton" text="Logg inn" translateX="70"
+                    onMouseReleased="#submit"/>
         </HBox>
     </VBox>
 </AnchorPane>

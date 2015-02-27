@@ -23,6 +23,8 @@ public class Network {
         kryo.register(String.class);
         kryo.register(AuthMessage.class);
         kryo.register(AuthMessage.Command.class);
+        kryo.register(AuthCompleteMessage.class);
+        kryo.register(AuthCompleteMessage.Command.class);
         kryo.register(UserMessage.class);
         kryo.register(UserMessage.Command.class);
         kryo.register(GeneralMessage.class);

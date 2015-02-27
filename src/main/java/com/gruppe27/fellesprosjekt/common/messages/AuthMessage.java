@@ -5,9 +5,9 @@ public class AuthMessage {
         LOGIN
     }
 
-    private Command command;
-    private String username;
-    private String password;
+    Command command;
+    String username;
+    String password;
 
     public AuthMessage() {}
 
