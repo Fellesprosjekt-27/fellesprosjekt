@@ -7,8 +7,8 @@ public class EventMessage {
             CREATE_EVENT
         }
 
-        private Event event;
-        private Command command;
+        Event event;
+        Command command;
 
         public EventMessage() {}
 

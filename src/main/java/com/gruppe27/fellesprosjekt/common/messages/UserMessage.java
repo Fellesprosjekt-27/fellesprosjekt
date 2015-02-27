@@ -3,12 +3,10 @@ package com.gruppe27.fellesprosjekt.common.messages;
 import com.gruppe27.fellesprosjekt.common.User;
 
 public class UserMessage {
-    public enum Command {
-        SUCCESSFUL_LOGIN
-    }
+    public enum Command {}
 
-    private User user;
-    private Command command;
+    User user;
+    Command command;
 
     public UserMessage() {}
 

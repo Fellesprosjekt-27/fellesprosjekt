@@ -29,17 +29,7 @@ public class CalendarListener extends Listener {
             return;
         }
 
-        if (message instanceof TestMessage) {
-            System.out.println("Received a testmessage");
-            TestMessage received = (TestMessage) message;
-            TestMessage newMessage = new TestMessage("Received message: " + received.getMessage());
-
-
-            server.sendToAllTCP(newMessage);
-            return;
-        }
-
-        if(message instanceof EventMessage) {
+        if (message instanceof EventMessage) {
             EventController.getInstance().handleMessage(connection, message);
             return;
         }
@@ -47,8 +37,7 @@ public class CalendarListener extends Listener {
 
     public void connected(com.esotericsoftware.kryonet.Connection c) {
         CalendarConnection connection = (CalendarConnection) c;
-        TestMessage sendMessage = new TestMessage("Hi!");
-        connection.sendTCP(sendMessage);
+        System.out.println("User connected.");
     }
 }
 

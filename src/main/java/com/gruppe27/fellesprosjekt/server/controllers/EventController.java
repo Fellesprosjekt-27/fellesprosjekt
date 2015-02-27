@@ -46,7 +46,6 @@ public class EventController {
             statement.setString(5, event.getCreator().getUsername());
             int result = statement.executeUpdate();
 
-
             System.out.println(result + " rows affected");
             GeneralMessage createdMessage = new GeneralMessage(GeneralMessage.Command.SUCCESSFUL_CREATE,
                     "Avtalen " + event.getName() + " opprettet.");

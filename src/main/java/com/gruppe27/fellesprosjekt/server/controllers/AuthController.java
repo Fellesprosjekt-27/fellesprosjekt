@@ -1,5 +1,6 @@
 package com.gruppe27.fellesprosjekt.server.controllers;
 
+import com.gruppe27.fellesprosjekt.common.messages.AuthCompleteMessage;
 import com.gruppe27.fellesprosjekt.common.messages.AuthMessage;
 import com.gruppe27.fellesprosjekt.common.messages.ErrorMessage;
 import com.gruppe27.fellesprosjekt.common.messages.GeneralMessage;
@@ -43,18 +44,19 @@ public class AuthController {
             statement.setString(2, authMessage.getPassword());
             ResultSet result = statement.executeQuery();
 
+            AuthCompleteMessage authCompleteMessage;
             if (result.next()) {
                 String username = result.getString("username");
                 String name = result.getString("name");
 
                 User user = new User(username, name);
-                UserMessage userMessage = new UserMessage(UserMessage.Command.SUCCESSFUL_LOGIN, user);
-                connection.sendTCP(userMessage);
+                authCompleteMessage = new AuthCompleteMessage(AuthCompleteMessage.Command.SUCCESSFUL_LOGIN, user);
+                System.out.println("bra auth sender " + authCompleteMessage.getUser());
+                connection.sendTCP(authCompleteMessage);
             } else {
                 System.out.println("fant ingen bruker");
-                GeneralMessage badAuthMessage = new GeneralMessage(GeneralMessage.Command.UNSUCCESSFUL_LOGIN,
-                        "Ugyldig brukernavn og/eller passord.");
-                connection.sendTCP(badAuthMessage);
+                authCompleteMessage = new AuthCompleteMessage(AuthCompleteMessage.Command.UNSUCCESSFUL_LOGIN);
+                connection.sendTCP(authCompleteMessage);
             }
         } catch (SQLException e) {
             e.printStackTrace();

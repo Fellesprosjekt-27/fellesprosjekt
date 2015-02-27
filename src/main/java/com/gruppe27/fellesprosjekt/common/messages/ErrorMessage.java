@@ -1,7 +1,7 @@
 package com.gruppe27.fellesprosjekt.common.messages;
 
 public class ErrorMessage {
-    private String message;
+    String message;
 
     public ErrorMessage() {
         this.message = "Noe gikk galt!";
