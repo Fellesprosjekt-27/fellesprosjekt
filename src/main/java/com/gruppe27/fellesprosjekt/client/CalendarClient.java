@@ -6,11 +6,13 @@ import com.gruppe27.fellesprosjekt.common.Network;
 import java.io.IOException;
 
 public class CalendarClient {
+    private static CalendarClient instance;
+
     public static final int TIMEOUT = 5000;
 
-    Client client;
+    private Client client;
 
-    public CalendarClient() {
+    protected CalendarClient() {
         client = new Client();
         client.start();
 
@@ -24,6 +26,13 @@ public class CalendarClient {
             e.printStackTrace();
             System.exit(1);
         }
+    }
+
+    public static CalendarClient getInstance() {
+        if (instance == null) {
+            instance = new CalendarClient();
+        }
+        return instance;
     }
 
     public void sendMessage(Object message) {

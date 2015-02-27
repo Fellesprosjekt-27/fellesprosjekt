@@ -39,7 +39,7 @@
               <finalName>fellesprosjekt27-gui</finalName>
               <archive>
                 <manifest>
-                  <mainClass>com.gruppe27.fellesprosjekt.client.CalendarGUI</mainClass>
+                  <mainClass>com.gruppe27.fellesprosjekt.client.CalendarApplication</mainClass>
                 </manifest>
               </archive>
               <descriptorRefs>
