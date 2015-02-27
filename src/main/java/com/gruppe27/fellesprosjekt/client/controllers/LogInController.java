@@ -1,7 +1,7 @@
 package com.gruppe27.fellesprosjekt.client.controllers;
 
 import com.gruppe27.fellesprosjekt.client.CalendarClient;
-import com.gruppe27.fellesprosjekt.common.AuthMessage;
+import com.gruppe27.fellesprosjekt.common.messages.AuthMessage;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;

@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.effect.*?>
-<?import java.lang.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
-<AnchorPane id="pane" minHeight="0.0" minWidth="0.0" prefHeight="400.0" prefWidth="420.0" stylesheets="@test.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
-                     <children>
-                        <Label layoutX="173.0" layoutY="14.0" prefHeight="26.0" prefWidth="90.0" text="AVTALE INFO" />
-                        <Label layoutX="43.0" layoutY="137.0" text="Deltakere" />
-                        <ListView fx:id="deltakerListe" layoutX="43.0" layoutY="160.0" prefHeight="142.0" prefWidth="271.0">
-         </ListView>
-                        <ScrollBar layoutX="297.0" layoutY="160.0" orientation="VERTICAL" prefHeight="142.0" prefWidth="17.0" />
-      <Label layoutX="43.0" layoutY="73.0" prefHeight="26.0" prefWidth="333.0" text="Morgenmøte, mandag">
-         <font>
-            <Font name="System Bold" size="15.0" />
-         </font></Label>
-      <Label fx:id="RomInfo" layoutX="286.0" layoutY="54.0" text="RomNr" />
-      <Label layoutX="248.0" layoutY="137.0" text="Status" />
-      <Label layoutX="44.0" layoutY="308.0" text="Alle har svart" textFill="#169405">
-         <font>
-            <Font size="12.0" />
-         </font></Label>
-      <Label layoutX="44.0" layoutY="54.0" text="Du deltar (ikke) på:" />
-      <Button fx:id="DeltakerSlettAvtale" layoutX="314.0" layoutY="346.0" mnemonicParsing="false" text="Slett avtale" onAction="#handleParticipantDeleteAction"/>
-      <Label layoutX="257.0" layoutY="99.0" text="Gjelder gruppe XX" />
-      <Label layoutX="131.0" layoutY="308.0" text="Det er fortsatt noen som ikke har svart" textFill="#da0909" />
-                     </children>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" id="pane" minHeight="0.0" minWidth="0.0" prefHeight="400.0" prefWidth="420.0"
+            stylesheets="@test.css" xmlns="http://javafx.com/javafx/8">
+    <children>
+        <Label layoutX="173.0" layoutY="14.0" prefHeight="26.0" prefWidth="90.0" text="AVTALE INFO"/>
+        <Label layoutX="43.0" layoutY="137.0" text="Deltakere"/>
+        <ListView fx:id="deltakerListe" layoutX="43.0" layoutY="160.0" prefHeight="142.0" prefWidth="271.0">
+        </ListView>
+        <ScrollBar layoutX="297.0" layoutY="160.0" orientation="VERTICAL" prefHeight="142.0" prefWidth="17.0"/>
+        <Label layoutX="43.0" layoutY="73.0" prefHeight="26.0" prefWidth="333.0" text="Morgenmøte, mandag">
+            <font>
+                <Font name="System Bold" size="15.0"/>
+            </font>
+        </Label>
+        <Label fx:id="RomInfo" layoutX="286.0" layoutY="54.0" text="RomNr"/>
+        <Label layoutX="248.0" layoutY="137.0" text="Status"/>
+        <Label layoutX="44.0" layoutY="308.0" text="Alle har svart" textFill="#169405">
+            <font>
+                <Font size="12.0"/>
+            </font>
+        </Label>
+        <Label layoutX="44.0" layoutY="54.0" text="Du deltar (ikke) på:"/>
+        <Button fx:id="DeltakerSlettAvtale" layoutX="314.0" layoutY="346.0" mnemonicParsing="false" text="Slett avtale"
+                onAction="#handleParticipantDeleteAction"/>
+        <Label layoutX="257.0" layoutY="99.0" text="Gjelder gruppe XX"/>
+        <Label layoutX="131.0" layoutY="308.0" text="Det er fortsatt noen som ikke har svart" textFill="#da0909"/>
+    </children>
 </AnchorPane>

@@ -26,7 +26,7 @@ public class CalendarGUI extends Application {
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/LogIn.fxml"));
         Parent root = (Parent)loader.load();
-        LogInController loginController = loader.<LogInController>getController();
+        LogInController loginController = loader.getController();
         loginController.setClient(calendarClient);
 
         Scene scene = new Scene(root, 500, 450);
