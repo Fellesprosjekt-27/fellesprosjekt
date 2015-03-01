@@ -3,7 +3,6 @@ package com.gruppe27.fellesprosjekt.client;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Listener;
 import com.gruppe27.fellesprosjekt.common.Network;
-import com.gruppe27.fellesprosjekt.common.User;
 
 import java.io.IOException;
 
@@ -13,7 +12,6 @@ public class CalendarClient {
     public static final int TIMEOUT = 5000;
 
     private Client client;
-    User user;
 
     protected CalendarClient() {
         client = new Client();
@@ -48,8 +46,5 @@ public class CalendarClient {
 
     public void sendMessage(Object message) {
         client.sendTCP(message);
-    }
-    public User getUser(){
-    	return user;
     }
 }

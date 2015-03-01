@@ -1,26 +1,28 @@
 package com.gruppe27.fellesprosjekt.client.controllers;
 
-import java.time.LocalTime;
-
+import com.gruppe27.fellesprosjekt.client.CalendarApplication;
 import com.gruppe27.fellesprosjekt.client.CalendarClient;
 import com.gruppe27.fellesprosjekt.common.Event;
 import com.gruppe27.fellesprosjekt.common.messages.EventMessage;
-
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
-public class CreateEventController {
+import java.net.URL;
+import java.time.LocalTime;
+import java.util.ResourceBundle;
+
+public class CreateEventController implements Initializable {
 	
 	@FXML
 	TextField emne;
-	
-	@FXML
-	DatePicker dato;
-	
+
+	@FXML DatePicker dato;
+
 	@FXML
 	TextField fraTid;
 	
@@ -39,10 +41,17 @@ public class CreateEventController {
 	@FXML
 	Button cancelButton;
 
-	private CalendarClient calendarClient;
-	
+    private CalendarApplication application;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {}
+
+    public void setApp(CalendarApplication application) {
+        this.application = application;
+    }
+
 	@FXML
-	private void handleCreateEventAction(){
+	private void handleCreateEventAction() {
 		Event event = new Event();
 		event.setName(emne.getText());
 	
@@ -52,19 +61,11 @@ public class CreateEventController {
 		LocalTime endTime = LocalTime.parse(tilTid.getText());
 		event.setStartTime(startTime);
 		event.setEndTime(endTime);
-		event.setCreator(calendarClient.getUser());
+		event.setCreator(application.getUser()); // TODO: This should just be set on the backend instead
 		
 		EventMessage message = new EventMessage(EventMessage.Command.CREATE_EVENT, event);
-		calendarClient.sendMessage(message);
+		CalendarClient.getInstance().sendMessage(message);
 	}
 	
-	@SuppressWarnings("unused")
-	@FXML private void handleCancelAction(){
-		
-	}
-
-	public void setClient(CalendarClient calendarClient) {
-		this.calendarClient = calendarClient;
-	}
-
+	@FXML private void handleCancelAction() {}
 }

@@ -1,19 +1,25 @@
 package com.gruppe27.fellesprosjekt.client;
-import com.gruppe27.fellesprosjekt.client.controllers.LogInController;
 
+import com.gruppe27.fellesprosjekt.client.controllers.CreateEventController;
+import com.gruppe27.fellesprosjekt.client.controllers.LogInController;
+import com.gruppe27.fellesprosjekt.common.User;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
 
 public class CalendarApplication extends Application {
+    public static final int WIDTH = 500;
+    public static final int HEIGHT = 450;
+
     private Stage stage;
+    private User user;
 
     public static void main(String[] args) {
         launch(args);
@@ -27,13 +33,24 @@ public class CalendarApplication extends Application {
         this.stage.show();
     }
 
-    public void successfulLogin() {
+    public User getUser() {
+        return user;
+    }
+
+    public void successfulLogin(User user) {
         System.out.println("Nå har du logget inn.");
+        this.user = user;
+        gotoCreateEvent();
     }
 
     private void gotoLogin() {
-        LogInController loginController = (LogInController) replaceSceneContent("/fxml/LogIn.fxml");
-        loginController.setApp(this);
+        LogInController controller = (LogInController) replaceSceneContent("/fxml/LogIn.fxml");
+        controller.setApp(this);
+    }
+
+    private void gotoCreateEvent() {
+        CreateEventController controller = (CreateEventController) replaceSceneContent("/fxml/CreateEvent.fxml");
+        controller.setApp(this);
     }
 
     private Initializable replaceSceneContent(String fxml) {
@@ -48,9 +65,13 @@ public class CalendarApplication extends Application {
             return null;
         }
 
-        Scene scene = new Scene(root, 500, 450);
-        stage.setScene(scene);
-        stage.sizeToScene();
+        // replaceSceneContent can be called from a non-GUI thread, runLater makes it work
+        Platform.runLater(() -> {
+            Scene scene = new Scene(root, WIDTH, HEIGHT);
+            stage.setScene(scene);
+            stage.sizeToScene();
+        });
+
         return (Initializable) loader.getController();
     }
 }
