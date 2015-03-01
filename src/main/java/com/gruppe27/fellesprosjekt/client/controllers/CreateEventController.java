@@ -61,8 +61,7 @@ public class CreateEventController implements Initializable {
 		LocalTime endTime = LocalTime.parse(tilTid.getText());
 		event.setStartTime(startTime);
 		event.setEndTime(endTime);
-		event.setCreator(application.getUser()); // TODO: This should just be set on the backend instead
-		
+
 		EventMessage message = new EventMessage(EventMessage.Command.CREATE_EVENT, event);
 		CalendarClient.getInstance().sendMessage(message);
 	}
