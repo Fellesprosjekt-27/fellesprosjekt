@@ -26,8 +26,10 @@ CREATE TABLE Event (
   start TIME NOT NULL,
   end TIME NOT NULL,
   creator VARCHAR(32) NOT NULL,
+  room VARCHAR(32),
   PRIMARY KEY(id),
-  FOREIGN KEY(creator) REFERENCES User(username)
+  FOREIGN KEY(creator) REFERENCES User(username),
+  FOREIGN KEY (room) REFERENCES Room(name)
 );
 
 CREATE TABLE TeamEvent (
@@ -46,3 +48,8 @@ CREATE TABLE UserEvent (
   FOREIGN KEY(event_id) REFERENCES Event(id)
 );
 
+CREATE TABLE Room (
+  name VARCHAR(64) NOT NULL,
+  capacity INT NOT NULL,
+  PRIMARY KEY (name)
+);

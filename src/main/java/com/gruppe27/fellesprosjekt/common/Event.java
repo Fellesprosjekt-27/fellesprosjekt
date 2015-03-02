@@ -15,6 +15,7 @@ public class Event {
     private HashSet<User> userParticipants;
     private HashSet<Group> groupParticipants;
     private String name;
+    private Room room;
 
     public Event(){
         this.creator = null;
@@ -97,4 +98,14 @@ public class Event {
 	public void setCreator(User user) {
 		this.creator = user;		
 	}
+
+    public void setRoom(Room room) {
+        if(this.room != null) {
+            this.room.removeEvent(this);
+        }
+
+        this.room = room;
+        room.addEvent(this);
+    }
+
 }
