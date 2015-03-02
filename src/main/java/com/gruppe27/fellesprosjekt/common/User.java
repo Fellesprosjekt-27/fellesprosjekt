@@ -21,6 +21,9 @@ public class User {
         this.setName(name);
         this.setUsername(username);
     }
+    public User(String username) {
+        this.setUsername(username);
+    }
 
     @Override
     public String toString() {

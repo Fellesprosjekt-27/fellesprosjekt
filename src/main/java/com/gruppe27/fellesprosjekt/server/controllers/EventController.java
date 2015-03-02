@@ -37,62 +37,90 @@ public class EventController {
                 sendAllEvents(connection);
         }
     }
-
     private void sendAllEvents(CalendarConnection connection) {
         try {
-
             PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement(
                     "SELECT Event.id,Event.name,Event.date,Event.start,Event.end, Creator.username,Creator.name, Participant.username, Participant.name" +
                             " FROM Event JOIN User AS Creator ON Event.creator = Creator.username" +
-                            " JOIN UserEvent ON Event.id = UserEvent.event_id JOIN User AS Participant ON UserEvent.username = Participant.username"
-            );
-            HashSet<Event> events =  new HashSet<>();
-            int eventAmount = 0;
-            ResultSet result = statement.executeQuery();
-            int currentEventId = -1;
-            Event event = null;
-            while(result.next()) {
-                if( !(result.getInt("Event.id") == currentEventId) ) {
-                    eventAmount++;
-                    event = new Event();
-                    User creator = new User();
-                    User participant = new User();
+                            " JOIN UserEvent ON Event.id = UserEvent.event_id JOIN User AS Participant ON UserEvent.username = Participant.username");
 
-                    currentEventId = result.getInt(1);
-                    event.setName(result.getString(2));
-                    event.setDate(result.getDate(3).toLocalDate());
-                    event.setStartTime(result.getTime(4).toLocalTime());
-                    event.setEndTime(result.getTime(5).toLocalTime());
-                    creator.setUsername(result.getString(6));
-                    creator.setName(result.getString(7));
-                    participant.setUsername(result.getString(8));
-                    participant.setName(result.getString(9));
-
-                    event.addParticipant(participant);
-
-                    event.setCreator(creator);
-                    events.add(event);
-                    System.out.println("add event");
-                } else {
-                    User participant = new User();
-                    participant.setUsername(result.getString(8));
-                    participant.setName(result.getString(9));
-                    if(event == null) {return;}
-                    event.addParticipant(participant);
-                    System.out.println("Add user");
-                }
-
-            }
-
-            System.out.println(eventAmount + " events sent");
+            ResultSet resultSet = statement.executeQuery();
+            HashSet<Event> events = parseEventResult(resultSet);
             EventMessage createdMessage = new EventMessage(EventMessage.Command.RECIEVE_ALL, events);
             connection.sendTCP(createdMessage);
-
+            System.out.println("sent " + events.size() + "events.");
         } catch (SQLException e) {
             e.printStackTrace();
             ErrorMessage error = new ErrorMessage();
             connection.sendTCP(error);
         }
+    }
+
+    private void sendConnectedUserEvents(CalendarConnection connection) {
+        HashSet<Event> events = getUserEvents(connection, connection.getUser());
+        EventMessage createdMessage = new EventMessage(EventMessage.Command.RECIEVE_ALL, events);
+        connection.sendTCP(createdMessage);
+    }
+    private HashSet<Event> getUserEvents(CalendarConnection connection, User user) {
+        try {
+            PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement(
+                    "SELECT Event.id,Event.name,Event.date,Event.start,Event.end, Creator.username,Creator.name, Participant.username, Participant.name" +
+                            " FROM Event JOIN User AS Creator ON Event.creator = Creator.username" +
+                            " JOIN UserEvent ON Event.id = UserEvent.event_id JOIN User AS Participant ON UserEvent.username = Participant.username" +
+                            " WHERE Participant.username = " + user.getUsername()
+            );
+            HashSet<Event> events =  new HashSet<>();
+            ResultSet result = statement.executeQuery();
+
+            events = parseEventResult(result);
+
+            return events;
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            ErrorMessage error = new ErrorMessage();
+            connection.sendTCP(error);
+            return null;
+        }
+    }
+
+    private HashSet<Event> parseEventResult(ResultSet result) throws SQLException {
+        int currentEventId = -1;
+        Event event = null;
+        HashSet<Event> events = new HashSet<Event>();
+        while(result.next()) {
+            if (!(result.getInt("Event.id") == currentEventId )) {
+                event = new Event();
+                User creator = new User();
+                User participant = new User();
+                currentEventId = result.getInt(1);
+                event.setName(result.getString(2));
+                event.setDate(result.getDate(3).toLocalDate());
+                event.setStartTime(result.getTime(4).toLocalTime());
+                event.setEndTime(result.getTime(5).toLocalTime());
+                creator.setUsername(result.getString(6));
+                creator.setName(result.getString(7));
+                participant.setUsername(result.getString(8));
+                participant.setName(result.getString(9));
+
+                event.addParticipant(participant);
+
+                event.setCreator(creator);
+                events.add(event);
+                System.out.println("add event");
+            } else {
+                if(event == null) {
+                    return events;
+                }
+                User participant = new User();
+                participant.setUsername(result.getString(8));
+                participant.setName(result.getString(9));
+                event.addParticipant(participant);
+                System.out.println("Add user");
+            }
+        }
+        return events;
     }
 
     private void createEvent(CalendarConnection connection, Event event) {
