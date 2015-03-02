@@ -1,3 +1,7 @@
+DROP DATABASE andreahd_cal;
+CREATE DATABASE andreahd_cal;
+USE andreahd_cal;
+
 CREATE TABLE User (
   username VARCHAR(32) NOT NULL,
   name VARCHAR(64) NOT NULL,
@@ -17,6 +21,12 @@ CREATE TABLE TeamMember (
   PRIMARY KEY(username, team_number),
   FOREIGN KEY(username) REFERENCES User(username),
   FOREIGN KEY(team_number) REFERENCES Team(number)
+);
+
+CREATE TABLE Room (
+  name VARCHAR(64) NOT NULL,
+  capacity INT NOT NULL,
+  PRIMARY KEY (name)
 );
 
 CREATE TABLE Event (
@@ -48,8 +58,4 @@ CREATE TABLE UserEvent (
   FOREIGN KEY(event_id) REFERENCES Event(id)
 );
 
-CREATE TABLE Room (
-  name VARCHAR(64) NOT NULL,
-  capacity INT NOT NULL,
-  PRIMARY KEY (name)
-);
+

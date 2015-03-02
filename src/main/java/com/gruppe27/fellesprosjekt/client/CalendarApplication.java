@@ -2,6 +2,7 @@ package com.gruppe27.fellesprosjekt.client;
 
 import com.gruppe27.fellesprosjekt.client.controllers.CreateEventController;
 import com.gruppe27.fellesprosjekt.client.controllers.LogInController;
+import com.gruppe27.fellesprosjekt.common.Event;
 import com.gruppe27.fellesprosjekt.common.User;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -12,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.HashSet;
 
 
 public class CalendarApplication extends Application {
@@ -20,6 +22,16 @@ public class CalendarApplication extends Application {
 
     private Stage stage;
     private User user;
+
+    public HashSet<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(HashSet<Event> events) {
+        this.events = events;
+    }
+
+    HashSet<Event> events;
 
     public static void main(String[] args) {
         launch(args);
@@ -41,7 +53,9 @@ public class CalendarApplication extends Application {
         System.out.println("Nå har du logget inn.");
         this.user = user;
         gotoCreateEvent();
+
     }
+
 
     private void gotoLogin() {
         LogInController controller = (LogInController) replaceSceneContent("/fxml/LogIn.fxml");

@@ -33,6 +33,7 @@ public class CalendarListener extends Listener {
             EventController.getInstance().handleMessage(connection, message);
             return;
         }
+
     }
 
     public void connected(com.esotericsoftware.kryonet.Connection c) {
