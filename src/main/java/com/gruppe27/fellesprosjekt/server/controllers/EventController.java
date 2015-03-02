@@ -43,7 +43,7 @@ public class EventController {
             statement.setString(2, event.getDate().toString());
             statement.setString(3, event.getStartTime().toString());
             statement.setString(4, event.getEndTime().toString());
-            statement.setString(5, event.getCreator().getUsername());
+            statement.setString(5, connection.getUser().getUsername());
             int result = statement.executeUpdate();
 
             System.out.println(result + " rows affected");

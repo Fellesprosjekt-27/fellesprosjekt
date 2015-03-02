@@ -1,11 +1,9 @@
 package com.gruppe27.fellesprosjekt.server.controllers;
 
+import com.gruppe27.fellesprosjekt.common.User;
 import com.gruppe27.fellesprosjekt.common.messages.AuthCompleteMessage;
 import com.gruppe27.fellesprosjekt.common.messages.AuthMessage;
 import com.gruppe27.fellesprosjekt.common.messages.ErrorMessage;
-import com.gruppe27.fellesprosjekt.common.messages.GeneralMessage;
-import com.gruppe27.fellesprosjekt.common.User;
-import com.gruppe27.fellesprosjekt.common.messages.UserMessage;
 import com.gruppe27.fellesprosjekt.server.CalendarConnection;
 import com.gruppe27.fellesprosjekt.server.DatabaseConnector;
 
@@ -50,6 +48,7 @@ public class AuthController {
                 String name = result.getString("name");
 
                 User user = new User(username, name);
+                connection.setUser(user);
                 authCompleteMessage = new AuthCompleteMessage(AuthCompleteMessage.Command.SUCCESSFUL_LOGIN, user);
                 System.out.println("bra auth sender " + authCompleteMessage.getUser());
                 connection.sendTCP(authCompleteMessage);

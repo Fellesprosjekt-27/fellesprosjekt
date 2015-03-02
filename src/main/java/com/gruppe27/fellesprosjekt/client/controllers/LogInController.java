@@ -28,16 +28,7 @@ public class LogInController implements Initializable {
     }
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
-    }
-
-    private boolean login(String username, String password) {
-        AuthMessage testMessage = new AuthMessage(AuthMessage.Command.LOGIN, username, password);
-        CalendarClient.getInstance().sendMessage(testMessage);
-        // TODO: Listen for the result
-        return true;
-    }
+    public void initialize(URL location, ResourceBundle resources) {}
 
     @FXML
     private void submit() {
@@ -53,7 +44,7 @@ public class LogInController implements Initializable {
 
                     switch (complete.getCommand()) {
                         case SUCCESSFUL_LOGIN:
-                            application.successfulLogin();
+                            application.successfulLogin(complete.getUser());
                             break;
                         case UNSUCCESSFUL_LOGIN:
                             // TODO: Show in GUI
