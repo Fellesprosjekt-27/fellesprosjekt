@@ -1,18 +1,11 @@
-#pane{
-    -fx-background-image: url("../images/PostIt.jpg");
+#postItPane{
+    -fx-background-image: url("../../images/PostIt.jpg");
     -fx-background-size: stretch;
     -fx-background-repeat: stretch;
     -fx-background-position: bottom left;  
 }
- 
-}
-#border{
-    -fx-border-color: [ffffff,ffffff,ffffff,000000];
-    -fx-background-color: 000000ff;
-}
 			 
 #checkBoxYes{
-    -fx-
 }
 
 #checkBoxNo{
