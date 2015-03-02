@@ -1,0 +1,50 @@
+#pane{
+    -fx-background-image: url("../images/PostIt.jpg");
+    -fx-background-size: stretch;
+    -fx-background-repeat: stretch;
+    -fx-background-position: bottom left;  
+}
+ 
+}
+#border{
+    -fx-border-color: [ffffff,ffffff,ffffff,000000];
+    -fx-background-color: 000000ff;
+}
+			 
+#checkBoxYes{
+    -fx-
+}
+
+#checkBoxNo{
+}
+
+#checkBoxInd{
+}
+
+#cancelButton{
+    -fx-background-color: red, linear-gradient(#cc4a29 50%, FF6C47 100%),radial-gradient(center 50% -40%, radius 200%,cc4a29 45%,rgba(230,230,230,0) 50% );
+    -fx-background-radius: 30;
+    -fx-background-insets: 0,1,1;
+    -fx-text-fill: #654b00;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-text-fill: black;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 );
+}
+#createEventButton{
+    -fx-background-color: green, linear-gradient(#8AE65C 50%, AAE670 100%),radial-gradient(center 50% -40%, radius 200%,#6ada6a 45%,rgba(230,230,230,0) 50% );
+    -fx-background-radius: 30;
+    -fx-background-insets: 0,1,1;
+    -fx-text-fill: #654b00;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-text-fill: black;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 );
+}
+#buttonPane{
+    -fx-background-color: #aaaaaa;
+
+}
+
+
+
