@@ -17,7 +17,7 @@ public class Event {
     private String name;
     private Room room;
 
-    public Event(){
+    public Event() {
         this.creator = null;
         userParticipants = new HashSet<User>();
         groupParticipants = new HashSet<Group>();
@@ -85,19 +85,20 @@ public class Event {
         return creator;
     }
 
-	public void setName(String s) {
-		this.name = s;
-		
-		
-	}
+    public void setName(String s) {
+        this.name = s;
 
-	public void setCreator(User user) {
-		this.creator = user;		
-	}
+
+    }
+
+    public void setCreator(User user) {
+        this.creator = user;
+    }
 
     public void setRoom(Room room) {
         this.room = room;
     }
+
     public String toString() {
         return "Name: " + getName() + ".";
     }

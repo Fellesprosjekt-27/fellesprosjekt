@@ -9,7 +9,8 @@ public class AuthMessage {
     String username;
     String password;
 
-    public AuthMessage() {}
+    public AuthMessage() {
+    }
 
     public AuthMessage(Command command, String username, String password) {
         this.command = command;

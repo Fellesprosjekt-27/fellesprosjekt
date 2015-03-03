@@ -9,16 +9,15 @@ import com.gruppe27.fellesprosjekt.server.CalendarConnection;
 import com.gruppe27.fellesprosjekt.server.DatabaseConnector;
 
 import java.sql.PreparedStatement;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.HashSet;
 
 public class EventController {
     private static EventController instance = null;
 
-    protected EventController() {}
+    protected EventController() {
+    }
 
     public static EventController getInstance() {
         if (instance == null) {
@@ -37,6 +36,7 @@ public class EventController {
                 sendAllEvents(connection);
         }
     }
+
     private void sendAllEvents(CalendarConnection connection) {
         try {
             PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement(
@@ -61,6 +61,7 @@ public class EventController {
         EventMessage createdMessage = new EventMessage(EventMessage.Command.RECIEVE_ALL, events);
         connection.sendTCP(createdMessage);
     }
+
     private HashSet<Event> getUserEvents(CalendarConnection connection, User user) {
         try {
             PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement(
@@ -88,8 +89,8 @@ public class EventController {
         int currentEventId = -1;
         Event event = null;
         HashSet<Event> events = new HashSet<Event>();
-        while(result.next()) {
-            if (result.getInt("Event.id") != currentEventId ) {
+        while (result.next()) {
+            if (result.getInt("Event.id") != currentEventId) {
                 event = new Event();
                 User creator = new User();
                 User participant = new User();
@@ -109,7 +110,7 @@ public class EventController {
                 events.add(event);
                 System.out.println("add event");
             } else {
-                if(event == null) {
+                if (event == null) {
                     return events;
                 }
                 User participant = new User();

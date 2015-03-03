@@ -13,7 +13,8 @@ public class RoomMessage {
     HashSet<Room> rooms;
     Command command;
 
-    public RoomMessage() {}
+    public RoomMessage() {
+    }
 
     public RoomMessage(Command command, HashSet<Room> rooms) {
         this.command = command;

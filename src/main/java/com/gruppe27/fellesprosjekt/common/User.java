@@ -21,6 +21,7 @@ public class User {
         this.setName(name);
         this.setUsername(username);
     }
+
     public User(String username) {
         this.setUsername(username);
     }
@@ -39,6 +40,7 @@ public class User {
 
     /**
      * Takes in a group and adds it to the user's other groups
+     *
      * @param group
      */
     public void addUserToGroup(Group group) {

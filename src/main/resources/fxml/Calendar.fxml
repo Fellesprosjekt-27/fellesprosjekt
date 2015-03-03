@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.shape.*?>
-<?import javafx.scene.text.*?>
-<?import javafx.scene.image.*?>
-<?import java.lang.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
 <?import java.net.URL?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="450" prefWidth="700">	        
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="450" prefWidth="700">
     <SplitPane dividerPositions="0.25" AnchorPane.bottomAnchor="0"
-        AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
-        AnchorPane.topAnchor="0">
+               AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
+               AnchorPane.topAnchor="0">
         <AnchorPane minHeight="0" minWidth="0">
             <TitledPane collapsible="false" text="Vis"
                 AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0"
@@ -27,48 +25,48 @@
         </AnchorPane>
         <AnchorPane>
             <TabPane side="RIGHT" tabClosingPolicy="UNAVAILABLE"
-                AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0"
-                AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+                     AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0"
+                     AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
                 <tabs>
                     <Tab text="Uke">
                         <GridPane >
                             <columnConstraints>
-                                <ColumnConstraints minWidth="10.0" prefWidth="100.0" />
-                                <ColumnConstraints />
+                                <ColumnConstraints minWidth="10.0" prefWidth="100.0"/>
+                                <ColumnConstraints/>
                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                    prefWidth="100.0" />
+                                                   prefWidth="100.0"/>
                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                    prefWidth="100.0" />
+                                                   prefWidth="100.0"/>
                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                    prefWidth="100.0" />
+                                                   prefWidth="100.0"/>
                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                    prefWidth="100.0" />
+                                                   prefWidth="100.0"/>
                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                    prefWidth="100.0" />
+                                                   prefWidth="100.0"/>
                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                    prefWidth="100.0" />
+                                                   prefWidth="100.0"/>
                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                    prefWidth="100.0" />
+                                                   prefWidth="100.0"/>
                             </columnConstraints>
                             <rowConstraints>
                                 <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                    vgrow="SOMETIMES" />
+                                                vgrow="SOMETIMES"/>
                                 <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                    vgrow="SOMETIMES" />
+                                                vgrow="SOMETIMES"/>
                                 <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                    vgrow="SOMETIMES" />
+                                                vgrow="SOMETIMES"/>
                                 <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                    vgrow="SOMETIMES" />
+                                                vgrow="SOMETIMES"/>
                                 <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                    vgrow="SOMETIMES" />
+                                                vgrow="SOMETIMES"/>
                                 <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                    vgrow="SOMETIMES" />
+                                                vgrow="SOMETIMES"/>
                                 <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                    vgrow="SOMETIMES" />
+                                                vgrow="SOMETIMES"/>
                                 <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                    vgrow="SOMETIMES" />
+                                                vgrow="SOMETIMES"/>
                                 <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                    vgrow="SOMETIMES" />
+                                                vgrow="SOMETIMES"/>
                             </rowConstraints>
                             <Text text="Mandag"
                                 GridPane.columnIndex="2" GridPane.halignment="CENTER">
@@ -110,29 +108,29 @@
                         <GridPane >
                             <columnConstraints>
                                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="153.0"
-                                    minWidth="10.0" prefWidth="43.0" />
+                                                   minWidth="10.0" prefWidth="43.0"/>
                                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="389.0"
-                                    minWidth="10.0" prefWidth="389.0" />
+                                                   minWidth="10.0" prefWidth="389.0"/>
                             </columnConstraints>
                             <rowConstraints>
                                 <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                    vgrow="SOMETIMES" />
+                                                vgrow="SOMETIMES"/>
                                 <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                    vgrow="SOMETIMES" />
+                                                vgrow="SOMETIMES"/>
                                 <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                    vgrow="SOMETIMES" />
+                                                vgrow="SOMETIMES"/>
                                 <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                    vgrow="SOMETIMES" />
+                                                vgrow="SOMETIMES"/>
                                 <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                    vgrow="SOMETIMES" />
+                                                vgrow="SOMETIMES"/>
                                 <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                    vgrow="SOMETIMES" />
+                                                vgrow="SOMETIMES"/>
                                 <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                    vgrow="SOMETIMES" />
+                                                vgrow="SOMETIMES"/>
                                 <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                    vgrow="SOMETIMES" />
+                                                vgrow="SOMETIMES"/>
                                 <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                    vgrow="SOMETIMES" />
+                                                vgrow="SOMETIMES"/>
                             </rowConstraints>
                         </GridPane>
                     </Tab>

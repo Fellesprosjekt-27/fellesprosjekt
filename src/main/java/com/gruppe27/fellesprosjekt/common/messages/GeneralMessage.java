@@ -8,7 +8,8 @@ public class GeneralMessage {
     String message;
     Command command;
 
-    public GeneralMessage() {}
+    public GeneralMessage() {
+    }
 
     public GeneralMessage(Command command, String message) {
         this.command = command;

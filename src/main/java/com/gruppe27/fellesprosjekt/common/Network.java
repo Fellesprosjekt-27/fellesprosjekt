@@ -1,7 +1,7 @@
 package com.gruppe27.fellesprosjekt.common;
 
-import com.esotericsoftware.kryonet.EndPoint;
 import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryonet.EndPoint;
 import com.gruppe27.fellesprosjekt.common.messages.*;
 import com.gruppe27.fellesprosjekt.common.serializers.LocalDateSerializer;
 import com.gruppe27.fellesprosjekt.common.serializers.LocalTimeSerializer;

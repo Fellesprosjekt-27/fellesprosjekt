@@ -17,13 +17,15 @@ public class EventMessage {
     Event event;
     Command command;
 
-    public EventMessage() {}
+    public EventMessage() {
+    }
 
     public EventMessage(Command command, Event event) {
         this.command = command;
         this.event = event;
         this.events = null;
     }
+
     public EventMessage(Command command, HashSet<Event> events) {
         this.command = command;
         this.events = events;
@@ -31,12 +33,13 @@ public class EventMessage {
     }
 
     public Command getCommand() {
-            return command;
-        }
+        return command;
+    }
 
     public Event getEvent() {
-            return event;
-        }
+        return event;
+    }
+
     public HashSet<Event> getEvents() {
         return events;
     }

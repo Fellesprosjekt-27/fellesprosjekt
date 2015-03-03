@@ -8,11 +8,7 @@ import com.gruppe27.fellesprosjekt.common.Event;
 import com.gruppe27.fellesprosjekt.common.messages.EventMessage;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import java.net.URL;
 import java.time.LocalTime;
@@ -20,36 +16,38 @@ import java.util.HashSet;
 import java.util.ResourceBundle;
 
 public class CreateEventController implements Initializable {
-	@FXML
+    @FXML
     Button getEventTest;
 
-	@FXML
-	TextField emne;
+    @FXML
+    TextField emne;
 
-	@FXML DatePicker dato;
+    @FXML
+    DatePicker dato;
 
-	@FXML
-	TextField fraTid;
-	
-	@FXML
-	TextField tilTid;
-	
-	@FXML
-	ListView deltakere;
-	
-	@FXML
-	ChoiceBox romValg;
-	
-	@FXML
-	Button createEventButton;
-	
-	@FXML
-	Button cancelButton;
+    @FXML
+    TextField fraTid;
+
+    @FXML
+    TextField tilTid;
+
+    @FXML
+    ListView deltakere;
+
+    @FXML
+    ChoiceBox romValg;
+
+    @FXML
+    Button createEventButton;
+
+    @FXML
+    Button cancelButton;
 
     private CalendarApplication application;
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {}
+    public void initialize(URL location, ResourceBundle resources) {
+    }
 
     public void setApp(CalendarApplication application) {
         this.application = application;
@@ -81,21 +79,24 @@ public class CreateEventController implements Initializable {
         client.addListener(eventListener);
         client.sendMessage(message);
     }
-	@FXML
-	private void handleCreateEventAction() {
-		Event event = new Event();
-		event.setName(emne.getText());
-	
-		event.setDate(dato.getValue());
-		
-		LocalTime startTime = LocalTime.parse(fraTid.getText());
-		LocalTime endTime = LocalTime.parse(tilTid.getText());
-		event.setStartTime(startTime);
-		event.setEndTime(endTime);
 
-		EventMessage message = new EventMessage(EventMessage.Command.CREATE_EVENT, event);
-		CalendarClient.getInstance().sendMessage(message);
-	}
-	
-	@FXML private void handleCancelAction() {}
+    @FXML
+    private void handleCreateEventAction() {
+        Event event = new Event();
+        event.setName(emne.getText());
+
+        event.setDate(dato.getValue());
+
+        LocalTime startTime = LocalTime.parse(fraTid.getText());
+        LocalTime endTime = LocalTime.parse(tilTid.getText());
+        event.setStartTime(startTime);
+        event.setEndTime(endTime);
+
+        EventMessage message = new EventMessage(EventMessage.Command.CREATE_EVENT, event);
+        CalendarClient.getInstance().sendMessage(message);
+    }
+
+    @FXML
+    private void handleCancelAction() {
+    }
 }
