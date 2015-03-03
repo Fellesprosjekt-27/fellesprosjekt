@@ -144,6 +144,6 @@
         </AnchorPane>
     </SplitPane>
     <stylesheets>
-        <URL value="@calendar.css"/>
+        <URL value="@css/calendar.css"/>
     </stylesheets>
 </AnchorPane>
