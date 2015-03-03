@@ -23,7 +23,6 @@ public class CreateEventController implements Initializable {
 	@FXML
     Button getEventTest;
 
-
 	@FXML
 	TextField emne;
 

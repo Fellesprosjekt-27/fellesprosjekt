@@ -69,10 +69,9 @@ public class EventController {
                             " JOIN UserEvent ON Event.id = UserEvent.event_id JOIN User AS Participant ON UserEvent.username = Participant.username" +
                             " WHERE Participant.username = " + user.getUsername()
             );
-            HashSet<Event> events =  new HashSet<>();
             ResultSet result = statement.executeQuery();
 
-            events = parseEventResult(result);
+            HashSet<Event> events = parseEventResult(result);
 
             return events;
 
@@ -90,7 +89,7 @@ public class EventController {
         Event event = null;
         HashSet<Event> events = new HashSet<Event>();
         while(result.next()) {
-            if (!(result.getInt("Event.id") == currentEventId )) {
+            if (result.getInt("Event.id") != currentEventId ) {
                 event = new Event();
                 User creator = new User();
                 User participant = new User();

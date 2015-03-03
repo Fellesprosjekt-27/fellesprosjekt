@@ -20,7 +20,9 @@ public class CalendarApplication extends Application {
     public static final int WIDTH = 500;
     public static final int HEIGHT = 450;
 
+    private HashSet<Event> events;
     private Stage stage;
+
     private User user;
 
     public HashSet<Event> getEvents() {
@@ -30,8 +32,6 @@ public class CalendarApplication extends Application {
     public void setEvents(HashSet<Event> events) {
         this.events = events;
     }
-
-    HashSet<Event> events;
 
     public static void main(String[] args) {
         launch(args);
