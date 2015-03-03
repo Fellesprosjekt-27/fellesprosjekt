@@ -3,8 +3,8 @@ package com.gruppe27.fellesprosjekt.server;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 import com.gruppe27.fellesprosjekt.common.Network;
+
 import java.io.IOException;
-import java.sql.SQLException;
 
 
 public class CalendarServer {

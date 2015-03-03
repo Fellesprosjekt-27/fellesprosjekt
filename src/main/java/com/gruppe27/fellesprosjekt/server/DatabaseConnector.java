@@ -19,7 +19,8 @@ public class DatabaseConnector {
 
     private static Connection connection = null;
 
-    protected DatabaseConnector() {}
+    protected DatabaseConnector() {
+    }
 
     public static Connection getConnection() {
         if (connection == null) {

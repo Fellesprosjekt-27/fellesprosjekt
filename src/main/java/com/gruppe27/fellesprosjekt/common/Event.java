@@ -15,9 +15,12 @@ public class Event {
     private HashSet<User> userParticipants;
     private HashSet<Group> groupParticipants;
     private String name;
+    private Room room;
 
-    public Event(){
+    public Event() {
         this.creator = null;
+        userParticipants = new HashSet<User>();
+        groupParticipants = new HashSet<Group>();
     }
 
     public Event(String name, User creator, LocalDate date, LocalTime startTime, LocalTime endTime) {
@@ -29,17 +32,11 @@ public class Event {
     }
 
     public void addParticipant(User participant) {
-        if(!userParticipants.contains(participant)) {
-            userParticipants.add(participant);
-            participant.addEvent(this);
-        }
+        userParticipants.add(participant);
     }
 
     public void addGroupParticipant(Group participant) {
-        if(!groupParticipants.contains(participant)) {
-            groupParticipants.add(participant);
-            participant.addEvent(this);
-        }
+        groupParticipants.add(participant);
     }
 
     public HashSet<Group> getGroupParticipants() {
@@ -88,13 +85,22 @@ public class Event {
         return creator;
     }
 
-	public void setName(String s) {
-		this.name = s;
-		
-		
-	}
+    public void setName(String s) {
+        this.name = s;
 
-	public void setCreator(User user) {
-		this.creator = user;		
-	}
+
+    }
+
+    public void setCreator(User user) {
+        this.creator = user;
+    }
+
+    public void setRoom(Room room) {
+        this.room = room;
+    }
+
+    public String toString() {
+        return "Name: " + getName() + ".";
+    }
+
 }

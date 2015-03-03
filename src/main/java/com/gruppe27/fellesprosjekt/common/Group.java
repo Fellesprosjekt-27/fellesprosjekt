@@ -20,6 +20,7 @@ public class Group {
 
     /**
      * Adds a user to the set of users, if it doesn't already exist
+     *
      * @param user
      */
     public void addUser(User user) {
@@ -57,7 +58,7 @@ public class Group {
     }
 
     public void addEvent(Event event) {
-        if(!events.contains(event)) {
+        if (!events.contains(event)) {
             events.add(event);
             event.addGroupParticipant(this);
         }

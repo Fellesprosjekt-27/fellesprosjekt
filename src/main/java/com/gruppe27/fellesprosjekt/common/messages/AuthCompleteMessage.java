@@ -11,7 +11,8 @@ public class AuthCompleteMessage {
     Command command;
     User user;
 
-    public AuthCompleteMessage() {}
+    public AuthCompleteMessage() {
+    }
 
     public AuthCompleteMessage(Command command) {
         this.command = command;

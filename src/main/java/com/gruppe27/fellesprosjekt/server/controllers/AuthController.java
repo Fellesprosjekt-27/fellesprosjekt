@@ -14,7 +14,8 @@ import java.sql.SQLException;
 public class AuthController {
     private static AuthController instance = null;
 
-    protected AuthController() {}
+    protected AuthController() {
+    }
 
     public static AuthController getInstance() {
         if (instance == null) {

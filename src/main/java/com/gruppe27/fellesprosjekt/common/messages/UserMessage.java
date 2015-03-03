@@ -8,7 +8,8 @@ public class UserMessage {
     User user;
     Command command;
 
-    public UserMessage() {}
+    public UserMessage() {
+    }
 
     public UserMessage(Command command, User user) {
         this.command = command;

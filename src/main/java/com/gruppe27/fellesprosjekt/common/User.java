@@ -11,17 +11,19 @@ public class User {
 
     private String name;
 
-
-
-    private HashSet<Event> events;
     private Set<Group> groups;
 
-    public User() {}
+    public User() {
+        groups = new HashSet<Group>();
+    }
 
     public User(String username, String name) {
         this.setName(name);
         this.setUsername(username);
-        groups = new HashSet<>();
+    }
+
+    public User(String username) {
+        this.setUsername(username);
     }
 
     @Override
@@ -38,6 +40,7 @@ public class User {
 
     /**
      * Takes in a group and adds it to the user's other groups
+     *
      * @param group
      */
     public void addUserToGroup(Group group) {
@@ -55,8 +58,6 @@ public class User {
         this.username = username;
     }
 
-
-
     public void setName(String name) {
         this.name = name;
     }
@@ -69,13 +70,6 @@ public class User {
         if (groups.contains(group)) {
             groups.remove(group);
             group.removeUser(this);
-        }
-    }
-
-    public void addEvent(Event event) {
-        if(!events.contains(event)) {
-            events.add(event);
-            event.addParticipant(this);
         }
     }
 }
