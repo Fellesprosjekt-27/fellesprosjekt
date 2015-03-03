@@ -1,11 +1,15 @@
 package com.gruppe27.fellesprosjekt.common.messages;
 
+import com.gruppe27.fellesprosjekt.common.Event;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.HashSet;
 
 public class RoomRequestMessage {
+
     public enum Command{
-        ROOM_REQUEST
+        ROOM_REQUEST,
     }
 
     Command command;

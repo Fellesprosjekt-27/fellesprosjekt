@@ -7,7 +7,7 @@ import java.util.HashSet;
 public class RoomMessage {
     public enum Command {
         SEND_ROOMS,
-        RECIEVE_ROOMS
+        RECEIVE_ROOMS,
     }
 
     HashSet<Room> rooms;

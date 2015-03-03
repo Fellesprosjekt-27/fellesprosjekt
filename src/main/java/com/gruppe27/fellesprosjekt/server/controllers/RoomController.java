@@ -46,13 +46,13 @@ public class RoomController {
             while (result.next()) {
                 roomAmount++;
                 Room room = new Room();
-                room.setRoomNo(result.getString("name"));
+                room.setRoomName(result.getString("name"));
                 room.setCapacity(result.getInt("capacity"));
                 rooms.add(room);
             }
 
             System.out.println(roomAmount + " rooms found");
-            RoomMessage createdMessage = new RoomMessage(RoomMessage.Command.RECIEVE_ROOMS, rooms);
+            RoomMessage createdMessage = new RoomMessage(RoomMessage.Command.RECEIVE_ROOMS, rooms);
             connection.sendTCP(createdMessage);
 
         } catch (SQLException e) {
