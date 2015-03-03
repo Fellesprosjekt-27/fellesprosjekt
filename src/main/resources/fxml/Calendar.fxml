@@ -21,16 +21,7 @@
                 <VBox spacing="45">
                     <ListView />
                     <Text text="Notifications!" wrappingWidth="100"/>
-                    <Button text="Ny Event" contentDisplay="CENTER">
-                        <graphic>
-                            <ImageView fitHeight="90.0" fitWidth="175.0"
-                                preserveRatio="true">
-                                <image>
-                                    <Image url="/images/post-it-notes1.jpg"/>
-                                </image>
-                            </ImageView>
-                        </graphic>
-                    </Button>
+                    <Button id="createEventButton" text="Ny Event"/>
                 </VBox>
             </TitledPane>
         </AnchorPane>
