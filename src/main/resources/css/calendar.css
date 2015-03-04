@@ -3,17 +3,17 @@
     -fx-text-fill: #e6e5e6;
 }
 
-CalendarComponent {
+MonthCalendarComponent {
     -fx-border-color: #e6e5e6;
     -fx-border-width: 0 0 0 1px;
 }
 
-CalendarSquare {
+MonthCalendarSquare {
     -fx-border-color: #e6e5e6;
     -fx-border-width: 0 1px 1px 0;
 }
 
-CalendarSquare.first-in-row {
+MonthCalendarSquare.first-in-row {
     -fx-border-width: 0 1px 1px 1px;
 }
 

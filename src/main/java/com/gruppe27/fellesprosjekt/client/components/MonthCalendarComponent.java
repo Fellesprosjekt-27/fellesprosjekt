@@ -1,6 +1,7 @@
 package com.gruppe27.fellesprosjekt.client.components;
 
 import javafx.geometry.Insets;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -19,8 +20,9 @@ import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class CalendarComponent extends BorderPane {
-    private ArrayList<CalendarSquare> calendarSquares;
+public class MonthCalendarComponent extends BorderPane {
+    private ArrayList<MonthCalendarSquare> calendarSquares;
+    private ArrayList<RowConstraints> squareRowConstraints;
 
     private static final Font headerFont = Font.font("Helvetica", 26);
     private static final Font controlFont = Font.font("Helvetica", 36);
@@ -36,20 +38,37 @@ public class CalendarComponent extends BorderPane {
     private Text previousMonth;
     private Text nextMonth;
 
-    public CalendarComponent() {
-        calendarGrid = new GridPane();
-        header = new HBox();
+    private int year;
+    private int month;
+
+    private void decrementMonth() {
+        LocalDate date = LocalDate.of(this.year, this.month, 1).minusMonths(1);
+        this.year = date.getYear();
+        this.month = date.getMonthValue();
+        drawCurrentPeriod();
+    }
+
+    private void incrementMonth() {
+        LocalDate date = LocalDate.of(this.year, this.month, 1).plusMonths(1);
+        this.year = date.getYear();
+        this.month = date.getMonthValue();
+        drawCurrentPeriod();
+    }
+
+    private void addPeriodInfo() {
         periodInfo = new HBox(10);
-        monthControls = new HBox();
-        header.setPadding(new Insets(0, 0, 30, 0));
         periodInfo.setPadding(new Insets(5, 20, 0, 0));
 
+        monthControls = new HBox();
         currentMonth = new Text();
         currentYear = new Text();
         periodInfo.getChildren().addAll(currentMonth, currentYear);
 
         previousMonth = new Text("«");
         nextMonth = new Text("»");
+        previousMonth.setOnMouseClicked((MouseEvent event) -> decrementMonth());
+        nextMonth.setOnMouseClicked((MouseEvent event) -> incrementMonth());
+
         monthControls.getChildren().addAll(previousMonth, nextMonth);
         previousMonth.getStyleClass().add("change-month");
         nextMonth.getStyleClass().add("change-month");
@@ -61,7 +80,17 @@ public class CalendarComponent extends BorderPane {
         currentYear.setFont(headerFont);
 
         header.getChildren().addAll(periodInfo, monthControls);
+    }
 
+    public MonthCalendarComponent() {
+        calendarGrid = new GridPane();
+        calendarSquares = new ArrayList<>();
+        squareRowConstraints = new ArrayList<>();
+
+        header = new HBox();
+        header.setPadding(new Insets(0, 0, 30, 0));
+
+        this.addPeriodInfo();
         this.setTop(header);
         this.setCenter(calendarGrid);
 
@@ -86,26 +115,31 @@ public class CalendarComponent extends BorderPane {
             calendarGrid.add(pane, i, 0);
 
             ColumnConstraints c = new ColumnConstraints();
-            c.setMinWidth(160);
+            c.setMinWidth(130);
             c.setHgrow(Priority.ALWAYS);
             calendarGrid.getColumnConstraints().add(c);
         }
 
+        this.year = LocalDate.now().getYear();
+        this.month = LocalDate.now().getMonthValue();
+        drawCurrentPeriod();
     }
 
-    public void setCurrentPeriod(int year, int month) {
-        ArrayList<LocalDate> days = getCalendarDays(year, month);
+    private void drawCurrentPeriod() {
+        ArrayList<LocalDate> days = getCalendarDays(this.year, this.month);
+        calendarGrid.getChildren().removeAll(calendarSquares);
+        calendarGrid.getRowConstraints().removeAll(squareRowConstraints);
         calendarSquares = new ArrayList<>();
-
 
         for (int i = 0; i < days.size() / 7; i++) {
             RowConstraints r = new RowConstraints();
             r.setMinHeight(100);
             r.setVgrow(Priority.ALWAYS);
+            squareRowConstraints.add(r);
             calendarGrid.getRowConstraints().add(r);
 
             for (int j = 0; j < 7; j++) {
-                CalendarSquare square = new CalendarSquare(days.get(j+i*7), month);
+                MonthCalendarSquare square = new MonthCalendarSquare(days.get(j+i*7), this.month);
 
                 if (j == 0) {
                     square.getStyleClass().add("first-in-row");

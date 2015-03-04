@@ -18,8 +18,8 @@ import java.util.HashSet;
 
 
 public class CalendarApplication extends Application {
-    public static final int WIDTH = 1200;
-    public static final int HEIGHT = 700;
+    public static final int WIDTH = 1400;
+    public static final int HEIGHT = 800;
 
     private HashSet<Event> events;
     private Stage stage;
@@ -42,7 +42,7 @@ public class CalendarApplication extends Application {
     public void start(Stage primaryStage) throws Exception {
         this.stage = primaryStage;
         this.stage.setTitle("Kalender");
-        gotoLogin();
+        gotoCalendar();
         this.stage.show();
     }
 

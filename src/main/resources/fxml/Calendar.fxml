@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.gruppe27.fellesprosjekt.client.components.CalendarComponent?>
+<?import com.gruppe27.fellesprosjekt.client.components.MonthCalendarComponent?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.SplitPane?>
@@ -14,6 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 <?import java.net.URL?>
+
 <AnchorPane prefHeight="450.0" prefWidth="700.0"
     xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gruppe27.fellesprosjekt.client.controllers.CalendarController">
     <SplitPane dividerPositions="0.25" AnchorPane.bottomAnchor="0"
@@ -35,6 +36,9 @@
                      AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0"
                      AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
                 <tabs>
+                    <Tab text="Måned">
+                        <MonthCalendarComponent fx:id="calendar" stylesheets="@/css/calendar.css"/>
+                    </Tab>
                     <Tab text="Uke">
                         <GridPane >
                             <columnConstraints>
@@ -140,9 +144,6 @@
                                                 vgrow="SOMETIMES"/>
                             </rowConstraints>
                         </GridPane>
-                    </Tab>
-                    <Tab text="Måned">
-                        <CalendarComponent />
                     </Tab>
                 </tabs>
             </TabPane>
