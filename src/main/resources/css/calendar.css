@@ -21,3 +21,12 @@ MonthCalendarSquare.first-in-row {
     -fx-border-color: #e6e5e6;
     -fx-border-width: 0 0 1px 0
 }
+
+#createEventButton {
+    -fx-content-display: center;
+}
+
+.newNotification {
+    -fx-font-size: 20;
+    -fx-fill: RED;
+}
