@@ -1,0 +1,23 @@
+.change-month:hover {
+    -fx-cursor: hand;
+    -fx-text-fill: #e6e5e6;
+}
+
+CalendarComponent {
+    -fx-border-color: #e6e5e6;
+    -fx-border-width: 0 0 0 1px;
+}
+
+CalendarSquare {
+    -fx-border-color: #e6e5e6;
+    -fx-border-width: 0 1px 1px 0;
+}
+
+CalendarSquare.first-in-row {
+    -fx-border-width: 0 1px 1px 1px;
+}
+
+.label {
+    -fx-border-color: #e6e5e6;
+    -fx-border-width: 0 0 1px 0
+}
