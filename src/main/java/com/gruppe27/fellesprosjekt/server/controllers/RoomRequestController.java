@@ -43,8 +43,8 @@ public class RoomRequestController {
                             " Room.name NOT IN(" +
                             "SELECT Room.name FROM Room JOIN Event ON Event.room = Room.name" +
                             " WHERE Event.date = ? AND (" +
-                            " (Event.start < ? AND ? > Event.end) OR " +
-                            " (Event.start < ? AND ? > Event.end)))"
+                            " (Event.start < ? AND ? < Event.end) OR " +
+                            " (Event.start < ? AND ? < Event.end)))"
             );
             statement.setInt(1, message.getCapacity());
             statement.setString(2, message.getDate().toString());
