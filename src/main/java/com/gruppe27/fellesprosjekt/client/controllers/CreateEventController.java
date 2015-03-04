@@ -11,7 +11,6 @@ import com.gruppe27.fellesprosjekt.common.messages.UserMessage;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -21,11 +20,11 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.util.StringConverter;
 
 import java.net.URL;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.ResourceBundle;
 
@@ -67,7 +66,7 @@ public class CreateEventController implements Initializable {
     private CalendarApplication application;
     
     private ArrayList<User> userArrayList;
-    private ObservableList<String> observablelist;
+    private ObservableList<String> allUsersObservablelist;
     
     private HashSet<User> participants;
     
@@ -109,13 +108,13 @@ public class CreateEventController implements Initializable {
     
     private void setAllUsers(HashSet<User> allUsers) {
         userArrayList = new ArrayList<>(allUsers);
-        observablelist = FXCollections.observableArrayList();
+        allUsersObservablelist = FXCollections.observableArrayList();
         for (User user : allUsers) {
-            observablelist.add(user.getUsername());
+            allUsersObservablelist.add(user.getUsername());
         }
         
         Platform.runLater(() -> {
-            participantComboBox.setItems(observablelist);
+            participantComboBox.setItems(allUsersObservablelist);
         });
     }
     
@@ -148,7 +147,7 @@ public class CreateEventController implements Initializable {
         LocalTime endTime = LocalTime.parse(tilTid.getText());
         event.setStartTime(startTime);
         event.setEndTime(endTime);
-        //TODO: set all participants in event
+        event.setAllParticipants(participants);
 
         EventMessage message = new EventMessage(EventMessage.Command.CREATE_EVENT, event);
         //TODO: add functions backend to invite all users from the eventmessage
@@ -159,7 +158,7 @@ public class CreateEventController implements Initializable {
 	@FXML private void handleCancelAction() {}
 	
 	private User fromStringtoUser(String username){
-	    int index = observablelist.indexOf(username);
+	    int index = allUsersObservablelist.indexOf(username);
         return userArrayList.get(index);
 	}
 	
