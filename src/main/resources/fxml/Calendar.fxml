@@ -28,7 +28,7 @@
                      AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
                 <tabs>
                     <Tab text="Måned">
-                        <MonthCalendarComponent />
+                        <MonthCalendarComponent fx:id="calendar"/>
                     </Tab>
                     <Tab text="Uke">
                         <GridPane >

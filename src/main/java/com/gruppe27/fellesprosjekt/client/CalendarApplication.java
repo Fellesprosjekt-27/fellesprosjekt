@@ -26,14 +26,6 @@ public class CalendarApplication extends Application {
 
     private User user;
 
-    public HashSet<Event> getEvents() {
-        return events;
-    }
-
-    public void setEvents(HashSet<Event> events) {
-        this.events = events;
-    }
-
     public static void main(String[] args) {
         launch(args);
     }
@@ -42,7 +34,7 @@ public class CalendarApplication extends Application {
     public void start(Stage primaryStage) throws Exception {
         this.stage = primaryStage;
         this.stage.setTitle("Kalender");
-        gotoCalendar();
+        gotoLogin();
         this.stage.show();
     }
 

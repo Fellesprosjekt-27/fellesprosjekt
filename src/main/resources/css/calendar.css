@@ -1,6 +1,10 @@
+.change-month {
+    -fx-fill: DARKGREY
+}
+
 .change-month:hover {
     -fx-cursor: hand;
-    -fx-text-fill: #e6e5e6;
+    -fx-fill: #6e6e6e;
 }
 
 MonthCalendarComponent {

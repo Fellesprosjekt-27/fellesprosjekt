@@ -2,6 +2,7 @@ package com.gruppe27.fellesprosjekt.common.messages;
 
 import com.gruppe27.fellesprosjekt.common.Event;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 
 public class EventMessage {
@@ -9,11 +10,13 @@ public class EventMessage {
 
     public enum Command {
         CREATE_EVENT,
-        SEND_ALL,
-        RECIEVE_ALL,
+        RECEIVE_EVENTS,
+        SEND_EVENTS
     }
 
     HashSet<Event> events;
+    LocalDate from;
+    LocalDate to;
     Event event;
     Command command;
 
@@ -24,12 +27,24 @@ public class EventMessage {
         this.command = command;
         this.event = event;
         this.events = null;
+        this.from = null;
+        this.to = null;
+    }
+
+    public EventMessage(Command command, LocalDate from, LocalDate to) {
+        this.command = command;
+        this.event = null;
+        this.events = null;
+        this.from = from;
+        this.to = to;
     }
 
     public EventMessage(Command command, HashSet<Event> events) {
         this.command = command;
         this.events = events;
         this.event = null;
+        this.from = null;
+        this.to = null;
     }
 
     public Command getCommand() {
@@ -44,4 +59,11 @@ public class EventMessage {
         return events;
     }
 
+    public LocalDate getFrom() {
+        return from;
+    }
+
+    public LocalDate getTo() {
+        return to;
+    }
 }

@@ -7,9 +7,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class MonthCalendarSquare extends Pane {
     private ArrayList<Event> events;
@@ -17,16 +17,19 @@ public class MonthCalendarSquare extends Pane {
 
     private final static Font labelFont = new Font("Helvetica", 12);
 
-    private Text dayLabel;
     private VBox eventBox;
 
     public MonthCalendarSquare(LocalDate date, int month) {
-        dayLabel = new Text(String.valueOf(date.getDayOfMonth()));
+        Text dayLabel = new Text(String.valueOf(date.getDayOfMonth()));
         if (date.getMonth().getValue() != month) {
             dayLabel.setFill(Color.GREY);
         }
 
         dayLabel.setFont(labelFont);
+        if (date.getDayOfWeek() == DayOfWeek.SUNDAY) {
+            dayLabel.setFill(Color.valueOf("#fa403f"));
+        }
+
         dayLabel.setLayoutX(125);
         dayLabel.setLayoutY(15);
 
@@ -41,15 +44,14 @@ public class MonthCalendarSquare extends Pane {
         this.date = date;
     }
 
-    public void addEvents(Event... events) {
-        ArrayList<Event> newEvents = new ArrayList<>(Arrays.asList(events));
-        this.events.addAll(newEvents);
+    public LocalDate getDate() {
+        return date;
+    }
 
-        newEvents.forEach((event) -> {
-            MonthEventSquare square = new MonthEventSquare(event);
-            eventBox.getChildren().add(square);
-        });
-
+    public void addEvent(Event event) {
+        this.events.add(event);
+        MonthEventSquare square = new MonthEventSquare(event);
+        eventBox.getChildren().add(square);
     }
 
     @Override
