@@ -48,7 +48,7 @@
                         </VBox>
                         <VBox GridPane.columnSpan="2" GridPane.rowIndex="6">
                             <children>
-                                <TextField fx:id="nyDeltaker" GridPane.rowIndex="6" />
+                                <ComboBox fx:id="nyDeltaker" editable="true" promptText="skriv inn brukernavn"/>
                             </children>
                         </VBox>
                         <VBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="1">
@@ -84,9 +84,9 @@
                             </padding>
                         </VBox>
                         <VBox alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
-                            <children>
-                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Alle deltakere har svart" textAlignment="RIGHT" wrappingWidth="100.0" />
-                            </children>
+                     <children>
+                        <Button fx:id="fjernDeltakere" mnemonicParsing="false" stylesheets="@css/default.css" text="Fjern markerte deltakere" />
+                     </children>
                         </VBox>
                     </children>
                 </GridPane>

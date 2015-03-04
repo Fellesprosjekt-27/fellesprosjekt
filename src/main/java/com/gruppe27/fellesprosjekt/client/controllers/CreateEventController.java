@@ -5,10 +5,19 @@ import com.esotericsoftware.kryonet.Listener;
 import com.gruppe27.fellesprosjekt.client.CalendarApplication;
 import com.gruppe27.fellesprosjekt.client.CalendarClient;
 import com.gruppe27.fellesprosjekt.common.Event;
+import com.gruppe27.fellesprosjekt.common.User;
 import com.gruppe27.fellesprosjekt.common.messages.EventMessage;
+import com.gruppe27.fellesprosjekt.common.messages.UserMessage;
+
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 
 import java.net.URL;
 import java.time.LocalTime;
@@ -16,69 +25,83 @@ import java.util.HashSet;
 import java.util.ResourceBundle;
 
 public class CreateEventController implements Initializable {
-    @FXML
-    Button getEventTest;
+	
+	@FXML
+	TextField emne;
 
-    @FXML
-    TextField emne;
+	@FXML 
+	DatePicker dato;
 
-    @FXML
-    DatePicker dato;
-
-    @FXML
-    TextField fraTid;
-
-    @FXML
-    TextField tilTid;
-
-    @FXML
-    ListView deltakere;
-
-    @FXML
-    ChoiceBox romValg;
-
-    @FXML
-    Button createEventButton;
-
-    @FXML
-    Button cancelButton;
+	@FXML
+	TextField fraTid;
+	
+	@FXML
+	TextField tilTid;
+	
+	@FXML
+	ListView deltakere;
+	
+	@FXML
+	ComboBox nyDeltaker;
+	
+	@FXML
+	ChoiceBox<User> romValg;
+	
+	@FXML
+	Button fjernDeltakere;
+	
+	@FXML
+	Button createEventButton;
+	
+	@FXML
+	Button cancelButton;
 
     private CalendarApplication application;
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-    }
+    
+    private HashSet<User> allUsers;
+    private ObservableList<User> observablelist;
 
     public void setApp(CalendarApplication application) {
         this.application = application;
     }
-
-    @FXML
-    private void getEvents() {
-        EventMessage message = new EventMessage(EventMessage.Command.SEND_ALL, new Event());
-
-
+    
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        getAllUsers();
+    }
+    
+    private void getAllUsers() {
+        UserMessage message = new UserMessage(UserMessage.Command.SEND_ALL);
+        
         CalendarClient client = CalendarClient.getInstance();
-
-        Listener eventListener = new Listener() {
+        
+        Listener getUsersListener = new Listener() {
             public void received(Connection connection, Object object) {
-                if (object instanceof EventMessage) {
-                    EventMessage complete = (EventMessage) object;
-
+                if (object instanceof UserMessage) {
+                    UserMessage complete = (UserMessage) object;
                     switch (complete.getCommand()) {
-                        case RECIEVE_ALL:
-                            HashSet<Event> events = complete.getEvents();
-                            application.setEvents(events);
-                            System.out.println(events);
+                        case RECEIVE_ALL:
+                            setAllUsers(complete.getUsers());
+                            break;
+                        case SEND_ALL:
                             break;
                     }
                     client.removeListener(this);
                 }
             }
+
         };
-        client.addListener(eventListener);
+
+        client.addListener(getUsersListener);
         client.sendMessage(message);
     }
+    
+    private void setAllUsers(HashSet<User> allUsers) {
+        this.allUsers = allUsers;
+        
+        System.out.println(allUsers);
+    }
+
 
     @FXML
     private void handleCreateEventAction() {
@@ -95,8 +118,6 @@ public class CreateEventController implements Initializable {
         EventMessage message = new EventMessage(EventMessage.Command.CREATE_EVENT, event);
         CalendarClient.getInstance().sendMessage(message);
     }
-
-    @FXML
-    private void handleCancelAction() {
-    }
+	
+	@FXML private void handleCancelAction() {}
 }

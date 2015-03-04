@@ -17,7 +17,7 @@
 			<TextField fx:id="usernameField" GridPane.columnIndex="1"
 				GridPane.rowIndex="1" />
 			<Label text="Passord:" GridPane.rowIndex="2" />
-			<PasswordField fx:id="passwordField"
+			<PasswordField fx:id="passwordField" onAction="#submit"
 				GridPane.columnIndex="1" GridPane.rowIndex="2" />
 		</GridPane>
         <HBox>
