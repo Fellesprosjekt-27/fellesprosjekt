@@ -1,5 +1,6 @@
 package com.gruppe27.fellesprosjekt.client;
 
+import com.gruppe27.fellesprosjekt.client.controllers.CalendarController;
 import com.gruppe27.fellesprosjekt.client.controllers.CreateEventController;
 import com.gruppe27.fellesprosjekt.client.controllers.LogInController;
 import com.gruppe27.fellesprosjekt.common.User;
@@ -15,8 +16,8 @@ import java.io.IOException;
 
 
 public class CalendarApplication extends Application {
-    public static final int WIDTH = 500;
-    public static final int HEIGHT = 450;
+    public static final int WIDTH = 1200;
+    public static final int HEIGHT = 700;
 
     private Stage stage;
     private User user;
@@ -50,6 +51,11 @@ public class CalendarApplication extends Application {
 
     private void gotoCreateEvent() {
         CreateEventController controller = (CreateEventController) replaceSceneContent("/fxml/CreateEvent.fxml");
+        controller.setApp(this);
+    }
+
+    private void gotoCalendar() {
+        CalendarController controller = (CalendarController) replaceSceneContent("/fxml/CalendarComponent.fxml");
         controller.setApp(this);
     }
 

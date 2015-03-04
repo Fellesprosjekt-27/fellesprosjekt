@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.gruppe27.fellesprosjekt.client.components.CalendarComponent?>
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" style="-fx-background-color: white;"
+            fx:controller="com.gruppe27.fellesprosjekt.client.controllers.CalendarController">
+    <CalendarComponent fx:id="calendar" stylesheets="@/css/calendar.css"/>
+</AnchorPane>
