@@ -53,8 +53,7 @@ public class CalendarApplication extends Application {
     public void successfulLogin(User user) {
         System.out.println("Nå har du logget inn.");
         this.user = user;
-        gotoCreateEvent();
-
+        gotoCalendar();
     }
 
 
@@ -69,7 +68,7 @@ public class CalendarApplication extends Application {
     }
 
     private void gotoCalendar() {
-        CalendarController controller = (CalendarController) replaceSceneContent("/fxml/CalendarComponent.fxml");
+        CalendarController controller = (CalendarController) replaceSceneContent("/fxml/Calendar.fxml");
         controller.setApp(this);
     }
 
