@@ -17,6 +17,7 @@ public class UserMessage {
 
     public UserMessage(Command command) {
         this.command = command;
+        this.users = null;
     }
     
     public UserMessage(Command command, HashSet<User> users) {

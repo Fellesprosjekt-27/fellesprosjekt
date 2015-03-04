@@ -101,8 +101,7 @@ public class CreateEventController implements Initializable {
         
         System.out.println(allUsers);
     }
-
-
+    
     @FXML
     private void handleCreateEventAction() {
         Event event = new Event();
@@ -114,8 +113,11 @@ public class CreateEventController implements Initializable {
         LocalTime endTime = LocalTime.parse(tilTid.getText());
         event.setStartTime(startTime);
         event.setEndTime(endTime);
+        //TODO: set all participants in event
 
         EventMessage message = new EventMessage(EventMessage.Command.CREATE_EVENT, event);
+        //TODO: add functions backend to invite all users from the eventmessage
+        //TODO: make an invite message
         CalendarClient.getInstance().sendMessage(message);
     }
 	
