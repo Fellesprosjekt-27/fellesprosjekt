@@ -5,6 +5,7 @@
 <?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="531.0" prefWidth="753.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gruppe27.fellesprosjekt.client.controllers.CreateEventController">
     <children>
@@ -48,7 +49,8 @@
                         </VBox>
                         <VBox GridPane.columnSpan="2" GridPane.rowIndex="6">
                             <children>
-                                <ComboBox fx:id="nyDeltaker" editable="true" promptText="skriv inn brukernavn"/>
+                                <ComboBox fx:id="participantComboBox" editable="true" promptText="skriv inn brukernavn"/>
+                                <Button fx:id="addParticipantButton" onAction="#handleAddParticipant" text="legg til deltaker"/>
                             </children>
                         </VBox>
                         <VBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="1">
@@ -69,7 +71,7 @@
                         </VBox>
                         <VBox GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="6" GridPane.rowSpan="2">
                             <children>
-                                <ListView fx:id="deltakere" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="6" />
+                                <ListView fx:id="participantsListView" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="6" />
                             </children>
                             <padding>
                                 <Insets left="10.0" right="10.0" />
