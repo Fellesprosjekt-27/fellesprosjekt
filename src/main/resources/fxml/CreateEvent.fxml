@@ -3,7 +3,6 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.text.*?>
-<?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="531.0" prefWidth="753.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gruppe27.fellesprosjekt.client.controllers.CreateEventController">
@@ -33,9 +32,11 @@
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Fra" GridPane.rowIndex="3" />
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Legg til deltakere:" GridPane.columnSpan="2" GridPane.rowIndex="5" />
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Rom" GridPane.rowIndex="4" />
-                        <TextField fx:id="fraTid" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                        <DatePicker fx:id="dato" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <ChoiceBox fx:id="romValg" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <TextField fx:id="fromTimeField" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <DatePicker fx:id="datePicker" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <ChoiceBox fx:id="roomChoiceBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" onMouseClicked="#handleChoiceboxClicked" />
+                        <Text text="Kapasitet" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                        <TextField fx:id="capacityField" GridPane.columnIndex="3" GridPane.rowIndex="4" />
                         <VBox alignment="CENTER" GridPane.columnSpan="4">
                             <children>
                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="OPPRETT AVTALE" GridPane.columnSpan="5" />
@@ -61,7 +62,7 @@
                         </VBox>
                         <VBox alignment="CENTER_LEFT" GridPane.columnIndex="3" GridPane.rowIndex="3">
                             <children>
-                                <TextField fx:id="tilTid" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                                <TextField fx:id="toTimeField" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
                             </children>
                             <padding>
                                 <Insets right="10.0" />
@@ -112,6 +113,7 @@
                             </padding>
                             <children>
                                 <Button id="createEventButton" fx:id="createEventButton" alignment="CENTER" mnemonicParsing="false" onAction="#handleCreateEventAction" style="-fx-padding: 10;" stylesheets="@../css/default.css" text="Opprett Avtale" textAlignment="CENTER" wrapText="true" />
+
                             </children>
                         </VBox>
                     </children>
