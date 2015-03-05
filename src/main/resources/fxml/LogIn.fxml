@@ -26,6 +26,6 @@
         </HBox>
 	</VBox>
 	<stylesheets>
-		<URL value="@css/login.css" />
+		<URL value="@../css/login.css" />
 	</stylesheets>
 </AnchorPane>

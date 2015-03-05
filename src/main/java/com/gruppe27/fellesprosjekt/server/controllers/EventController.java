@@ -11,10 +11,18 @@ import com.gruppe27.fellesprosjekt.server.DatabaseConnector;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.HashSet;
 
 public class EventController {
     private static EventController instance = null;
+
+    private static final String EVENT_QUERY =
+            "SELECT Event.id, Event.name, Event.date, Event.start, Event.end, Creator.username, Creator.name, " +
+            "Participant.username, Participant.name " +
+            "FROM Event JOIN User AS Creator ON Event.creator = Creator.username " +
+            "JOIN UserEvent ON Event.id = UserEvent.event_id " +
+            "JOIN User AS Participant ON UserEvent.username = Participant.username ";
 
     protected EventController() {
     }
@@ -32,21 +40,24 @@ public class EventController {
             case CREATE_EVENT:
                 createEvent(connection, eventMessage.getEvent());
                 break;
-            case SEND_ALL:
-                sendAllEvents(connection);
+            case SEND_EVENTS:
+                sendEvents(connection, eventMessage.getFrom(), eventMessage.getTo());
+                break;
         }
     }
 
-    private void sendAllEvents(CalendarConnection connection) {
+    private void sendEvents(CalendarConnection connection, LocalDate from, LocalDate to) {
         try {
-            PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement(
-                    "SELECT Event.id,Event.name,Event.date,Event.start,Event.end, Creator.username,Creator.name, Participant.username, Participant.name" +
-                            " FROM Event JOIN User AS Creator ON Event.creator = Creator.username" +
-                            " JOIN UserEvent ON Event.id = UserEvent.event_id JOIN User AS Participant ON UserEvent.username = Participant.username");
+            String query = EVENT_QUERY + "WHERE Event.date >= ? AND Event.date <= ? " +
+                    "AND Participant.username = ?";
+            PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement(query);
+            statement.setString(1, from.toString());
+            statement.setString(2, to.toString());
+            statement.setString(3, connection.getUser().getUsername());
 
             ResultSet resultSet = statement.executeQuery();
             HashSet<Event> events = parseEventResult(resultSet);
-            EventMessage createdMessage = new EventMessage(EventMessage.Command.RECIEVE_ALL, events);
+            EventMessage createdMessage = new EventMessage(EventMessage.Command.RECEIVE_EVENTS, events);
             connection.sendTCP(createdMessage);
             System.out.println("sent " + events.size() + "events.");
         } catch (SQLException e) {
@@ -56,39 +67,10 @@ public class EventController {
         }
     }
 
-    private void sendConnectedUserEvents(CalendarConnection connection) {
-        HashSet<Event> events = getUserEvents(connection, connection.getUser());
-        EventMessage createdMessage = new EventMessage(EventMessage.Command.RECIEVE_ALL, events);
-        connection.sendTCP(createdMessage);
-    }
-
-    private HashSet<Event> getUserEvents(CalendarConnection connection, User user) {
-        try {
-            PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement(
-                    "SELECT Event.id,Event.name,Event.date,Event.start,Event.end, Creator.username,Creator.name, Participant.username, Participant.name" +
-                            " FROM Event JOIN User AS Creator ON Event.creator = Creator.username" +
-                            " JOIN UserEvent ON Event.id = UserEvent.event_id JOIN User AS Participant ON UserEvent.username = Participant.username" +
-                            " WHERE Participant.username = " + user.getUsername()
-            );
-            ResultSet result = statement.executeQuery();
-
-            HashSet<Event> events = parseEventResult(result);
-
-            return events;
-
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            ErrorMessage error = new ErrorMessage();
-            connection.sendTCP(error);
-            return null;
-        }
-    }
-
     private HashSet<Event> parseEventResult(ResultSet result) throws SQLException {
         int currentEventId = -1;
         Event event = null;
-        HashSet<Event> events = new HashSet<Event>();
+        HashSet<Event> events = new HashSet<>();
         while (result.next()) {
             if (result.getInt("Event.id") != currentEventId) {
                 event = new Event();
