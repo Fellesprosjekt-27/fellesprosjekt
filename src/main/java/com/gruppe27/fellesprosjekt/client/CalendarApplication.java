@@ -3,6 +3,7 @@ package com.gruppe27.fellesprosjekt.client;
 import com.gruppe27.fellesprosjekt.client.controllers.CreateEventController;
 import com.gruppe27.fellesprosjekt.client.controllers.LogInController;
 import com.gruppe27.fellesprosjekt.common.Event;
+import com.gruppe27.fellesprosjekt.common.Room;
 import com.gruppe27.fellesprosjekt.common.User;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -22,6 +23,7 @@ public class CalendarApplication extends Application {
 
     private HashSet<Event> events;
     private Stage stage;
+
 
     private User user;
 
