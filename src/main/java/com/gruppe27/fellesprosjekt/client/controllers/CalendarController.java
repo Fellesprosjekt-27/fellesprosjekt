@@ -26,6 +26,7 @@ public class CalendarController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.calendar.setController(this);
+        this.calendar.findEvents();
     }
 
     public void setApp(CalendarApplication application) {

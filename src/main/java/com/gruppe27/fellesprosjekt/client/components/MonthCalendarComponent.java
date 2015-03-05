@@ -98,24 +98,27 @@ public class MonthCalendarComponent extends BorderPane {
         this.controller = controller;
     }
 
-    private void adjustPeriod(LocalDate date) {
-        this.year = date.getYear();
-        this.month = date.getMonthValue();
+    public void findEvents() {
         this.drawCurrentPeriod();
 
-        LocalDate to = date.withDayOfMonth(date.lengthOfMonth());
+        LocalDate from = this.calendarSquares.get(0).getDate();
+        LocalDate to = this.calendarSquares.get(this.calendarSquares.size() - 1).getDate();
         events.clear();
-        this.controller.getEventsForPeriod(date, to, events);
+        this.controller.getEventsForPeriod(from, to, events);
     }
 
     private void decrementMonth() {
         LocalDate date = LocalDate.of(this.year, this.month, 1).minusMonths(1);
-        adjustPeriod(date);
+        this.month = date.getMonthValue();
+        this.year = date.getYear();
+        findEvents();
     }
 
     private void incrementMonth() {
         LocalDate date = LocalDate.of(this.year, this.month, 1).plusMonths(1);
-        adjustPeriod(date);
+        this.month = date.getMonthValue();
+        this.year = date.getYear();
+        findEvents();
     }
 
     private void addPeriodInfo() {
