@@ -103,4 +103,8 @@ public class Event {
         return "Name: " + getName() + ".";
     }
 
+    public void setAllParticipants(HashSet<User> participants) {
+        userParticipants.addAll(participants);
+    }
+
 }
