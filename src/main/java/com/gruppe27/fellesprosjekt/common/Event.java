@@ -107,4 +107,7 @@ public class Event {
         userParticipants.addAll(participants);
     }
 
+    public Room getRoom() {
+        return room;
+    }
 }

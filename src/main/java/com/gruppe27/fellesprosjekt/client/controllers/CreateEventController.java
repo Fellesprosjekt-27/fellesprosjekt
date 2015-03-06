@@ -12,6 +12,8 @@ import com.gruppe27.fellesprosjekt.common.messages.RoomMessage;
 import com.gruppe27.fellesprosjekt.common.messages.RoomRequestMessage;
 import com.gruppe27.fellesprosjekt.common.messages.UserMessage;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -70,21 +72,39 @@ public class CreateEventController implements Initializable {
 
 
 
+    private Room currentRoom;
+
+    private ArrayList<Room> roomsArray;
     private CalendarApplication application;
 
     private ArrayList<User> userArrayList;
     private ObservableList<String> allUsersObservablelist;
-
     private HashSet<User> participants;
 
-    public void setApp(CalendarApplication application) {
-        this.application = application;
+    public void emptyRoomsArray() {
+        this.roomsArray = new ArrayList<>();
+    }
+
+    public CreateEventController() {
+        participants = new HashSet<>();
+        roomsArray = new ArrayList<>();
+        currentRoom = null;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        participants = new HashSet<>();
         getAllUsers();
+        roomChoiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                currentRoom = roomsArray.get(newValue.intValue());
+            }
+        });
+
+    }
+
+    public void setApp(CalendarApplication application) {
+        this.application = application;
     }
 
     private void getAllUsers() {
@@ -151,8 +171,8 @@ public class CreateEventController implements Initializable {
     }
 
     private void updateChoiceBox(HashSet<Room> rooms) {
-        ArrayList<Room> roomsArray = new ArrayList<>();
-        roomsArray.addAll(rooms);
+        this.emptyRoomsArray();
+        this.roomsArray.addAll(rooms);
         ArrayList<String> stringArrayList = new ArrayList<>();
         for(Room room: roomsArray) {
             String roomString = room.toString();
@@ -210,6 +230,7 @@ public class CreateEventController implements Initializable {
         event.setStartTime(startTime);
         event.setEndTime(endTime);
         event.setAllParticipants(participants);
+        event.setRoom(currentRoom);
 
         EventMessage message = new EventMessage(EventMessage.Command.CREATE_EVENT, event);
         //TODO: add functions backend to invite all users from the eventmessage

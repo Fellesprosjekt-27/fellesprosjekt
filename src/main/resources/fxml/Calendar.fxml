@@ -140,6 +140,6 @@
         </AnchorPane>
     </SplitPane>
     <stylesheets>
-        <URL value="@/css/calendar.css"/>
+        <URL value="@../css/calendar.css"/>
     </stylesheets>
 </AnchorPane>

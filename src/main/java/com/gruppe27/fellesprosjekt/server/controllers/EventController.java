@@ -109,7 +109,7 @@ public class EventController {
         try {
 
             PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement(
-                    "INSERT INTO Event(name, date, start, end, creator) VALUES (?,?,?,?,?)"
+                    "INSERT INTO Event(name, date, start, end, creator,room) VALUES (?,?,?,?,?,?)"
             );
 
             statement.setString(1, event.getName());
@@ -117,12 +117,14 @@ public class EventController {
             statement.setString(3, event.getStartTime().toString());
             statement.setString(4, event.getEndTime().toString());
             statement.setString(5, connection.getUser().getUsername());
+            statement.setString(6, event.getRoom().getRoomName());
             int result = statement.executeUpdate();
 
             System.out.println(result + " rows affected");
             GeneralMessage createdMessage = new GeneralMessage(GeneralMessage.Command.SUCCESSFUL_CREATE,
                     "Avtalen " + event.getName() + " opprettet.");
             connection.sendTCP(createdMessage);
+
 
         } catch (SQLException e) {
             e.printStackTrace();
