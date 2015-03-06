@@ -103,4 +103,7 @@ public class Event {
         return "Name: " + getName() + ".";
     }
 
+    public Room getRoom() {
+        return room;
+    }
 }

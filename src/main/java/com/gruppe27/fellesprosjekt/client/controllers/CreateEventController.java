@@ -60,13 +60,18 @@ public class CreateEventController implements Initializable {
 
 
 
-    private CalendarApplication application;
-    private ArrayList<Room> roomsArray;
     Room currentRoom;
+
+    private ArrayList<Room> roomsArray;
+    private CalendarApplication application;
+
+    public void emptyRoomsArray() {
+        this.roomsArray = new ArrayList<>();
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        roomsArray = null;
+        roomsArray = new ArrayList<>();
         currentRoom = null;
         roomChoiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
@@ -119,7 +124,7 @@ public class CreateEventController implements Initializable {
     }
 
     private void updateChoiceBox(HashSet<Room> rooms) {
-        ArrayList<Room> roomsArray = new ArrayList<>();
+        this.emptyRoomsArray();
         this.roomsArray.addAll(rooms);
         ArrayList<String> stringArrayList = new ArrayList<>();
         for(Room room: roomsArray) {
