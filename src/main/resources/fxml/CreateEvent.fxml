@@ -6,6 +6,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.Button?>
+<?import com.gruppe27.fellesprosjekt.client.controllers.ParticipantComboBox?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="531.0" prefWidth="753.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gruppe27.fellesprosjekt.client.controllers.CreateEventController">
     <children>
@@ -49,7 +50,7 @@
                         </VBox>
                         <VBox GridPane.columnSpan="2" GridPane.rowIndex="6">
                             <children>
-                                <ComboBox fx:id="participantComboBox" editable="true" promptText="skriv inn brukernavn"/>
+                                <ParticipantComboBox  fx:id="participantComboBox" editable="true" promptText="skriv inn brukernavn"/>
                                 <Button fx:id="addParticipantButton" onAction="#handleAddParticipant" text="legg til deltaker"/>
                             </children>
                         </VBox>
@@ -87,7 +88,7 @@
                         </VBox>
                         <VBox alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
                      <children>
-                        <Button fx:id="fjernDeltakere" mnemonicParsing="false" stylesheets="@css/default.css" text="Fjern markerte deltakere" />
+                        <Button fx:id="removeParticipants" onAction="#handleRemoveParticipant" mnemonicParsing="false" stylesheets="@css/default.css" text="Fjern markerte deltakere" />
                      </children>
                         </VBox>
                     </children>

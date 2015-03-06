@@ -46,7 +46,7 @@ public class CreateEventController implements Initializable {
 	ListView<String> participantsListView;
 	
 	@FXML
-	ComboBox<String> participantComboBox;
+	ParticipantComboBox participantComboBox;
 	
 	@FXML
 	Button addParticipantButton;
@@ -55,7 +55,7 @@ public class CreateEventController implements Initializable {
 	ChoiceBox<User> romValg;
 	
 	@FXML
-	Button fjernDeltakere;
+	Button removeParticipants;
 	
 	@FXML
 	Button createEventButton;
@@ -112,15 +112,19 @@ public class CreateEventController implements Initializable {
         for (User user : allUsers) {
             allUsersObservablelist.add(user.getUsername());
         }
-        
+        allUsersObservablelist.addAll("Anne", "Arne");
         Platform.runLater(() -> {
-            participantComboBox.setItems(allUsersObservablelist);
+            participantComboBox.init(allUsersObservablelist);
         });
     }
+    
+    
     
     @FXML
     private void handleAddParticipant(){
         String inputUsername = participantComboBox.getValue();
+        participantComboBox.setValue(null);
+        participantComboBox.setItems(allUsersObservablelist);
         //TODO: validering hvis -1
         participants.add(fromStringtoUser(inputUsername));
         updateListView();
@@ -137,12 +141,17 @@ public class CreateEventController implements Initializable {
     }
     
     @FXML
+    private void handleRemoveParticipant() {
+        String username = participantsListView.getSelectionModel().getSelectedItem();
+        participants.remove(fromStringtoUser(username));
+        updateListView();
+    }
+    
+    @FXML
     private void handleCreateEventAction() {
         Event event = new Event();
         event.setName(emne.getText());
-
         event.setDate(dato.getValue());
-
         LocalTime startTime = LocalTime.parse(fraTid.getText());
         LocalTime endTime = LocalTime.parse(tilTid.getText());
         event.setStartTime(startTime);
