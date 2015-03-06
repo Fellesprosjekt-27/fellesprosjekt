@@ -84,4 +84,11 @@ public class CalendarApplication extends Application {
 
         return (Initializable) loader.getController();
     }
+
+    public void createNewEvent() {
+        this.gotoCreateEvent();
+    }
+    public void cancelCreateNewEvent() {
+        this.gotoCalendar();
+    }
 }
