@@ -142,5 +142,6 @@ public class CreateEventController implements Initializable {
 
     @FXML
     private void handleCancelAction() {
+        application.cancelCreateNewEvent();
     }
 }
