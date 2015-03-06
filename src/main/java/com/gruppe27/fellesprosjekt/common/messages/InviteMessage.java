@@ -3,22 +3,22 @@ package com.gruppe27.fellesprosjekt.common.messages;
 import com.gruppe27.fellesprosjekt.common.Event;
 
 public class InviteMessage {
-    
-    public enum Command{
-        
+
+    public enum Command {
+
     }
-    
+
     Event event;
     Command command;
 
-    public InviteMessage(){
+    public InviteMessage() {
     }
-    
-    public InviteMessage(Command command, Event event){
+
+    public InviteMessage(Command command, Event event) {
         this.command = command;
         this.event = event;
     }
-    
+
     public Command getCommand() {
         return command;
     }

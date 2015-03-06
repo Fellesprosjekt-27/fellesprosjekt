@@ -1,5 +1,5 @@
 GridPane {
-    -fx-background-color: #FFF0BA; 
+    -fx-background-color: #FFF0BA;
     -fx-grid-lines-visible: true;
 }
 
@@ -11,8 +11,8 @@ VBox {
     -fx-alignment: center;
 }
 
-#createEventButton { 
-    -fx-graphic: url("../../images/post-it-notes1.jpg"); 
+#createEventButton {
+    -fx-graphic: url("../../images/post-it-notes1.jpg");
     -fx-content-display: center;
 }
 

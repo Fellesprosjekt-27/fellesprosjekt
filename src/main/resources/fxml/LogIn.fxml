@@ -2,30 +2,29 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import java.net.URL?>
-<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+<?import java.net.URL?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="com.gruppe27.fellesprosjekt.client.controllers.LogInController">
-	<VBox AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0"
-		AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
-		<GridPane>
-			<Text text="Logg inn" GridPane.columnSpan="2"
-				GridPane.halignment="CENTER">
-			</Text>
-			<Label text="Brukernavn:" GridPane.rowIndex="1" />
-			<TextField fx:id="usernameField" GridPane.columnIndex="1"
-				GridPane.rowIndex="1" />
-			<Label text="Passord:" GridPane.rowIndex="2" />
-			<PasswordField fx:id="passwordField" onAction="#submit"
-				GridPane.columnIndex="1" GridPane.rowIndex="2" />
-		</GridPane>
+            fx:controller="com.gruppe27.fellesprosjekt.client.controllers.LogInController">
+    <VBox AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0"
+          AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+        <GridPane>
+            <Text text="Logg inn" GridPane.columnSpan="2"
+                  GridPane.halignment="CENTER">
+            </Text>
+            <Label text="Brukernavn:" GridPane.rowIndex="1"/>
+            <TextField fx:id="usernameField" GridPane.columnIndex="1"
+                       GridPane.rowIndex="1"/>
+            <Label text="Passord:" GridPane.rowIndex="2"/>
+            <PasswordField fx:id="passwordField" onAction="#submit"
+                           GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+        </GridPane>
         <HBox>
             <Button fx:id="submitButton" text="Logg inn"
                     onMouseReleased="#submit"/>
         </HBox>
-	</VBox>
-	<stylesheets>
-		<URL value="@css/login.css" />
-	</stylesheets>
+    </VBox>
+    <stylesheets>
+        <URL value="@css/login.css"/>
+    </stylesheets>
 </AnchorPane>

@@ -29,7 +29,7 @@ public class CalendarListener extends Listener {
             EventController.getInstance().handleMessage(connection, message);
             return;
         }
-        
+
         if (message instanceof UserMessage) {
             UserController.getInstance().handleMessage(connection, message);
             return;

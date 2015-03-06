@@ -8,83 +8,76 @@ import com.gruppe27.fellesprosjekt.common.Event;
 import com.gruppe27.fellesprosjekt.common.User;
 import com.gruppe27.fellesprosjekt.common.messages.EventMessage;
 import com.gruppe27.fellesprosjekt.common.messages.UserMessage;
-
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import java.net.URL;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.ResourceBundle;
 
 public class CreateEventController implements Initializable {
-	
-	@FXML
-	TextField emne;
 
-	@FXML 
-	DatePicker dato;
+    @FXML
+    TextField emne;
 
-	@FXML
-	TextField fraTid;
-	
-	@FXML
-	TextField tilTid;
-	
-	@FXML
-	ListView<String> participantsListView;
-	
-	@FXML
-	ComboBox<String> participantComboBox;
-	
-	@FXML
-	Button addParticipantButton;
-	
-	@FXML
-	ChoiceBox<User> romValg;
-	
-	@FXML
-	Button fjernDeltakere;
-	
-	@FXML
-	Button createEventButton;
-	
-	@FXML
-	Button cancelButton;
+    @FXML
+    DatePicker dato;
+
+    @FXML
+    TextField fraTid;
+
+    @FXML
+    TextField tilTid;
+
+    @FXML
+    ListView<String> participantsListView;
+
+    @FXML
+    ComboBox<String> participantComboBox;
+
+    @FXML
+    Button addParticipantButton;
+
+    @FXML
+    ChoiceBox<User> romValg;
+
+    @FXML
+    Button fjernDeltakere;
+
+    @FXML
+    Button createEventButton;
+
+    @FXML
+    Button cancelButton;
 
     private CalendarApplication application;
-    
+
     private ArrayList<User> userArrayList;
     private ObservableList<String> allUsersObservablelist;
-    
+
     private HashSet<User> participants;
-    
+
     public void setApp(CalendarApplication application) {
         this.application = application;
     }
-    
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         participants = new HashSet<>();
         getAllUsers();
     }
-    
+
     private void getAllUsers() {
         UserMessage message = new UserMessage(UserMessage.Command.SEND_ALL);
-        
+
         CalendarClient client = CalendarClient.getInstance();
-        
+
         Listener getUsersListener = new Listener() {
             public void received(Connection connection, Object object) {
                 if (object instanceof UserMessage) {
@@ -105,27 +98,27 @@ public class CreateEventController implements Initializable {
         client.addListener(getUsersListener);
         client.sendMessage(message);
     }
-    
+
     private void setAllUsers(HashSet<User> allUsers) {
         userArrayList = new ArrayList<>(allUsers);
         allUsersObservablelist = FXCollections.observableArrayList();
         for (User user : allUsers) {
             allUsersObservablelist.add(user.getUsername());
         }
-        
+
         Platform.runLater(() -> {
             participantComboBox.setItems(allUsersObservablelist);
         });
     }
-    
+
     @FXML
-    private void handleAddParticipant(){
+    private void handleAddParticipant() {
         String inputUsername = participantComboBox.getValue();
         //TODO: validering hvis -1
         participants.add(fromStringtoUser(inputUsername));
         updateListView();
     }
-    
+
     private void updateListView() {
         ObservableList<String> observable = FXCollections.observableArrayList();
         for (User user : participants) {
@@ -135,7 +128,7 @@ public class CreateEventController implements Initializable {
             participantsListView.setItems(observable);
         });
     }
-    
+
     @FXML
     private void handleCreateEventAction() {
         Event event = new Event();
@@ -154,12 +147,14 @@ public class CreateEventController implements Initializable {
         //TODO: make an invite message
         CalendarClient.getInstance().sendMessage(message);
     }
-	
-	@FXML private void handleCancelAction() {}
-	
-	private User fromStringtoUser(String username){
-	    int index = allUsersObservablelist.indexOf(username);
+
+    @FXML
+    private void handleCancelAction() {
+    }
+
+    private User fromStringtoUser(String username) {
+        int index = allUsersObservablelist.indexOf(username);
         return userArrayList.get(index);
-	}
-	
+    }
+
 }

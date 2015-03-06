@@ -4,18 +4,18 @@ AnchorPane {
 
 VBox {
     -fx-alignment: center;
-     -fx-spacing: 10;
+    -fx-spacing: 10;
 }
 
 GridPane {
     -fx-alignment: center;
-     -fx-vgap: 6;
-      -fx-hgap: 6;
+    -fx-vgap: 6;
+    -fx-hgap: 6;
 }
 
 HBox {
     -fx-alignment: center;
-     -fx-spacing: 10;
+    -fx-spacing: 10;
 }
 
 Text {

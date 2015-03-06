@@ -1,8 +1,8 @@
 package com.gruppe27.fellesprosjekt.common.messages;
 
-import java.util.HashSet;
-
 import com.gruppe27.fellesprosjekt.common.User;
+
+import java.util.HashSet;
 
 public class UserMessage {
     public enum Command {
@@ -19,7 +19,7 @@ public class UserMessage {
         this.command = command;
         this.users = null;
     }
-    
+
     public UserMessage(Command command, HashSet<User> users) {
         this.command = command;
         this.users = users;

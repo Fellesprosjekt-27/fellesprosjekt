@@ -1,21 +1,22 @@
 package com.gruppe27.fellesprosjekt.server.controllers;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.HashSet;
-
 import com.gruppe27.fellesprosjekt.common.User;
 import com.gruppe27.fellesprosjekt.common.messages.ErrorMessage;
 import com.gruppe27.fellesprosjekt.common.messages.UserMessage;
 import com.gruppe27.fellesprosjekt.server.CalendarConnection;
 import com.gruppe27.fellesprosjekt.server.DatabaseConnector;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashSet;
+
 public class UserController {
-    
+
     private static UserController instance = null;
 
-    protected UserController() {}
+    protected UserController() {
+    }
 
     public static UserController getInstance() {
         if (instance == null) {
@@ -34,7 +35,7 @@ public class UserController {
                 break;
         }
     }
-    
+
     private void sendAllUsers(CalendarConnection connection) {
         try {
             PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement(
@@ -51,9 +52,9 @@ public class UserController {
         }
     }
 
-    private HashSet<User> parseUserResult(ResultSet resultSet) throws SQLException{
+    private HashSet<User> parseUserResult(ResultSet resultSet) throws SQLException {
         HashSet<User> users = new HashSet<>();
-        while (resultSet.next()){
+        while (resultSet.next()) {
             User user = new User();
             user.setName(resultSet.getString("name"));
             user.setUsername(resultSet.getString("username"));
@@ -61,6 +62,6 @@ public class UserController {
         }
         return users;
     }
-    
+
 
 }
