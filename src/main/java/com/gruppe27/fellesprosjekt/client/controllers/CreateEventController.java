@@ -5,8 +5,11 @@ import com.esotericsoftware.kryonet.Listener;
 import com.gruppe27.fellesprosjekt.client.CalendarApplication;
 import com.gruppe27.fellesprosjekt.client.CalendarClient;
 import com.gruppe27.fellesprosjekt.common.Event;
+import com.gruppe27.fellesprosjekt.common.Room;
 import com.gruppe27.fellesprosjekt.common.User;
 import com.gruppe27.fellesprosjekt.common.messages.EventMessage;
+import com.gruppe27.fellesprosjekt.common.messages.RoomMessage;
+import com.gruppe27.fellesprosjekt.common.messages.RoomRequestMessage;
 import com.gruppe27.fellesprosjekt.common.messages.UserMessage;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -16,10 +19,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.ResourceBundle;
+
+
 
 public class CreateEventController implements Initializable {
 
@@ -27,13 +33,13 @@ public class CreateEventController implements Initializable {
     TextField emne;
 
     @FXML
-    DatePicker dato;
+    DatePicker datePicker;
 
     @FXML
-    TextField fraTid;
+    TextField fromTimeField;
 
     @FXML
-    TextField tilTid;
+    TextField toTimeField;
 
     @FXML
     ListView<String> participantsListView;
@@ -51,10 +57,18 @@ public class CreateEventController implements Initializable {
     Button fjernDeltakere;
 
     @FXML
+    ChoiceBox<String> roomChoiceBox;
+
+    @FXML
+    TextField capacityField;
+
+    @FXML
     Button createEventButton;
 
     @FXML
     Button cancelButton;
+
+
 
     private CalendarApplication application;
 
@@ -94,9 +108,64 @@ public class CreateEventController implements Initializable {
             }
 
         };
-
         client.addListener(getUsersListener);
         client.sendMessage(message);
+    }
+    @FXML
+    private void handleChoiceboxClicked() {
+        System.out.println("Cbox clicked.");
+        LocalDate date = datePicker.getValue();
+        LocalTime start = LocalTime.parse(fromTimeField.getText());
+        LocalTime end = LocalTime.parse(toTimeField.getText());
+        int capacity = Integer.parseInt(capacityField.getText());
+        this.updateCurrentRooms(date,start,end,capacity);
+        //TODO needs time to update rooms before I can do something.
+
+    }
+
+    @FXML
+    private void updateCurrentRooms(LocalDate date, LocalTime start, LocalTime end, int capacity) {
+        RoomRequestMessage message = new RoomRequestMessage(RoomRequestMessage.Command.ROOM_REQUEST, date,start,end,capacity);
+
+        CalendarClient client = CalendarClient.getInstance();
+
+        Listener roomListener = new Listener() {
+            public void received(Connection connection, Object object) {
+                if (object instanceof RoomMessage) {
+                    RoomMessage message = (RoomMessage) object;
+
+                    switch (message.getCommand()) {
+                        case RECEIVE_ROOMS:
+                            updateChoiceBox(message.getRooms());
+                            break;
+                    }
+                    client.removeListener(this);
+                }
+            }
+
+        };
+
+        client.addListener(roomListener);
+        client.sendMessage(message);
+
+    }
+
+    private void updateChoiceBox(HashSet<Room> rooms) {
+        ArrayList<Room> roomsArray = new ArrayList<>();
+        roomsArray.addAll(rooms);
+        ArrayList<String> stringArrayList = new ArrayList<>();
+        for(Room room: roomsArray) {
+            String roomString = room.toString();
+            stringArrayList.add(roomString);
+        }
+
+        ObservableList<String> observableList = FXCollections.observableArrayList(stringArrayList);
+
+        Platform.runLater(() -> {
+            roomChoiceBox.setItems(observableList);
+            roomChoiceBox.show();
+        });
+
     }
 
     private void setAllUsers(HashSet<User> allUsers) {
@@ -134,10 +203,10 @@ public class CreateEventController implements Initializable {
         Event event = new Event();
         event.setName(emne.getText());
 
-        event.setDate(dato.getValue());
+        event.setDate(datePicker.getValue());
 
-        LocalTime startTime = LocalTime.parse(fraTid.getText());
-        LocalTime endTime = LocalTime.parse(tilTid.getText());
+        LocalTime startTime = LocalTime.parse(fromTimeField.getText());
+        LocalTime endTime = LocalTime.parse(toTimeField.getText());
         event.setStartTime(startTime);
         event.setEndTime(endTime);
         event.setAllParticipants(participants);
@@ -150,6 +219,7 @@ public class CreateEventController implements Initializable {
 
     @FXML
     private void handleCancelAction() {
+        application.cancelCreateNewEvent();
     }
 
     private User fromStringtoUser(String username) {

@@ -23,8 +23,9 @@
             <Button fx:id="submitButton" text="Logg inn"
                     onMouseReleased="#submit"/>
         </HBox>
-    </VBox>
-    <stylesheets>
-        <URL value="@css/login.css"/>
-    </stylesheets>
+
+	</VBox>
+	<stylesheets>
+		<URL value="@../css/login.css" />
+	</stylesheets>
 </AnchorPane>

@@ -4,18 +4,20 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <?import java.net.URL?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="450" prefWidth="700">
+<?import com.gruppe27.fellesprosjekt.client.components.MonthCalendarComponent?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="450" prefWidth="700"
+            fx:controller="com.gruppe27.fellesprosjekt.client.controllers.CalendarController">
     <SplitPane dividerPositions="0.25" AnchorPane.bottomAnchor="0"
                AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
                AnchorPane.topAnchor="0">
-        <AnchorPane minHeight="0" minWidth="0">
+        <AnchorPane minHeight="0" maxWidth="100">
             <TitledPane collapsible="false" text="Vis"
                         AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0"
                         AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
-                <VBox spacing="45">
-                    <ListView/>
-                    <Text text="Notifications!" wrappingWidth="100"/>
-                    <Button id="createEventButton" text="Ny Event"/>
+
+                <VBox spacing="45" alignment="center">
+                    <ListView />
+                    <Button fx:id="createEventButton" text="Ny Event" onAction="#handleCreateNewEvent"/>
                 </VBox>
             </TitledPane>
         </AnchorPane>
@@ -24,6 +26,9 @@
                      AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0"
                      AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
                 <tabs>
+                    <Tab text="Måned">
+                        <MonthCalendarComponent fx:id="calendar"/>
+                    </Tab>
                     <Tab text="Uke">
                         <GridPane>
                             <columnConstraints>
@@ -130,14 +135,11 @@
                             </rowConstraints>
                         </GridPane>
                     </Tab>
-                    <Tab text="Måned">
-                        <GridPane/>
-                    </Tab>
                 </tabs>
             </TabPane>
         </AnchorPane>
     </SplitPane>
     <stylesheets>
-        <URL value="@css/calendar.css"/>
+        <URL value="@/css/calendar.css"/>
     </stylesheets>
 </AnchorPane>

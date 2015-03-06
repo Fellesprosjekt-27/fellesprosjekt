@@ -1,8 +1,8 @@
 package com.gruppe27.fellesprosjekt.client;
 
+import com.gruppe27.fellesprosjekt.client.controllers.CalendarController;
 import com.gruppe27.fellesprosjekt.client.controllers.CreateEventController;
 import com.gruppe27.fellesprosjekt.client.controllers.LogInController;
-import com.gruppe27.fellesprosjekt.common.Event;
 import com.gruppe27.fellesprosjekt.common.User;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -13,25 +13,15 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.HashSet;
 
 
 public class CalendarApplication extends Application {
-    public static final int WIDTH = 500;
-    public static final int HEIGHT = 450;
+    public static final int WIDTH = 1400;
+    public static final int HEIGHT = 800;
 
-    private HashSet<Event> events;
     private Stage stage;
 
     private User user;
-
-    public HashSet<Event> getEvents() {
-        return events;
-    }
-
-    public void setEvents(HashSet<Event> events) {
-        this.events = events;
-    }
 
     public static void main(String[] args) {
         launch(args);
@@ -52,8 +42,7 @@ public class CalendarApplication extends Application {
     public void successfulLogin(User user) {
         System.out.println("Nå har du logget inn.");
         this.user = user;
-        gotoCreateEvent();
-
+        gotoCalendar();
     }
 
 
@@ -64,6 +53,11 @@ public class CalendarApplication extends Application {
 
     private void gotoCreateEvent() {
         CreateEventController controller = (CreateEventController) replaceSceneContent("/fxml/CreateEvent.fxml");
+        controller.setApp(this);
+    }
+
+    private void gotoCalendar() {
+        CalendarController controller = (CalendarController) replaceSceneContent("/fxml/Calendar.fxml");
         controller.setApp(this);
     }
 
@@ -87,5 +81,12 @@ public class CalendarApplication extends Application {
         });
 
         return (Initializable) loader.getController();
+    }
+
+    public void createNewEvent() {
+        this.gotoCreateEvent();
+    }
+    public void cancelCreateNewEvent() {
+        this.gotoCalendar();
     }
 }

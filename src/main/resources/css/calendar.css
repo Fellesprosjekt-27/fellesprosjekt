@@ -1,0 +1,36 @@
+.change-month {
+    -fx-fill: DARKGREY
+}
+
+.change-month:hover {
+    -fx-cursor: hand;
+    -fx-fill: #6e6e6e;
+}
+
+MonthCalendarComponent {
+    -fx-border-color: #e6e5e6;
+    -fx-border-width: 0 0 0 1px;
+}
+
+MonthCalendarSquare {
+    -fx-border-color: #e6e5e6;
+    -fx-border-width: 0 1px 1px 0;
+}
+
+MonthCalendarSquare.first-in-row {
+    -fx-border-width: 0 1px 1px 1px;
+}
+
+.label {
+    -fx-border-color: #e6e5e6;
+    -fx-border-width: 0 0 1px 0
+}
+
+#createEventButton {
+    -fx-content-display: center;
+}
+
+.newNotification {
+    -fx-font-size: 20;
+    -fx-fill: RED;
+}

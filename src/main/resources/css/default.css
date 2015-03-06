@@ -1,5 +1,6 @@
-#postItPane {
-    -fx-background-image: url("../../images/PostIt.jpg");
+
+#postItPane{
+    -fx-background-image: url("../images/PostIt.jpg");
     -fx-background-size: stretch;
     -fx-background-repeat: stretch;
     -fx-background-position: bottom left;

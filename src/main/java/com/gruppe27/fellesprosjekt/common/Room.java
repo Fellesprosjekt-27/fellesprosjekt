@@ -3,10 +3,17 @@ package com.gruppe27.fellesprosjekt.common;
 
 public class Room {
 
-    private String roomNo;
+    private String roomName;
 
     private int capacity;
 
+    @Override
+    public String toString() {
+        return "Room{" +
+                "roomName='" + roomName + '\'' +
+                ", capacity=" + capacity +
+                '}';
+    }
 
     public int getCapacity() {
         return capacity;
@@ -16,12 +23,12 @@ public class Room {
         this.capacity = capacity;
     }
 
-    public String getRoomNo() {
-        return roomNo;
+    public String getRoomName() {
+        return roomName;
     }
 
-    public void setRoomNo(String roomNo) {
-        this.roomNo = roomNo;
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
     }
 
     public boolean hasCapacityFor(int capacity) {

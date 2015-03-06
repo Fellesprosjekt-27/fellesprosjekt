@@ -13,6 +13,7 @@ public class DatabaseConnector {
     static final String USER = "root";
     static final String PASS = "";
     */
+
     static final String DB_URL = "jdbc:mysql://mysql.stud.ntnu.no/andreahd_cal";
     static final String USER = "andreahd";
     static final String PASS = "gurgle1";
