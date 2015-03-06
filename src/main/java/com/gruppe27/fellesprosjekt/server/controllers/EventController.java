@@ -125,6 +125,7 @@ public class EventController {
                     "Avtalen " + event.getName() + " opprettet.");
             connection.sendTCP(createdMessage);
 
+
         } catch (SQLException e) {
             e.printStackTrace();
             ErrorMessage error = new ErrorMessage();

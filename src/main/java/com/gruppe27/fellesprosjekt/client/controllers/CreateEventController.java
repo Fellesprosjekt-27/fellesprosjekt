@@ -60,7 +60,7 @@ public class CreateEventController implements Initializable {
 
 
 
-    Room currentRoom;
+    private Room currentRoom;
 
     private ArrayList<Room> roomsArray;
     private CalendarApplication application;
@@ -69,10 +69,14 @@ public class CreateEventController implements Initializable {
         this.roomsArray = new ArrayList<>();
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public CreateEventController() {
         roomsArray = new ArrayList<>();
         currentRoom = null;
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+
         roomChoiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
