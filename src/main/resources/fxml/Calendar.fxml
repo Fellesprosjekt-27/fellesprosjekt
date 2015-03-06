@@ -18,7 +18,7 @@
                         AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
                 <VBox spacing="45" alignment="center">
                     <ListView />
-                    <Button id="createEventButton" text="Ny Event"/>
+                    <Button fx:id="createEventButton" text="Ny Event" onAction="#handleCreateNewEvent"/>
                 </VBox>
             </TitledPane>
         </AnchorPane>
