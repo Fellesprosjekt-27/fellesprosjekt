@@ -10,6 +10,8 @@ import com.gruppe27.fellesprosjekt.common.messages.EventMessage;
 import com.gruppe27.fellesprosjekt.common.messages.RoomMessage;
 import com.gruppe27.fellesprosjekt.common.messages.RoomRequestMessage;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -59,9 +61,19 @@ public class CreateEventController implements Initializable {
 
 
     private CalendarApplication application;
+    private ArrayList<Room> roomsArray;
+    Room currentRoom;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        roomsArray = null;
+        currentRoom = null;
+        roomChoiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                currentRoom = roomsArray.get(newValue.intValue());
+            }
+        });
 
     }
 
@@ -108,7 +120,7 @@ public class CreateEventController implements Initializable {
 
     private void updateChoiceBox(HashSet<Room> rooms) {
         ArrayList<Room> roomsArray = new ArrayList<>();
-        roomsArray.addAll(rooms);
+        this.roomsArray.addAll(rooms);
         ArrayList<String> stringArrayList = new ArrayList<>();
         for(Room room: roomsArray) {
             String roomString = room.toString();
@@ -135,6 +147,8 @@ public class CreateEventController implements Initializable {
         LocalTime endTime = LocalTime.parse(toTimeField.getText());
         event.setStartTime(startTime);
         event.setEndTime(endTime);
+        event.setRoom(currentRoom);
+        System.out.println(event);
 
         EventMessage message = new EventMessage(EventMessage.Command.CREATE_EVENT, event);
         CalendarClient.getInstance().sendMessage(message);
