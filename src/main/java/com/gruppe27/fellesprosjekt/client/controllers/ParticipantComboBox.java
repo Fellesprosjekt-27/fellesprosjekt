@@ -29,7 +29,7 @@ public class ParticipantComboBox extends ComboBox<String>{
                 TextField editor = currentInstance.getEditor();
                 String selected = currentInstance.getSelectionModel().getSelectedItem();
 
-                if(selected == null || selected.equals(editor.getText())){
+                if(selected == null || !selected.equals(editor.getText())){
                     filterItems(newValue, currentInstance);
                     currentInstance.show();
 //                    if(currentInstance.getItems().size() == 1){
