@@ -5,6 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <?import java.net.URL?>
+<?import com.gruppe27.fellesprosjekt.client.controllers.ParticipantComboBox?>
 <AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
 	fx:controller="com.gruppe27.fellesprosjekt.client.controllers.CreateEventController">
 	<HBox alignment="CENTER" AnchorPane.bottomAnchor="0.0"
@@ -44,7 +45,7 @@
 
 			<Text text="Legg til deltakere:" 
 			GridPane.columnSpan="2"	GridPane.rowIndex="5" />
-			<ComboBox fx:id="participantComboBox" 
+			<ParticipantComboBox fx:id="participantComboBox"
 			promptText="skriv inn brukernavn" editable="true"
 			GridPane.rowIndex="6" GridPane.columnSpan="2" />
 			
