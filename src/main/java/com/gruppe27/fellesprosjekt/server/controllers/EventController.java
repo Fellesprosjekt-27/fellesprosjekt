@@ -8,7 +8,6 @@ import com.gruppe27.fellesprosjekt.common.messages.GeneralMessage;
 import com.gruppe27.fellesprosjekt.server.CalendarConnection;
 import com.gruppe27.fellesprosjekt.server.DatabaseConnector;
 
-import javax.swing.plaf.nimbus.State;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -123,16 +122,9 @@ public class EventController {
             int result = statement.executeUpdate();
 
             int event_id;
-
-            try (ResultSet event_id_rs = statement.getGeneratedKeys();) {
-                if (event_id_rs.next()) {
-                    event_id = event_id_rs.getInt(1);
-                }
-                else {
-                    throw new SQLException("Creating event failed, no ID obtained.");
-                }
-            }
-
+            ResultSet eventId_resultSet = statement.getGeneratedKeys();
+            eventId_resultSet.next();
+            event_id = eventId_resultSet.getInt(1);
 
             int number_of_participants = 0;
             for (User participant: event.getUserParticipants()){
