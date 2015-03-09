@@ -129,7 +129,7 @@ public class EventController {
                     event_id = event_id_rs.getInt(1);
                 }
                 else {
-                    throw new SQLException("Creating user failed, no ID obtained.");
+                    throw new SQLException("Creating event failed, no ID obtained.");
                 }
             }
 
