@@ -6,29 +6,31 @@ import com.gruppe27.fellesprosjekt.client.CalendarApplication;
 import com.gruppe27.fellesprosjekt.client.CalendarClient;
 import com.gruppe27.fellesprosjekt.common.Event;
 import com.gruppe27.fellesprosjekt.common.Room;
+import com.gruppe27.fellesprosjekt.common.User;
 import com.gruppe27.fellesprosjekt.common.messages.EventMessage;
 import com.gruppe27.fellesprosjekt.common.messages.RoomMessage;
 import com.gruppe27.fellesprosjekt.common.messages.RoomRequestMessage;
+import com.gruppe27.fellesprosjekt.common.messages.UserMessage;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.ResourceBundle;
 
+
+
 public class CreateEventController implements Initializable {
+
     @FXML
     TextField emne;
 
@@ -42,7 +44,19 @@ public class CreateEventController implements Initializable {
     TextField toTimeField;
 
     @FXML
-    ListView deltakere;
+    ListView<String> participantsListView;
+
+    @FXML
+    ComboBox<String> participantComboBox;
+
+    @FXML
+    Button addParticipantButton;
+
+    @FXML
+    ChoiceBox<User> romValg;
+
+    @FXML
+    Button fjernDeltakere;
 
     @FXML
     ChoiceBox<String> roomChoiceBox;
@@ -58,10 +72,34 @@ public class CreateEventController implements Initializable {
 
 
 
+    private Room currentRoom;
+
+    private ArrayList<Room> roomsArray;
     private CalendarApplication application;
+
+    private ArrayList<User> userArrayList;
+    private ObservableList<String> allUsersObservablelist;
+    private HashSet<User> participants;
+
+    public void emptyRoomsArray() {
+        this.roomsArray = new ArrayList<>();
+    }
+
+    public CreateEventController() {
+        participants = new HashSet<>();
+        roomsArray = new ArrayList<>();
+        currentRoom = null;
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        getAllUsers();
+        roomChoiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                currentRoom = roomsArray.get(newValue.intValue());
+            }
+        });
 
     }
 
@@ -69,6 +107,30 @@ public class CreateEventController implements Initializable {
         this.application = application;
     }
 
+    private void getAllUsers() {
+        UserMessage message = new UserMessage(UserMessage.Command.SEND_ALL);
+
+        CalendarClient client = CalendarClient.getInstance();
+
+        Listener getUsersListener = new Listener() {
+            public void received(Connection connection, Object object) {
+                if (object instanceof UserMessage) {
+                    UserMessage complete = (UserMessage) object;
+                    switch (complete.getCommand()) {
+                        case RECEIVE_ALL:
+                            setAllUsers(complete.getUsers());
+                            break;
+                        case SEND_ALL:
+                            break;
+                    }
+                    client.removeListener(this);
+                }
+            }
+
+        };
+        client.addListener(getUsersListener);
+        client.sendMessage(message);
+    }
     @FXML
     private void handleChoiceboxClicked() {
         System.out.println("Cbox clicked.");
@@ -100,15 +162,17 @@ public class CreateEventController implements Initializable {
                     client.removeListener(this);
                 }
             }
+
         };
+
         client.addListener(roomListener);
         client.sendMessage(message);
 
     }
 
     private void updateChoiceBox(HashSet<Room> rooms) {
-        ArrayList<Room> roomsArray = new ArrayList<>();
-        roomsArray.addAll(rooms);
+        this.emptyRoomsArray();
+        this.roomsArray.addAll(rooms);
         ArrayList<String> stringArrayList = new ArrayList<>();
         for(Room room: roomsArray) {
             String roomString = room.toString();
@@ -124,6 +188,36 @@ public class CreateEventController implements Initializable {
 
     }
 
+    private void setAllUsers(HashSet<User> allUsers) {
+        userArrayList = new ArrayList<>(allUsers);
+        allUsersObservablelist = FXCollections.observableArrayList();
+        for (User user : allUsers) {
+            allUsersObservablelist.add(user.getUsername());
+        }
+
+        Platform.runLater(() -> {
+            participantComboBox.setItems(allUsersObservablelist);
+        });
+    }
+
+    @FXML
+    private void handleAddParticipant() {
+        String inputUsername = participantComboBox.getValue();
+        //TODO: validering hvis -1
+        participants.add(fromStringtoUser(inputUsername));
+        updateListView();
+    }
+
+    private void updateListView() {
+        ObservableList<String> observable = FXCollections.observableArrayList();
+        for (User user : participants) {
+            observable.add(user.getUsername());
+        }
+        Platform.runLater(() -> {
+            participantsListView.setItems(observable);
+        });
+    }
+
     @FXML
     private void handleCreateEventAction() {
         Event event = new Event();
@@ -135,12 +229,23 @@ public class CreateEventController implements Initializable {
         LocalTime endTime = LocalTime.parse(toTimeField.getText());
         event.setStartTime(startTime);
         event.setEndTime(endTime);
+        event.setAllParticipants(participants);
+        event.setRoom(currentRoom);
 
         EventMessage message = new EventMessage(EventMessage.Command.CREATE_EVENT, event);
+        //TODO: add functions backend to invite all users from the eventmessage
+        //TODO: make an invite message
         CalendarClient.getInstance().sendMessage(message);
     }
 
     @FXML
     private void handleCancelAction() {
+        application.cancelCreateNewEvent();
     }
+
+    private User fromStringtoUser(String username) {
+        int index = allUsersObservablelist.indexOf(username);
+        return userArrayList.get(index);
+    }
+
 }

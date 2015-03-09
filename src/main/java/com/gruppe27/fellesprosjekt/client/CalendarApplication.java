@@ -3,7 +3,6 @@ package com.gruppe27.fellesprosjekt.client;
 import com.gruppe27.fellesprosjekt.client.controllers.CalendarController;
 import com.gruppe27.fellesprosjekt.client.controllers.CreateEventController;
 import com.gruppe27.fellesprosjekt.client.controllers.LogInController;
-import com.gruppe27.fellesprosjekt.common.Event;
 import com.gruppe27.fellesprosjekt.common.User;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -14,7 +13,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.HashSet;
 
 
 public class CalendarApplication extends Application {
@@ -83,5 +81,12 @@ public class CalendarApplication extends Application {
         });
 
         return (Initializable) loader.getController();
+    }
+
+    public void createNewEvent() {
+        this.gotoCreateEvent();
+    }
+    public void cancelCreateNewEvent() {
+        this.gotoCalendar();
     }
 }

@@ -9,6 +9,7 @@ import com.gruppe27.fellesprosjekt.common.messages.EventMessage;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -19,6 +20,9 @@ public class CalendarController implements Initializable {
 
     @FXML
     private MonthCalendarComponent calendar;
+
+    @FXML
+    private Button createEventButton;
 
     public CalendarController() {
     }
@@ -31,6 +35,11 @@ public class CalendarController implements Initializable {
 
     public void setApp(CalendarApplication application) {
         this.application = application;
+    }
+
+    public void handleCreateNewEvent() {
+        application.createNewEvent();
+
     }
 
     public void getEventsForPeriod(LocalDate from, LocalDate to, ObservableList observableEvents) {

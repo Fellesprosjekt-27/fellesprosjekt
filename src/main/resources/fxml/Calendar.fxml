@@ -2,13 +2,11 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.*?>
 <?import java.net.URL?>
-
 <?import com.gruppe27.fellesprosjekt.client.components.MonthCalendarComponent?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="450" prefWidth="700"
             fx:controller="com.gruppe27.fellesprosjekt.client.controllers.CalendarController">
-
     <SplitPane dividerPositions="0.25" AnchorPane.bottomAnchor="0"
                AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
                AnchorPane.topAnchor="0">
@@ -16,9 +14,10 @@
             <TitledPane collapsible="false" text="Vis"
                         AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0"
                         AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+
                 <VBox spacing="45" alignment="center">
                     <ListView />
-                    <Button id="createEventButton" text="Ny Event"/>
+                    <Button fx:id="createEventButton" text="Ny Event" onAction="#handleCreateNewEvent"/>
                 </VBox>
             </TitledPane>
         </AnchorPane>
@@ -31,7 +30,7 @@
                         <MonthCalendarComponent fx:id="calendar"/>
                     </Tab>
                     <Tab text="Uke">
-                        <GridPane >
+                        <GridPane>
                             <columnConstraints>
                                 <ColumnConstraints minWidth="10.0" prefWidth="100.0"/>
                                 <ColumnConstraints/>
@@ -101,13 +100,13 @@
                                   GridPane.rowIndex="4" GridPane.halignment="CENTER">
                             </Text>
                             <VBox GridPane.rowIndex="1" spacing="15">
-                                <Text text="00:00" />
-                                <Text text="00:15" />
+                                <Text text="00:00"/>
+                                <Text text="00:15"/>
                             </VBox>
                         </GridPane>
                     </Tab>
                     <Tab text="Dag">
-                        <GridPane >
+                        <GridPane>
                             <columnConstraints>
                                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="153.0"
                                                    minWidth="10.0" prefWidth="43.0"/>
@@ -141,6 +140,6 @@
         </AnchorPane>
     </SplitPane>
     <stylesheets>
-        <URL value="@/css/calendar.css"/>
+        <URL value="@../css/calendar.css"/>
     </stylesheets>
 </AnchorPane>
