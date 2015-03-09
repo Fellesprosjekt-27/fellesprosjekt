@@ -1,9 +1,12 @@
 package com.gruppe27.fellesprosjekt.common;
 
+import java.time.LocalDateTime;
+
 public class Notification {
 
     Event event;
     String message;
+    LocalDateTime timestamp;
 
     public Notification() {
     }
@@ -19,5 +22,9 @@ public class Notification {
 
     public String getMessage() {
         return message;
+    }
+
+    public LocalDateTime getTimestamp() {
+        return timestamp;
     }
 }

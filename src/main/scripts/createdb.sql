@@ -60,10 +60,11 @@ CREATE TABLE UserEvent (
 );
 
 CREATE TABLE Notification (
-    id INT NOT NULL AUTO_INCREMENT,
-    event_id INT NOT NULL,
-    message VARCHAR(200),
-    PRIMARY KEY (id),
-    FOREIGN KEY (event_id) REFERENCES Event (id)
+  id INT NOT NULL AUTO_INCREMENT,
+  timestamp DATETIME NOT NULL DEFAULT NOW(),
+  event_id INT NOT NULL,
+  message VARCHAR(200),
+  PRIMARY KEY (id),
+  FOREIGN KEY (event_id) REFERENCES Event (id)
 );
 
