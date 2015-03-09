@@ -120,6 +120,23 @@ public class EventController {
             statement.setString(6, event.getRoom().getRoomName());
             int result = statement.executeUpdate();
 
+            PreparedStatement event_id_query = DatabaseConnector.getConnection().prepareStatement(
+                    "SELECT LAST_INSERT_ID()"
+            );
+            ResultSet event_id_result = statement.executeQuery();
+            int event_id = event_id_result.getInt(1);
+            int number_of_participants = 0;
+            for (User participant: event.getUserParticipants()){
+                PreparedStatement participantStatement = DatabaseConnector.getConnection().prepareStatement(
+                        "INSERT INTO UserEvent (username,event_id,status) VALUES (?,?,?)"
+                );
+                statement.setString(1, participant.getUsername());
+                statement.setInt(2,event_id);
+                statement.setString(3,"maybe");
+                int participantResult = participantStatement.executeUpdate();
+                number_of_participants += participantResult;
+            }
+            System.out.println(number_of_participants + " participants added to event.");
             System.out.println(result + " rows affected");
             GeneralMessage createdMessage = new GeneralMessage(GeneralMessage.Command.SUCCESSFUL_CREATE,
                     "Avtalen " + event.getName() + " opprettet.");

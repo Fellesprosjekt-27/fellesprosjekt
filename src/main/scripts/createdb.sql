@@ -52,7 +52,7 @@ CREATE TABLE TeamEvent (
 
 CREATE TABLE UserEvent (
   username VARCHAR(32) NOT NULL,
-  event_id INT         NOT NULL,
+  event_id INT NOT NULL,
   PRIMARY KEY (username, event_id),
   FOREIGN KEY (username) REFERENCES User (username),
   FOREIGN KEY (event_id) REFERENCES Event (id)
