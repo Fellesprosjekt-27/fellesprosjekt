@@ -1,138 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="531.0"
-            prefWidth="753.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.gruppe27.fellesprosjekt.client.controllers.CreateEventController">
-    <children>
-        <HBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-              AnchorPane.topAnchor="0.0">
-            <children>
-                <GridPane id="postItPane" prefHeight="400.0" prefWidth="600.0" style="-fx-padding: 20;" stylesheets="@../css/default.css">
-                    <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="70.0" minWidth="10.0" prefWidth="100.0"/>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="70.0" minWidth="10.0" prefWidth="100.0"/>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                    </rowConstraints>
-                    <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Emne" GridPane.rowIndex="1" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Dato" GridPane.rowIndex="2" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Fra" GridPane.rowIndex="3" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Legg til deltakere:" GridPane.columnSpan="2" GridPane.rowIndex="5" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Rom" GridPane.rowIndex="4" />
-                        <TextField fx:id="fromTimeField" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                        <DatePicker fx:id="datePicker" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <ChoiceBox fx:id="roomChoiceBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" onMouseClicked="#handleChoiceboxClicked" />
-                        <Text text="Kapasitet" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-                        <TextField fx:id="capacityField" GridPane.columnIndex="3" GridPane.rowIndex="4" />
-                        <VBox alignment="CENTER" GridPane.columnSpan="4">
-                            <children>
-                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="OPPRETT AVTALE"
-                                      GridPane.columnSpan="5"/>
-                            </children>
-                        </VBox>
-                        <VBox alignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="3">
-                            <children>
-                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Til" GridPane.columnIndex="2"
-                                      GridPane.rowIndex="3"/>
-                            </children>
-                        </VBox>
-                        <VBox GridPane.columnSpan="2" GridPane.rowIndex="6">
-                            <children>
-                                <ComboBox fx:id="participantComboBox" editable="true"
-                                          promptText="skriv inn brukernavn"/>
-                                <Button fx:id="addParticipantButton" onAction="#handleAddParticipant"
-                                        text="legg til deltaker"/>
-                            </children>
-                        </VBox>
-                        <VBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.columnSpan="3"
-                              GridPane.rowIndex="1">
-                            <children>
-                                <TextField fx:id="emne" prefHeight="26.0" prefWidth="101.0" GridPane.columnIndex="1"
-                                           GridPane.columnSpan="3" GridPane.rowIndex="1"/>
-                            </children>
-                            <padding>
-                                <Insets right="10.0"/>
-                            </padding>
-                        </VBox>
-                        <VBox alignment="CENTER_LEFT" GridPane.columnIndex="3" GridPane.rowIndex="3">
-                            <children>
-                                <TextField fx:id="toTimeField" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-                            </children>
-                            <padding>
-                                <Insets right="10.0"/>
-                            </padding>
-                        </VBox>
-                        <VBox GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="6"
-                              GridPane.rowSpan="2">
-                            <children>
-                                <ListView fx:id="participantsListView" prefHeight="200.0" prefWidth="200.0"
-                                          GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="6"/>
-                            </children>
-                            <padding>
-                                <Insets left="10.0" right="10.0"/>
-                            </padding>
-                        </VBox>
-                        <VBox alignment="CENTER_LEFT" GridPane.columnIndex="2" GridPane.rowIndex="5">
-                            <children>
-                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Lagt til:" GridPane.columnIndex="2"
-                                      GridPane.rowIndex="5"/>
-                            </children>
-                            <padding>
-                                <Insets left="10.0"/>
-                            </padding>
-                        </VBox>
-                        <VBox alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1"
-                              GridPane.rowIndex="7">
-                            <children>
-                                <Button fx:id="fjernDeltakere" mnemonicParsing="false" stylesheets="@css/default.css"
-                                        text="Fjern markerte deltakere"/>
-                            </children>
-                        </VBox>
-                    </children>
-                </GridPane>
-                <GridPane id="buttonPane" minWidth="150.0" stylesheets="@../css/default.css">
-                    <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                    </rowConstraints>
-                    <children>
-                        <VBox alignment="CENTER" style=": black;" GridPane.rowIndex="2">
-                            <children>
-                                <Button id="cancelButton" fx:id="cancelButton" mnemonicParsing="false" onAction="#handleCancelAction" stylesheets="@../css/default.css" text="Avbryt" GridPane.columnIndex="4" GridPane.rowIndex="4" />
-                            </children>
-                        </VBox>
-                        <VBox alignment="CENTER" GridPane.rowIndex="1">
-                            <padding>
-                                <Insets left="10.0"/>
-                            </padding>
-                            <children>
-                                <Button id="createEventButton" fx:id="createEventButton" alignment="CENTER" mnemonicParsing="false" onAction="#handleCreateEventAction" style="-fx-padding: 10;" stylesheets="@../css/default.css" text="Opprett Avtale" textAlignment="CENTER" wrapText="true" />
-                            </children>
-                        </VBox>
-                    </children>
-                </GridPane>
-            </children>
-        </HBox>
-    </children>
+<?import java.net.URL?>
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="com.gruppe27.fellesprosjekt.client.controllers.CreateEventController">
+	<HBox alignment="CENTER" AnchorPane.bottomAnchor="0.0"
+	AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+		<GridPane id="postItPane" alignment="CENTER" style="-fx-padding: 20;"
+		hgap="10" vgap="10">
+
+			<Text text="OPPRETT AVTALE" 
+			GridPane.rowIndex="0" GridPane.columnSpan="5" GridPane.halignment="CENTER" />
+
+			<Text text="Emne" GridPane.rowIndex="1" />
+			<TextField fx:id="emne"
+			GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.columnSpan="3" />
+
+			<Text text="Dato" GridPane.rowIndex="2" />
+			<DatePicker fx:id="datePicker"
+			GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+			<Text text="Fra" GridPane.rowIndex="3" />
+			<TextField fx:id="fromTimeField" 
+			GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+			<Text text="Til" GridPane.halignment="CENTER"
+			GridPane.columnIndex="2" GridPane.rowIndex="3" />
+			<TextField fx:id="toTimeField" 
+			GridPane.columnIndex="3" GridPane.rowIndex="3" />
+			
+			<Text text="Kapasitet"
+			GridPane.columnIndex="2" GridPane.rowIndex="4" />
+			<TextField fx:id="capacityField" 
+			GridPane.columnIndex="3" GridPane.rowIndex="4" />
+
+			<Text text="Rom" GridPane.rowIndex="4" />
+			<ChoiceBox fx:id="roomChoiceBox" 
+			onMouseClicked="#handleChoiceboxClicked"
+			GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
+			<Text text="Legg til deltakere:" 
+			GridPane.columnSpan="2"	GridPane.rowIndex="5" />
+			<ComboBox fx:id="participantComboBox" 
+			promptText="skriv inn brukernavn" editable="true"
+			GridPane.rowIndex="6" GridPane.columnSpan="2" />
+			
+			<Button fx:id="addParticipantButton" 
+			onAction="#handleAddParticipant"
+			text="legg til deltaker" 
+			GridPane.rowIndex="7" GridPane.columnSpan="2" />
+			<Button fx:id="fjernDeltakere" 
+			text="Fjern markerte deltakere" wrapText="true"
+			GridPane.columnIndex="1" GridPane.rowIndex="8" 
+			GridPane.halignment="RIGHT" GridPane.valignment="BOTTOM" />
+			
+			<Text text="Lagt til:" 
+			GridPane.columnIndex="2" GridPane.rowIndex="5" />
+			<ListView fx:id="participantsListView" 
+			GridPane.columnIndex="2" GridPane.rowIndex="6" GridPane.columnSpan="2" GridPane.rowSpan="3" />
+		</GridPane>
+		<GridPane id="buttonPane" alignment="CENTER" vgap="50"
+		style="-fx-padding: 10;">
+			<Button id="createEventButton" fx:id="createEventButton"
+				onAction="#handleCreateEventAction" 
+				GridPane.rowIndex="0" GridPane.halignment="CENTER"
+				text="Opprett Avtale" textAlignment="CENTER" wrapText="true" />
+			<Button id="cancelButton" fx:id="cancelButton" text="Avbryt"
+				onAction="#handleCancelAction" 
+				GridPane.rowIndex="1" GridPane.halignment="CENTER"/>
+		</GridPane>
+	</HBox>
+    <stylesheets>
+        <URL value="@../css/calendar.css"/>
+    </stylesheets>
 </AnchorPane>

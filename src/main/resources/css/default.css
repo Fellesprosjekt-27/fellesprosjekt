@@ -1,4 +1,17 @@
 
+
+Text{
+    -fx-font-family: helvetica;
+}
+
+Label{
+    -fx-font-family: helvetica;
+}
+
+Button{
+    -fx-font-family: helvetica;
+}
+
 #postItPane{
     -fx-background-image: url("../images/PostIt.jpg");
     -fx-background-size: stretch;
@@ -6,14 +19,6 @@
     -fx-background-position: bottom left;
 }
 
-#checkBoxYes {
-}
-
-#checkBoxNo {
-}
-
-#checkBoxInd {
-}
 
 #cancelButton {
     -fx-background-color: red, linear-gradient(#cc4a29 50%, FF6C47 100%), radial-gradient(center 50% -40%, radius 200%, cc4a29 45%, rgba(230, 230, 230, 0) 50%);
@@ -24,6 +29,16 @@
     -fx-font-size: 14px;
     -fx-text-fill: black;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6), 3, 0.0, 0, 1);
+}
+
+			 
+#checkBoxYes{
+}
+
+#checkBoxNo{
+}
+
+#checkBoxInd{
 }
 
 #createEventButton {
