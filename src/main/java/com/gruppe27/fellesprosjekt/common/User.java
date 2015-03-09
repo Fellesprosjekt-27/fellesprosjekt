@@ -16,13 +16,13 @@ public class User {
     public User() {
         groups = new HashSet<Group>();
     }
-
-    public User(String username, String name) {
-        this.setName(name);
+    
+    public User(String username) {
         this.setUsername(username);
     }
 
-    public User(String username) {
+    public User(String username, String name) {
+        this.setName(name);
         this.setUsername(username);
     }
 
@@ -64,6 +64,10 @@ public class User {
 
     public String getName() {
         return name;
+    }
+    
+    public Set<Group> getGroups(){
+        return groups;
     }
 
     public void removeUserFromGroup(Group group) {
