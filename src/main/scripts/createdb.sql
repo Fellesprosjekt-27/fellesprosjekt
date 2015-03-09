@@ -59,4 +59,11 @@ CREATE TABLE UserEvent (
   FOREIGN KEY (event_id) REFERENCES Event (id)
 );
 
+CREATE TABLE Notification (
+    id INT NOT NULL AUTO_INCREMENT,
+    event_id INT NOT NULL,
+    message VARCHAR(200),
+    PRIMARY KEY (id),
+    FOREIGN KEY (event_id) REFERENCES Event (id)
+);
 
