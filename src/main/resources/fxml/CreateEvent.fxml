@@ -74,6 +74,6 @@
 		</GridPane>
 	</HBox>
     <stylesheets>
-        <URL value="@../css/calendar.css"/>
+        <URL value="@../css/default.css"/>
     </stylesheets>
 </AnchorPane>
