@@ -1,6 +1,7 @@
 package com.gruppe27.fellesprosjekt.client.components;
 
 import com.gruppe27.fellesprosjekt.client.controllers.CalendarController;
+import com.gruppe27.fellesprosjekt.client.events.EventBoxClicked;
 import com.gruppe27.fellesprosjekt.common.Event;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -8,17 +9,12 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import org.controlsfx.control.PopOver;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -92,6 +88,17 @@ public class MonthCalendarComponent extends BorderPane {
         this.year = LocalDate.now().getYear();
         this.month = LocalDate.now().getMonthValue();
         drawCurrentPeriod();
+
+        this.addEventHandler(EventBoxClicked.eventType, e -> {
+            EventBoxClicked event = (EventBoxClicked) e;
+            String str ="\nAt: " + event.getEvent().getDate() + "\nFrom: " + event.getEvent().getStartTime() + " to: " + event.getEvent().getEndTime() + "\nIn room: " + event.getEvent().getRoom();
+            Pane pane = new Pane();
+            Text text = new Text(str);
+            pane.getChildren().add(text);
+            PopOver popOver = new PopOver(pane);
+            popOver.setDetachedTitle(event.getEvent().getName());
+            popOver.show(event.getSquare());
+        });
     }
 
     public void setController(CalendarController controller) {
