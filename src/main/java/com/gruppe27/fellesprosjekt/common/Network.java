@@ -5,6 +5,7 @@ import com.esotericsoftware.kryonet.EndPoint;
 import com.gruppe27.fellesprosjekt.common.messages.*;
 import com.gruppe27.fellesprosjekt.common.serializers.LocalDateSerializer;
 import com.gruppe27.fellesprosjekt.common.serializers.LocalTimeSerializer;
+import com.sun.corba.se.impl.protocol.giopmsgheaders.RequestMessage;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -30,8 +31,8 @@ public class Network {
         kryo.register(UserMessage.Command.class);
         kryo.register(RoomMessage.class);
         kryo.register(RoomMessage.Command.class);
-        kryo.register(RoomRequestMessage.class);
-        kryo.register(RoomRequestMessage.Command.class);
+        kryo.register(RequestMessage.class);
+        kryo.register(RequestMessage.Command.class);
         kryo.register(GeneralMessage.class);
         kryo.register(GeneralMessage.Command.class);
         kryo.register(ErrorMessage.class);

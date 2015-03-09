@@ -9,7 +9,7 @@ import com.gruppe27.fellesprosjekt.common.Room;
 import com.gruppe27.fellesprosjekt.common.User;
 import com.gruppe27.fellesprosjekt.common.messages.EventMessage;
 import com.gruppe27.fellesprosjekt.common.messages.RoomMessage;
-import com.gruppe27.fellesprosjekt.common.messages.RoomRequestMessage;
+import com.gruppe27.fellesprosjekt.common.messages.RequestMessage;
 import com.gruppe27.fellesprosjekt.common.messages.UserMessage;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -145,7 +145,7 @@ public class CreateEventController implements Initializable {
 
     @FXML
     private void updateCurrentRooms(LocalDate date, LocalTime start, LocalTime end, int capacity) {
-        RoomRequestMessage message = new RoomRequestMessage(RoomRequestMessage.Command.ROOM_REQUEST, date,start,end,capacity);
+        RequestMessage message = new RequestMessage(RequestMessage.Command.ROOM_REQUEST, date,start,end,capacity);
 
         CalendarClient client = CalendarClient.getInstance();
 

@@ -9,9 +9,9 @@ import com.gruppe27.fellesprosjekt.server.controllers.AuthController;
 import com.gruppe27.fellesprosjekt.server.controllers.EventController;
 import com.gruppe27.fellesprosjekt.server.controllers.UserController;
 import com.gruppe27.fellesprosjekt.common.messages.RoomMessage;
-import com.gruppe27.fellesprosjekt.common.messages.RoomRequestMessage;
 import com.gruppe27.fellesprosjekt.server.controllers.RoomController;
-import com.gruppe27.fellesprosjekt.server.controllers.RoomRequestController;
+import com.gruppe27.fellesprosjekt.server.controllers.RequestController;
+import com.sun.corba.se.impl.protocol.giopmsgheaders.RequestMessage;
 
 
 public class CalendarListener extends Listener {
@@ -37,8 +37,8 @@ public class CalendarListener extends Listener {
             RoomController.getInstance().handleMessage(connection,message);
         }
 
-        if (message instanceof RoomRequestMessage) {
-            RoomRequestController.getInstance().handleMessage(connection, message);
+        if (message instanceof RequestMessage) {
+            RequestController.getInstance().handleMessage(connection, message);
             return;
         }
 
