@@ -1,9 +1,12 @@
 package com.gruppe27.fellesprosjekt.server.controllers;
 
+import com.gruppe27.fellesprosjekt.common.ParticipantUser;
 import com.gruppe27.fellesprosjekt.common.Room;
+import com.gruppe27.fellesprosjekt.common.User;
 import com.gruppe27.fellesprosjekt.common.messages.ErrorMessage;
 import com.gruppe27.fellesprosjekt.common.messages.RoomMessage;
 import com.gruppe27.fellesprosjekt.common.messages.RequestMessage;
+import com.gruppe27.fellesprosjekt.common.messages.UserMessage;
 import com.gruppe27.fellesprosjekt.server.CalendarConnection;
 import com.gruppe27.fellesprosjekt.server.DatabaseConnector;
 
@@ -38,35 +41,52 @@ public class RequestController {
     }
 
     private void sendAllParticipantUsers(CalendarConnection connection, RequestMessage message) {
+        String busyQuery = " SELECT User.username FROM User JOIN UserEvent" +
+                " ON User.username = UserEvent.username JOIN Event ON Event.id = UserEvent.event_id" +
+                " WHERE Event.date = ? AND (" +
+                " (Event.start < ? AND ? < Event.end) OR " +
+                " (Event.start < ? AND ? < Event.end))";
         try {
 
-            PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement(
-                            "SELECT User.username FROM User JOIN UserEvent ON User.username = UserEvent.username JOIN Event ON Event.id = UserEvent.event_id" +
-                            " WHERE Event.date = ? AND (" +
-                            " (Event.start < ? AND ? < Event.end) OR " +
-                            " (Event.start < ? AND ? < Event.end))"
-            );
+            PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement(busyQuery);
+
             statement.setString(1, message.getDate().toString());
             statement.setString(2, message.getStartTime().toString());
             statement.setString(3, message.getStartTime().toString());
             statement.setString(4, message.getEndTime().toString());
             statement.setString(5, message.getEndTime().toString());
 
-            /*
-            HashSet<Room> rooms = new HashSet<>();
-            int roomAmount = 0;
-            ResultSet result = statement.executeQuery();
-            while (result.next()) {
-                roomAmount++;
-                Room room = new Room();
-                room.setRoomName(result.getString("name"));
-                room.setCapacity(result.getInt("capacity"));
-                rooms.add(room);
+            PreparedStatement freeUsersStatement = DatabaseConnector.getConnection().prepareStatement(
+                    "SELECT User.username, User.name FROM User WHERE NOT IN ( " + busyQuery + ")"
+            );
+
+
+
+            HashSet<User> participantUsers = new HashSet<>();
+
+
+            ResultSet busyUsersResult = statement.executeQuery();
+            ResultSet freeUusersResult = freeUsersStatement.executeQuery();
+
+
+
+            while (busyUsersResult.next()) {
+                ParticipantUser pUSer = new ParticipantUser();
+                pUSer.setUsername(busyUsersResult.getString(1));
+                pUSer.setName(busyUsersResult.getString(2));
+                pUSer.setBusy(true);
+                participantUsers.add(pUSer);
             }
-            System.out.println(roomAmount + " free rooms found");
-            RoomMessage createdMessage = new RoomMessage(RoomMessage.Command.RECEIVE_ROOMS, rooms);
+            while (freeUusersResult.next()) {
+                ParticipantUser pUser = new ParticipantUser();
+                pUser.setUsername(freeUusersResult.getString(1));
+                pUser.setName(freeUusersResult.getString(2));
+                participantUsers.add(pUser);
+            }
+            System.out.println(participantUsers.size() + " users found!");
+            UserMessage createdMessage = new UserMessage(UserMessage.Command.RECEIVE_ALL, participantUsers);
             connection.sendTCP(createdMessage);
-            */
+
         } catch (SQLException e) {
             e.printStackTrace();
             ErrorMessage error = new ErrorMessage();

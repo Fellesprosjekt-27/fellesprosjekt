@@ -6,6 +6,7 @@ public class ParticipantUser extends User{
     
     public ParticipantUser(){
         super();
+        this.busy = false;
     }
     
     public ParticipantUser(String username, boolean busy){
