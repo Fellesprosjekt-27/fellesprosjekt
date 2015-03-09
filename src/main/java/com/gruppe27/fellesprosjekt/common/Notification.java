@@ -3,19 +3,41 @@ package com.gruppe27.fellesprosjekt.common;
 import java.time.LocalDateTime;
 
 public class Notification {
-
-    String username;
     Event event;
     String message;
+    String username;
     LocalDateTime timestamp;
+    Boolean isRead;
+    NotificationType type;
+
+    public enum NotificationType {
+        INVITATION, PARTICIPATION_DECLINED, EVENT_CHANGED, CONFLICTING_EVENTS
+    }
 
     public Notification() {
     }
 
-    public Notification(Event event, String message, String username) {
+    public Notification(String username, Event event, String message, LocalDateTime timestamp, NotificationType type) {
+        this.username = username;
         this.event = event;
         this.message = message;
+        this.timestamp = timestamp;
+        this.type = type;
+    }
+
+    public Notification(String username, Event event, String message, NotificationType type) {
         this.username = username;
+        this.event = event;
+        this.message = message;
+        this.type = type;
+    }
+
+    public Boolean isRead() {
+        return isRead;
+    }
+
+    public NotificationType getType() {
+        return type;
     }
 
     public Event getEvent() {
@@ -32,5 +54,9 @@ public class Notification {
 
     public String getUsername() {
         return username;
+    }
+
+    public void setIsRead(Boolean isRead) {
+        this.isRead = isRead;
     }
 }

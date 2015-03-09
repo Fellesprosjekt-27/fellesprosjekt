@@ -6,6 +6,8 @@ import com.gruppe27.fellesprosjekt.client.CalendarApplication;
 import com.gruppe27.fellesprosjekt.client.CalendarClient;
 import com.gruppe27.fellesprosjekt.client.components.MonthCalendarComponent;
 import com.gruppe27.fellesprosjekt.common.Event;
+import com.gruppe27.fellesprosjekt.client.components.NotificationList;
+import com.gruppe27.fellesprosjekt.common.Notification;
 import com.gruppe27.fellesprosjekt.common.messages.EventMessage;
 
 import javafx.collections.ObservableList;
@@ -15,6 +17,8 @@ import javafx.scene.control.Button;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class CalendarController implements Initializable {
@@ -26,13 +30,31 @@ public class CalendarController implements Initializable {
     @FXML
     private Button createEventButton;
 
+    @FXML
+    private NotificationList notificationList;
+
     public CalendarController() {
     }
+
+    public void updateNotifications(){
+        ArrayList<Notification> not = new ArrayList<>();
+        not.add( new Notification("Test notification", LocalDateTime.now(), Notification.NotificationType.INVITATION, false));
+        not.add(new Notification("et eller annet", LocalDateTime.now(), Notification.NotificationType.EVENT_CHANGED, true));
+        not.add(new Notification("just for kicks", LocalDateTime.now(), Notification.NotificationType.PARTICIPATION_DECLINED, true));
+
+        notificationList.setNotifications(not);
+    }
+
+    /*public void addNotification(Notification n){
+        notificationList.addNotification(n);
+    }*/
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.calendar.setController(this);
         this.calendar.findEvents();
+        updateNotifications();
+
     }
 
     public void setApp(CalendarApplication application) {
@@ -41,7 +63,6 @@ public class CalendarController implements Initializable {
 
     public void handleCreateNewEvent() {
         application.createNewEvent();
-
     }
 
     public void getEventsForPeriod(LocalDate from, LocalDate to, ObservableList<Event> observableEvents) {

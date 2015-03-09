@@ -107,6 +107,7 @@ public class MonthCalendarComponent extends BorderPane {
         this.controller.getEventsForPeriod(from, to, events);
     }
 
+
     private void decrementMonth() {
         LocalDate date = LocalDate.of(this.year, this.month, 1).minusMonths(1);
         this.month = date.getMonthValue();
