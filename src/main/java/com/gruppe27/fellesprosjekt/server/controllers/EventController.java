@@ -75,18 +75,13 @@ public class EventController {
         while (result.next()) {
             if (result.getInt("Event.id") != currentEventId) {
                 event = new Event();
-                User creator = new User();
-                User participant = new User();
                 currentEventId = result.getInt(1);
                 event.setName(result.getString(2));
                 event.setDate(result.getDate(3).toLocalDate());
                 event.setStartTime(result.getTime(4).toLocalTime());
                 event.setEndTime(result.getTime(5).toLocalTime());
-                creator.setUsername(result.getString(6));
-                creator.setName(result.getString(7));
-                participant.setUsername(result.getString(8));
-                participant.setName(result.getString(9));
-
+                User creator = new User(result.getString(6), result.getString(7));
+                User participant = new User(result.getString(8), result.getString(9));
                 event.addParticipant(participant);
 
                 event.setCreator(creator);
@@ -96,9 +91,7 @@ public class EventController {
                 if (event == null) {
                     return events;
                 }
-                User participant = new User();
-                participant.setUsername(result.getString(8));
-                participant.setName(result.getString(9));
+                User participant = new User(result.getString(8), result.getString(9));
                 event.addParticipant(participant);
                 System.out.println("Add user");
             }
@@ -110,7 +103,8 @@ public class EventController {
         try {
 
             PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement(
-                    "INSERT INTO Event(name, date, start, end, creator,room) VALUES (?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS
+                    "INSERT INTO Event(name, date, start, end, creator, room) VALUES (?,?,?,?,?,?)",
+                    Statement.RETURN_GENERATED_KEYS
             );
 
             statement.setString(1, event.getName());
@@ -141,8 +135,6 @@ public class EventController {
             GeneralMessage createdMessage = new GeneralMessage(GeneralMessage.Command.SUCCESSFUL_CREATE,
                     "Avtalen " + event.getName() + " opprettet.");
             connection.sendTCP(createdMessage);
-
-
         } catch (SQLException e) {
             e.printStackTrace();
             ErrorMessage error = new ErrorMessage();

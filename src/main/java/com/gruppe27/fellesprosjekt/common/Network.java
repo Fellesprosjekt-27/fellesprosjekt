@@ -8,14 +8,17 @@ import com.gruppe27.fellesprosjekt.common.messages.ErrorMessage;
 import com.gruppe27.fellesprosjekt.common.messages.EventMessage;
 import com.gruppe27.fellesprosjekt.common.messages.GeneralMessage;
 import com.gruppe27.fellesprosjekt.common.messages.InviteMessage;
+import com.gruppe27.fellesprosjekt.common.messages.NotificationMessage;
 import com.gruppe27.fellesprosjekt.common.messages.ParticipantStatusMessage;
 import com.gruppe27.fellesprosjekt.common.messages.RoomMessage;
 import com.gruppe27.fellesprosjekt.common.messages.RoomRequestMessage;
 import com.gruppe27.fellesprosjekt.common.messages.UserMessage;
 import com.gruppe27.fellesprosjekt.common.serializers.LocalDateSerializer;
+import com.gruppe27.fellesprosjekt.common.serializers.LocalDateTimeSerializer;
 import com.gruppe27.fellesprosjekt.common.serializers.LocalTimeSerializer;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.HashSet;
 
@@ -32,6 +35,7 @@ public class Network {
         kryo.register(HashSet.class);
         kryo.register(LocalDate.class, new LocalDateSerializer());
         kryo.register(LocalTime.class, new LocalTimeSerializer());
+        kryo.register(LocalDateTime.class, new LocalDateTimeSerializer());
         kryo.register(Notification.class);
         kryo.register(Room.class);
         kryo.register(String.class);
@@ -69,6 +73,10 @@ public class Network {
 
         kryo.register(GeneralMessage.class);
         kryo.register(GeneralMessage.Command.class);
+
+        kryo.register(Notification.class);
+        kryo.register(NotificationMessage.class);
+        kryo.register(NotificationMessage.Command.class);
     }
 
 }

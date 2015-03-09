@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 public class Notification {
 
+    String username;
     Event event;
     String message;
     LocalDateTime timestamp;
@@ -11,9 +12,10 @@ public class Notification {
     public Notification() {
     }
 
-    public Notification(Event event, String message) {
+    public Notification(Event event, String message, String username) {
         this.event = event;
         this.message = message;
+        this.username = username;
     }
 
     public Event getEvent() {
@@ -26,5 +28,9 @@ public class Notification {
 
     public LocalDateTime getTimestamp() {
         return timestamp;
+    }
+
+    public String getUsername() {
+        return username;
     }
 }
