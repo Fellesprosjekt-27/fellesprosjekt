@@ -11,3 +11,9 @@ INSERT INTO UserEvent (username, event_id)
 VALUES ('anddor', 1);
 INSERT INTO UserEvent (username, event_id)
 VALUES ('user1', 1);
+
+
+INSERT INTO Room(name, capacity) VALUES ('rom 203','10');
+INSERT INTO Room(name, capacity) VALUES ('rom 204','15');
+INSERT INTO Room(name, capacity) VALUES ('rom 205','5');
+INSERT INTO Room(name, capacity) VALUES ('rom 206','20');

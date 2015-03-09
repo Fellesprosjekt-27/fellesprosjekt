@@ -8,9 +8,11 @@ import com.gruppe27.fellesprosjekt.common.messages.GeneralMessage;
 import com.gruppe27.fellesprosjekt.server.CalendarConnection;
 import com.gruppe27.fellesprosjekt.server.DatabaseConnector;
 
+import javax.swing.plaf.nimbus.State;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.HashSet;
 
@@ -109,7 +111,7 @@ public class EventController {
         try {
 
             PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement(
-                    "INSERT INTO Event(name, date, start, end, creator,room) VALUES (?,?,?,?,?,?)"
+                    "INSERT INTO Event(name, date, start, end, creator,room) VALUES (?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS
             );
 
             statement.setString(1, event.getName());
@@ -120,19 +122,26 @@ public class EventController {
             statement.setString(6, event.getRoom().getRoomName());
             int result = statement.executeUpdate();
 
-            PreparedStatement event_id_query = DatabaseConnector.getConnection().prepareStatement(
-                    "SELECT LAST_INSERT_ID()"
-            );
-            ResultSet event_id_result = statement.executeQuery();
-            int event_id = event_id_result.getInt(1);
+            int event_id;
+
+            try (ResultSet event_id_rs = statement.getGeneratedKeys();) {
+                if (event_id_rs.next()) {
+                    event_id = event_id_rs.getInt(1);
+                }
+                else {
+                    throw new SQLException("Creating user failed, no ID obtained.");
+                }
+            }
+
+
             int number_of_participants = 0;
             for (User participant: event.getUserParticipants()){
                 PreparedStatement participantStatement = DatabaseConnector.getConnection().prepareStatement(
-                        "INSERT INTO UserEvent (username,event_id,status) VALUES (?,?,?)"
+                        "INSERT INTO UserEvent(username,event_id,status) VALUES (?,?,?)"
                 );
-                statement.setString(1, participant.getUsername());
-                statement.setInt(2,event_id);
-                statement.setString(3,"maybe");
+                participantStatement.setString(1, participant.getUsername());
+                participantStatement.setInt(2,event_id);
+                participantStatement.setString(3,"maybe");
                 int participantResult = participantStatement.executeUpdate();
                 number_of_participants += participantResult;
             }
