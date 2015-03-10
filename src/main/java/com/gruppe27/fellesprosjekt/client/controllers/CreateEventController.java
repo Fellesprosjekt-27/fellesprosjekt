@@ -204,7 +204,7 @@ public class CreateEventController implements Initializable {
     @FXML
     private void handleAddParticipant(){
         String username = participantComboBox.getValue();
-        participants.add(fromStringtoUser(username));
+        participants.add(allUsers.get(username));
         updateListView();
 
         availableUsersObservable.remove(participantComboBox.getValue());
@@ -246,10 +246,6 @@ public class CreateEventController implements Initializable {
     @FXML
     private void handleCancelAction() {
         application.cancelCreateNewEvent();
-    }
-
-    private User fromStringtoUser(String username) {
-        return allUsers.get(username);
     }
 
 }
