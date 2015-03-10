@@ -49,7 +49,8 @@ public class NotificationController {
 
     public void newEventNotification(Event event, User user) {
         String message = "You have been invited to join: " + event.getName();
-        Notification notification = new Notification(event, message, user.getUsername());
+        Notification notification = new Notification(user.getUsername(), event, message,
+                Notification.NotificationType.INVITATION);
 
         try {
             createNotification(notification);

@@ -7,11 +7,18 @@ import com.gruppe27.fellesprosjekt.common.messages.AuthMessage;
 import com.gruppe27.fellesprosjekt.common.messages.ErrorMessage;
 import com.gruppe27.fellesprosjekt.common.messages.EventMessage;
 import com.gruppe27.fellesprosjekt.common.messages.GeneralMessage;
+<<<<<<< HEAD
 import com.gruppe27.fellesprosjekt.common.messages.InviteMessage;
 import com.gruppe27.fellesprosjekt.common.messages.NotificationMessage;
 import com.gruppe27.fellesprosjekt.common.messages.ParticipantStatusMessage;
 import com.gruppe27.fellesprosjekt.common.messages.RoomMessage;
 import com.gruppe27.fellesprosjekt.common.messages.RoomRequestMessage;
+=======
+import com.gruppe27.fellesprosjekt.common.messages.NotificationMessage;
+import com.gruppe27.fellesprosjekt.common.messages.RoomMessage;
+import com.gruppe27.fellesprosjekt.common.messages.RoomRequestMessage;
+import com.gruppe27.fellesprosjekt.common.messages.TestMessage;
+>>>>>>> Use observablelist for new notifications
 import com.gruppe27.fellesprosjekt.common.messages.UserMessage;
 import com.gruppe27.fellesprosjekt.common.serializers.LocalDateSerializer;
 import com.gruppe27.fellesprosjekt.common.serializers.LocalDateTimeSerializer;
@@ -20,6 +27,7 @@ import com.gruppe27.fellesprosjekt.common.serializers.LocalTimeSerializer;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 public class Network {
@@ -33,6 +41,7 @@ public class Network {
         kryo.register(Event.class);
         kryo.register(Group.class);
         kryo.register(HashSet.class);
+        kryo.register(ArrayList.class);
         kryo.register(LocalDate.class, new LocalDateSerializer());
         kryo.register(LocalTime.class, new LocalTimeSerializer());
         kryo.register(LocalDateTime.class, new LocalDateTimeSerializer());

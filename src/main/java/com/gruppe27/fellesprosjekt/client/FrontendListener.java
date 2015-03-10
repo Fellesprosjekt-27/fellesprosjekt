@@ -4,7 +4,6 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.gruppe27.fellesprosjekt.common.messages.GeneralMessage;
-import com.gruppe27.fellesprosjekt.common.messages.NotificationMessage;
 
 public class FrontendListener extends Listener {
     private Client client;
@@ -21,12 +20,6 @@ public class FrontendListener extends Listener {
         if (object instanceof GeneralMessage) {
             GeneralMessage generalMessage = (GeneralMessage) object;
             System.out.println(generalMessage.getMessage());
-            return;
-        }
-
-        if (object instanceof NotificationMessage) {
-            NotificationMessage notificationMessage = (NotificationMessage) object;
-            System.out.println("got a notification " + notificationMessage.getNotification().getMessage());
             return;
         }
     }
