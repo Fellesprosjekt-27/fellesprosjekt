@@ -5,7 +5,9 @@ import com.esotericsoftware.kryonet.Listener;
 import com.gruppe27.fellesprosjekt.client.CalendarApplication;
 import com.gruppe27.fellesprosjekt.client.CalendarClient;
 import com.gruppe27.fellesprosjekt.client.components.MonthCalendarComponent;
+import com.gruppe27.fellesprosjekt.common.Event;
 import com.gruppe27.fellesprosjekt.common.messages.EventMessage;
+
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -42,7 +44,7 @@ public class CalendarController implements Initializable {
 
     }
 
-    public void getEventsForPeriod(LocalDate from, LocalDate to, ObservableList observableEvents) {
+    public void getEventsForPeriod(LocalDate from, LocalDate to, ObservableList<Event> observableEvents) {
         EventMessage eventMessage = new EventMessage(EventMessage.Command.SEND_EVENTS, from, to);
         CalendarClient client = CalendarClient.getInstance();
 
