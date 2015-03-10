@@ -119,9 +119,10 @@ public class EventController {
             ResultSet eventIdResultSet = statement.getGeneratedKeys();
             eventIdResultSet.next();
             eventId = eventIdResultSet.getInt(1);
+            event.setId(eventId);
 
             int number_of_participants = 0;
-            for (User participant: event.getUserParticipants()){
+            for (User participant: event.getUserParticipants()) {
                 PreparedStatement participantStatement = DatabaseConnector.getConnection().prepareStatement(
                         "INSERT INTO UserEvent(username,event_id) VALUES (?,?)"
                 );
@@ -129,7 +130,10 @@ public class EventController {
                 participantStatement.setInt(2, eventId);
                 int participantResult = participantStatement.executeUpdate();
                 number_of_participants += participantResult;
+
+                NotificationController.getInstance().newEventNotification(event, participant);
             }
+
             System.out.println(number_of_participants + " participants added to event.");
             System.out.println(result + " rows affected");
             GeneralMessage createdMessage = new GeneralMessage(GeneralMessage.Command.SUCCESSFUL_CREATE,

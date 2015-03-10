@@ -55,7 +55,7 @@ public class UserController {
     private HashSet<User> parseUserResult(ResultSet resultSet) throws SQLException {
         HashSet<User> users = new HashSet<>();
         while (resultSet.next()) {
-            User user = new User(resultSet.getString("name"), resultSet.getString("username"));
+            User user = new User(resultSet.getString("username"), resultSet.getString("name"));
             users.add(user);
         }
         return users;

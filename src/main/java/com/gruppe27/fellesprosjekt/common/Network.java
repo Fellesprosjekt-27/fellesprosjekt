@@ -86,6 +86,7 @@ public class Network {
         kryo.register(Notification.class);
         kryo.register(NotificationMessage.class);
         kryo.register(NotificationMessage.Command.class);
+        kryo.register(Notification.NotificationType.class);
     }
 
 }

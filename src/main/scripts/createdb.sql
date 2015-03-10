@@ -69,4 +69,3 @@ CREATE TABLE Notification (
   FOREIGN KEY (event_id) REFERENCES Event (id),
   FOREIGN KEY (user_username) REFERENCES User (username)
 );
-

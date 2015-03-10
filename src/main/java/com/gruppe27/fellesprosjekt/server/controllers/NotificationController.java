@@ -28,7 +28,7 @@ public class NotificationController {
     private CalendarConnection findConnectedUser(User user) {
         for (Connection connection : CalendarServer.getServer().getConnections()) {
             CalendarConnection calendarConnection = (CalendarConnection) connection;
-            if (calendarConnection.getUser() == user) {
+            if (calendarConnection.getUser().getUsername().equals(user.getUsername())) {
                 return calendarConnection;
             }
         }
