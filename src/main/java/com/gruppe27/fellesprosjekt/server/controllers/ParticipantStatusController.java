@@ -29,33 +29,22 @@ public class ParticipantStatusController {
         ParticipantStatusMessage participantStatusMessage = (ParticipantStatusMessage) message;
         switch (participantStatusMessage.getCommand()) {
             case CHANGE_STATUS:
-                change_status(connection, participantStatusMessage);
+                changeStatus(connection, participantStatusMessage);
                 break;
         }
     }
 
-    private void change_status(CalendarConnection connection, ParticipantStatusMessage participantStatusMessage) {
+    private void changeStatus(CalendarConnection connection, ParticipantStatusMessage participantStatusMessage) {
         User user = connection.getUser();
-        String status = "maybe";
 
         try {
 
             PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement(
                     "UPDATE UserEvent SET status = ? WHERE username = ? AND event_id = ?"
             );
-            switch (participantStatusMessage.getStatus()) {
-                case ATTENDING:
-                    status = "attending";
-                    break;
-                case NOT_ATTENDING:
-                    status = "not attending";
-                    break;
-                case MAYBE:
-                    status = "maybe";
-                    break;
-            }
 
-            statement.setString(1, status);
+
+            statement.setString(1, participantStatusMessage.getCommand().toString());
             statement.setString(2, user.getUsername());
             statement.setInt(3, participantStatusMessage.getEventId());
 
