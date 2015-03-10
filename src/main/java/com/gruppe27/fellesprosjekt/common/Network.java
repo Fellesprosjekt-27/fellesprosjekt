@@ -26,6 +26,9 @@ public class Network {
         kryo.register(AuthMessage.Command.class);
         kryo.register(AuthCompleteMessage.class);
         kryo.register(AuthCompleteMessage.Command.class);
+        kryo.register(EventMessage.class);
+        kryo.register(EventMessage.Command.class);
+        kryo.register(ErrorMessage.class);
         kryo.register(UserMessage.class);
         kryo.register(UserMessage.Command.class);
         kryo.register(RoomMessage.class);
@@ -34,9 +37,6 @@ public class Network {
         kryo.register(RoomRequestMessage.Command.class);
         kryo.register(GeneralMessage.class);
         kryo.register(GeneralMessage.Command.class);
-        kryo.register(ErrorMessage.class);
-        kryo.register(EventMessage.class);
-        kryo.register(EventMessage.Command.class);
         kryo.register(HashSet.class);
     }
 
