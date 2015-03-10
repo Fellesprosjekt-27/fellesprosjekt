@@ -11,6 +11,7 @@ import com.gruppe27.fellesprosjekt.server.DatabaseConnector;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.HashSet;
 
@@ -109,7 +110,7 @@ public class EventController {
         try {
 
             PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement(
-                    "INSERT INTO Event(name, date, start, end, creator,room) VALUES (?,?,?,?,?,?)"
+                    "INSERT INTO Event(name, date, start, end, creator,room) VALUES (?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS
             );
 
             statement.setString(1, event.getName());
@@ -120,6 +121,22 @@ public class EventController {
             statement.setString(6, event.getRoom().getRoomName());
             int result = statement.executeUpdate();
 
+            int eventId;
+            ResultSet eventIdResultSet = statement.getGeneratedKeys();
+            eventIdResultSet.next();
+            eventId = eventIdResultSet.getInt(1);
+
+            int number_of_participants = 0;
+            for (User participant: event.getUserParticipants()){
+                PreparedStatement participantStatement = DatabaseConnector.getConnection().prepareStatement(
+                        "INSERT INTO UserEvent(username,event_id) VALUES (?,?)"
+                );
+                participantStatement.setString(1, participant.getUsername());
+                participantStatement.setInt(2, eventId);
+                int participantResult = participantStatement.executeUpdate();
+                number_of_participants += participantResult;
+            }
+            System.out.println(number_of_participants + " participants added to event.");
             System.out.println(result + " rows affected");
             GeneralMessage createdMessage = new GeneralMessage(GeneralMessage.Command.SUCCESSFUL_CREATE,
                     "Avtalen " + event.getName() + " opprettet.");

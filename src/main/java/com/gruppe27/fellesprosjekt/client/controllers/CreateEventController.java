@@ -232,6 +232,8 @@ public class CreateEventController implements Initializable {
 
         LocalTime startTime = LocalTime.parse(fromTimeField.getText());
         LocalTime endTime = LocalTime.parse(toTimeField.getText());
+        event.setCreator(application.getUser());
+        participants.add(event.getCreator());
         event.setStartTime(startTime);
         event.setEndTime(endTime);
         event.setAllParticipants(participants);
