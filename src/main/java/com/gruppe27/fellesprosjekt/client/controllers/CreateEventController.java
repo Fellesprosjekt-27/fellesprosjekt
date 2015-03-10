@@ -4,6 +4,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.gruppe27.fellesprosjekt.client.CalendarApplication;
 import com.gruppe27.fellesprosjekt.client.CalendarClient;
+import com.gruppe27.fellesprosjekt.client.components.ValidationDecoration;
 import com.gruppe27.fellesprosjekt.common.Event;
 import com.gruppe27.fellesprosjekt.common.Room;
 import com.gruppe27.fellesprosjekt.common.User;
@@ -19,11 +20,15 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import org.controlsfx.validation.Severity;
+import org.controlsfx.validation.ValidationSupport;
+import org.controlsfx.validation.Validator;
 
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
+import java.util.function.Predicate;
 
 
 public class CreateEventController implements Initializable {
@@ -67,8 +72,6 @@ public class CreateEventController implements Initializable {
     @FXML
     Button cancelButton;
 
-
-
     private Room currentRoom;
 
     private ArrayList<Room> roomsArray;
@@ -77,6 +80,8 @@ public class CreateEventController implements Initializable {
     private Map<String, User> allUsers;
     private ObservableList<String> availableUsersObservable;
     private HashSet<User> participants;
+
+    private ValidationSupport vd = new ValidationSupport();
 
     public void emptyRoomsArray() {
         this.roomsArray = new ArrayList<>();
@@ -98,6 +103,43 @@ public class CreateEventController implements Initializable {
             }
         });
 
+        vd.registerValidator(emne, Validator.createEmptyValidator("Tittel mangler", Severity.WARNING));
+        vd.registerValidator(fromTimeField, Validator.combine(
+                Validator.createEmptyValidator("Must supply value", Severity.WARNING),
+                Validator.createRegexValidator("Tid må være på formen hh:mm", "^$|([0-1]?[0-9]|2[0-3]):[0-5][0-9]", Severity.ERROR),
+                Validator.createPredicateValidator(new Predicate<String>() {
+                    @Override
+                    public boolean test(String o) {
+                        try {
+                            LocalTime fromTime = LocalTime.parse(fromTimeField.getText());
+                            LocalTime toTime = LocalTime.parse(toTimeField.getText());
+
+                            return fromTime.compareTo(toTime) <= 0;
+                        } catch (Exception e) {
+                            return o.compareTo("") == 0;
+                        }
+                    }
+                }, "Starttidspunkt må være før sluttidspunkt", Severity.ERROR)));
+
+        vd.registerValidator(toTimeField,
+                Validator.combine(
+                        Validator.createEmptyValidator("Must supply value", Severity.WARNING),
+                        Validator.createRegexValidator("Tid må være på formen hh:mm", "^$|([0-1]?[0-9]|2[0-3]):[0-5][0-9]", Severity.ERROR),
+                        Validator.createPredicateValidator(new Predicate<String>() {
+                            @Override
+                            public boolean test(String o) {
+                                try {
+                                    LocalTime fromTime = LocalTime.parse(fromTimeField.getText());
+                                    LocalTime toTime = LocalTime.parse(toTimeField.getText());
+
+                                    return fromTime.compareTo(toTime) <= 0;
+                                } catch (Exception e) {
+                                    return o.compareTo("") == 0;
+                                }
+                            }
+                        }, "Sluttidspunkt må være etter starttidspunkt", Severity.ERROR)));
+
+        vd.setValidationDecorator(new ValidationDecoration());
     }
 
     public void setApp(CalendarApplication application) {
@@ -123,7 +165,6 @@ public class CreateEventController implements Initializable {
                     client.removeListener(this);
                 }
             }
-
         };
         client.addListener(getUsersListener);
         client.sendMessage(message);
