@@ -121,19 +121,18 @@ public class EventController {
             statement.setString(6, event.getRoom().getRoomName());
             int result = statement.executeUpdate();
 
-            int event_id;
-            ResultSet eventId_resultSet = statement.getGeneratedKeys();
-            eventId_resultSet.next();
-            event_id = eventId_resultSet.getInt(1);
+            int eventId;
+            ResultSet eventIdResultSet = statement.getGeneratedKeys();
+            eventIdResultSet.next();
+            eventId = eventIdResultSet.getInt(1);
 
             int number_of_participants = 0;
             for (User participant: event.getUserParticipants()){
                 PreparedStatement participantStatement = DatabaseConnector.getConnection().prepareStatement(
-                        "INSERT INTO UserEvent(username,event_id,status) VALUES (?,?,?)"
+                        "INSERT INTO UserEvent(username,event_id) VALUES (?,?)"
                 );
                 participantStatement.setString(1, participant.getUsername());
-                participantStatement.setInt(2,event_id);
-                participantStatement.setString(3,"maybe");
+                participantStatement.setInt(2, eventId);
                 int participantResult = participantStatement.executeUpdate();
                 number_of_participants += participantResult;
             }
