@@ -61,4 +61,8 @@ public class CalendarController implements Initializable {
         client.addListener(listener);
         client.sendMessage(eventMessage);
     }
+
+    public void handleChangeParticipationStatus(String status) {
+        System.out.println(status);
+    }
 }

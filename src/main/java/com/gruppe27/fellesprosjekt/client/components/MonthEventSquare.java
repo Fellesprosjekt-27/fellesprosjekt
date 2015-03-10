@@ -19,7 +19,7 @@ public class MonthEventSquare extends Pane {
 
         this.addEventFilter(MouseEvent.MOUSE_RELEASED, e -> {
             e.consume();
-            this.fireEvent(new EventBoxClicked(event, this));
+            this.fireEvent(new EventBoxClicked(event, e.getScreenX(), e.getScreenY()));
         });
     }
 }
