@@ -13,6 +13,10 @@ import java.util.HashSet;
 
 public class RequestController {
     private static RequestController instance = null;
+    private static final String FIND_TIME_OVERLAP = " WHERE Event.date = ? AND (" +
+            " (? < Event.end AND Event.end <= ?) OR " +
+            " (? <= Event.start AND Event.start < ?) OR" +
+            " (Event.start <= ? AND ? <= Event.end))";
 
     protected RequestController() {
     }
@@ -38,11 +42,7 @@ public class RequestController {
 
     private void sendAllParticipantUsers(CalendarConnection connection, RequestMessage message) {
         String busyQuery = " FROM User JOIN UserEvent" +
-                " ON User.username = UserEvent.username JOIN Event ON Event.id = UserEvent.event_id" +
-                " WHERE Event.date = ? AND (" +
-                " (? < Event.end AND Event.end < ?) OR " +
-                " (? < Event.start AND Event.start < ?) OR" +
-                " (Event.start < ? AND ? < Event.end))";
+                " ON User.username = UserEvent.username JOIN Event ON Event.id = UserEvent.event_id" + FIND_TIME_OVERLAP;
         try {
 
             PreparedStatement busyUsersStatement = DatabaseConnector.getConnection().prepareStatement("SELECT User.username, User.name" + busyQuery);
@@ -111,17 +111,17 @@ public class RequestController {
                     "SELECT Room.name, Room.capacity FROM Room" +
                             " WHERE ? <= Room.capacity AND" +
                             " Room.name NOT IN(" +
-                            "SELECT Room.name FROM Room JOIN Event ON Event.room = Room.name" +
-                            " WHERE Event.date = ? AND (" +
-                            " (Event.start < ? AND ? < Event.end) OR " +
-                            " (Event.start < ? AND ? < Event.end)))"
+                            "SELECT Room.name FROM Room JOIN Event ON Event.room = Room.name" + 
+                            FIND_TIME_OVERLAP + " )"
             );
             statement.setInt(1, message.getCapacity());
             statement.setString(2, message.getDate().toString());
             statement.setString(3, message.getStartTime().toString());
-            statement.setString(4, message.getStartTime().toString());
-            statement.setString(5, message.getEndTime().toString());
+            statement.setString(4, message.getEndTime().toString());
+            statement.setString(5, message.getStartTime().toString());
             statement.setString(6, message.getEndTime().toString());
+            statement.setString(7, message.getStartTime().toString());
+            statement.setString(8, message.getEndTime().toString());
 
             HashSet<Room> rooms = new HashSet<>();
             int roomAmount = 0;
