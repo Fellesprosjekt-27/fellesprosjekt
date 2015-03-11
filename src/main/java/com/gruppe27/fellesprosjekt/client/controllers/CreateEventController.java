@@ -5,12 +5,10 @@ import com.esotericsoftware.kryonet.Listener;
 import com.gruppe27.fellesprosjekt.client.CalendarApplication;
 import com.gruppe27.fellesprosjekt.client.CalendarClient;
 import com.gruppe27.fellesprosjekt.common.Event;
+import com.gruppe27.fellesprosjekt.common.ParticipantUser;
 import com.gruppe27.fellesprosjekt.common.Room;
 import com.gruppe27.fellesprosjekt.common.User;
-import com.gruppe27.fellesprosjekt.common.messages.EventMessage;
-import com.gruppe27.fellesprosjekt.common.messages.RoomMessage;
-import com.gruppe27.fellesprosjekt.common.messages.RequestMessage;
-import com.gruppe27.fellesprosjekt.common.messages.UserMessage;
+import com.gruppe27.fellesprosjekt.common.messages.*;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -77,7 +75,7 @@ public class CreateEventController implements Initializable {
     private ArrayList<Room> roomsArray;
     private CalendarApplication application;
 
-    private ArrayList<User> userArrayList;
+    private ArrayList<ParticipantUser> userArrayList;
     private ObservableList<String> allUsersObservablelist;
     private HashSet<User> participants;
 
@@ -93,7 +91,7 @@ public class CreateEventController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        getAllUsers();
+        //getAllUsers();
         roomChoiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -108,17 +106,22 @@ public class CreateEventController implements Initializable {
     }
 
     private void getAllUsers() {
-        UserMessage message = new UserMessage(UserMessage.Command.SEND_ALL);
+
+        LocalDate date = datePicker.getValue();
+        LocalTime start = LocalTime.parse(fromTimeField.getText());
+        LocalTime end = LocalTime.parse(toTimeField.getText());
+
+        RequestMessage message = new RequestMessage(RequestMessage.Command.USER_REQUEST, date, start, end, -1);
 
         CalendarClient client = CalendarClient.getInstance();
 
         Listener getUsersListener = new Listener() {
             public void received(Connection connection, Object object) {
-                if (object instanceof UserMessage) {
-                    UserMessage complete = (UserMessage) object;
+                if (object instanceof ParticipantUserMessage) {
+                    ParticipantUserMessage complete = (ParticipantUserMessage) object;
                     switch (complete.getCommand()) {
                         case RECEIVE_ALL:
-                            setAllUsers(complete.getUsers());
+                            setAllUsers(complete.getParticipantUsers());
                             break;
                         case SEND_ALL:
                             break;
@@ -188,11 +191,11 @@ public class CreateEventController implements Initializable {
 
     }
 
-    private void setAllUsers(HashSet<User> allUsers) {
+    private void setAllUsers(HashSet<ParticipantUser> allUsers) {
         userArrayList = new ArrayList<>(allUsers);
         allUsersObservablelist = FXCollections.observableArrayList();
-        for (User user : allUsers) {
-            allUsersObservablelist.add(user.getUsername());
+        for (ParticipantUser pUser : allUsers) {
+            allUsersObservablelist.add(pUser.getUsername());
         }
 
         Platform.runLater(() -> {

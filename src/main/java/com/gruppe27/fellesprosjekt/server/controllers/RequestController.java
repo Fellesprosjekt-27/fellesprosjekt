@@ -3,10 +3,7 @@ package com.gruppe27.fellesprosjekt.server.controllers;
 import com.gruppe27.fellesprosjekt.common.ParticipantUser;
 import com.gruppe27.fellesprosjekt.common.Room;
 import com.gruppe27.fellesprosjekt.common.User;
-import com.gruppe27.fellesprosjekt.common.messages.ErrorMessage;
-import com.gruppe27.fellesprosjekt.common.messages.RoomMessage;
-import com.gruppe27.fellesprosjekt.common.messages.RequestMessage;
-import com.gruppe27.fellesprosjekt.common.messages.UserMessage;
+import com.gruppe27.fellesprosjekt.common.messages.*;
 import com.gruppe27.fellesprosjekt.server.CalendarConnection;
 import com.gruppe27.fellesprosjekt.server.DatabaseConnector;
 
@@ -62,7 +59,7 @@ public class RequestController {
 
 
 
-            HashSet<User> participantUsers = new HashSet<>();
+            HashSet<ParticipantUser> participantUsers = new HashSet<>();
 
 
             ResultSet busyUsersResult = statement.executeQuery();
@@ -84,7 +81,7 @@ public class RequestController {
                 participantUsers.add(pUser);
             }
             System.out.println(participantUsers.size() + " users found!");
-            UserMessage createdMessage = new UserMessage(UserMessage.Command.RECEIVE_ALL, participantUsers);
+            ParticipantUserMessage createdMessage = new ParticipantUserMessage(ParticipantUserMessage.Command.RECEIVE_ALL, participantUsers);
             connection.sendTCP(createdMessage);
 
         } catch (SQLException e) {
