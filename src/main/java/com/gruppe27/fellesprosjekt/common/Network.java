@@ -15,29 +15,49 @@ public class Network {
 
     public static void register(EndPoint endPoint) {
         Kryo kryo = endPoint.getKryo();
-        kryo.register(TestMessage.class);
-        kryo.register(User.class);
+
+//        -- COMMON --
+
         kryo.register(Event.class);
-        kryo.register(Room.class);
-        kryo.register(LocalTime.class, new LocalTimeSerializer());
+        kryo.register(Group.class);
+        kryo.register(HashSet.class);
         kryo.register(LocalDate.class, new LocalDateSerializer());
+        kryo.register(LocalTime.class, new LocalTimeSerializer());
+        kryo.register(Room.class);
         kryo.register(String.class);
-        kryo.register(AuthMessage.class);
-        kryo.register(AuthMessage.Command.class);
+        kryo.register(User.class);
+
+//         -- MESSAGES --
         kryo.register(AuthCompleteMessage.class);
         kryo.register(AuthCompleteMessage.Command.class);
+
+        kryo.register(AuthMessage.class);
+        kryo.register(AuthMessage.Command.class);
+
+        kryo.register(ErrorMessage.class);
+
         kryo.register(EventMessage.class);
         kryo.register(EventMessage.Command.class);
-        kryo.register(ErrorMessage.class);
-        kryo.register(UserMessage.class);
-        kryo.register(UserMessage.Command.class);
-        kryo.register(RoomMessage.class);
-        kryo.register(RoomMessage.Command.class);
-        kryo.register(RoomRequestMessage.class);
-        kryo.register(RoomRequestMessage.Command.class);
+
         kryo.register(GeneralMessage.class);
         kryo.register(GeneralMessage.Command.class);
-        kryo.register(HashSet.class);
+
+        kryo.register(InviteMessage.class);
+        kryo.register(InviteMessage.Command.class);
+
+        kryo.register(ParticipantStatusMessage.class);
+        kryo.register(ParticipantStatusMessage.Command.class);
+
+        kryo.register(RoomMessage.class);
+        kryo.register(RoomMessage.Command.class);
+
+        kryo.register(RoomRequestMessage.class);
+        kryo.register(RoomRequestMessage.Command.class);
+
+        kryo.register(TestMessage.class);
+
+        kryo.register(UserMessage.class);
+        kryo.register(UserMessage.Command.class);
     }
 
 }
