@@ -5,7 +5,6 @@ import com.esotericsoftware.kryonet.EndPoint;
 import com.gruppe27.fellesprosjekt.common.messages.*;
 import com.gruppe27.fellesprosjekt.common.serializers.LocalDateSerializer;
 import com.gruppe27.fellesprosjekt.common.serializers.LocalTimeSerializer;
-import com.sun.corba.se.impl.protocol.giopmsgheaders.RequestMessage;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

@@ -48,9 +48,6 @@ public class CreateEventController implements Initializable {
     Button addParticipantButton;
 
     @FXML
-    ChoiceBox<User> romValg;
-
-    @FXML
     Button fjernDeltakere;
 
     @FXML
@@ -102,35 +99,6 @@ public class CreateEventController implements Initializable {
         this.application = application;
     }
 
-    private void getAllUsers() {
-
-        LocalDate date = datePicker.getValue();
-        LocalTime start = LocalTime.parse(fromTimeField.getText());
-        LocalTime end = LocalTime.parse(toTimeField.getText());
-
-        RequestMessage message = new RequestMessage(RequestMessage.Command.USER_REQUEST, date, start, end, -1);
-
-        CalendarClient client = CalendarClient.getInstance();
-
-        Listener getUsersListener = new Listener() {
-            public void received(Connection connection, Object object) {
-                if (object instanceof ParticipantUserMessage) {
-                    ParticipantUserMessage complete = (ParticipantUserMessage) object;
-                    switch (complete.getCommand()) {
-                        case RECEIVE_ALL:
-                            setAllUsers(complete.getParticipantUsers());
-                            break;
-                        case SEND_ALL:
-                            break;
-                    }
-                    client.removeListener(this);
-                }
-            }
-
-        };
-        client.addListener(getUsersListener);
-        client.sendMessage(message);
-    }
     @FXML
     private void handleChoiceboxClicked() {
         System.out.println("Cbox clicked.");
@@ -142,7 +110,6 @@ public class CreateEventController implements Initializable {
         //TODO needs time to update rooms before I can do something.
 
     }
-
     @FXML
     private void updateCurrentRooms(LocalDate date, LocalTime start, LocalTime end, int capacity) {
         RequestMessage message = new RequestMessage(RequestMessage.Command.ROOM_REQUEST, date,start,end,capacity);
@@ -188,12 +155,56 @@ public class CreateEventController implements Initializable {
 
     }
 
+    @FXML
+    private void handleComboBoxClicked() {
+        System.out.println("combobox clicked");
+        getAllUsers();
+        //TODO Validering
+    }
+
+    private void getAllUsers() {
+        System.out.println("Getting all users");
+        LocalDate date = datePicker.getValue();
+        LocalTime start = LocalTime.parse(fromTimeField.getText());
+        LocalTime end = LocalTime.parse(toTimeField.getText());
+
+        RequestMessage message = new RequestMessage(RequestMessage.Command.USER_REQUEST, date, start, end, -1);
+
+        CalendarClient client = CalendarClient.getInstance();
+
+        Listener getUsersListener = new Listener() {
+            public void received(Connection connection, Object object) {
+                System.out.println("Listening for ParticipantUserMessage");
+                if (object instanceof ParticipantUserMessage) {
+                    ParticipantUserMessage complete = (ParticipantUserMessage) object;
+                    switch (complete.getCommand()) {
+                        case RECEIVE_ALL:
+                            setAllUsers(complete.getParticipantUsers());
+                            System.out.println("Got users");
+                            break;
+                        case SEND_ALL:
+                            break;
+                    }
+                    client.removeListener(this);
+                }
+            }
+
+        };
+        client.addListener(getUsersListener);
+        client.sendMessage(message);
+    }
+
     private void setAllUsers(HashSet<ParticipantUser> allUsers) {
+        System.out.println("Setting all users.");
         this.allUsers = new HashMap<>();
         availableUsersObservable = FXCollections.observableArrayList();
         for (ParticipantUser participantUser : allUsers) {
             this.allUsers.put(participantUser.getUsername(), participantUser);
-            availableUsersObservable.add(participantUser.getUsername());
+            if (participantUser.isBusy()) {
+                availableUsersObservable.add(participantUser.getUsername().toUpperCase());
+            } else {
+                availableUsersObservable.add(participantUser.getUsername().toLowerCase());
+            }
         }
 
         Collections.sort(availableUsersObservable);

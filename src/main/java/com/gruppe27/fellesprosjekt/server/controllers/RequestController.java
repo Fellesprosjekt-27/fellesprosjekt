@@ -63,7 +63,7 @@ public class RequestController {
 
 
             ResultSet busyUsersResult = statement.executeQuery();
-            ResultSet freeUusersResult = freeUsersStatement.executeQuery();
+            ResultSet freeUsersResult = freeUsersStatement.executeQuery();
 
 
 
@@ -74,10 +74,10 @@ public class RequestController {
                 pUSer.setBusy(true);
                 participantUsers.add(pUSer);
             }
-            while (freeUusersResult.next()) {
+            while (freeUsersResult.next()) {
                 ParticipantUser pUser = new ParticipantUser();
-                pUser.setUsername(freeUusersResult.getString(1));
-                pUser.setName(freeUusersResult.getString(2));
+                pUser.setUsername(freeUsersResult.getString(1));
+                pUser.setName(freeUsersResult.getString(2));
                 participantUsers.add(pUser);
             }
             System.out.println(participantUsers.size() + " users found!");
