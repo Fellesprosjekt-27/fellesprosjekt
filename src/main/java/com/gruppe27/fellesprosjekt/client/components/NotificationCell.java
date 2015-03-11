@@ -27,11 +27,7 @@ public class NotificationCell extends ListCell<Notification> {
             String text = item.getMessage() + "\n" +
                     item.getTimestamp().format(DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm"));
             setText(text);
-            if (!item.isRead()) {
-                this.setStyle("-fx-font-weight: bold;");
-            } else {
-                this.setStyle("-fx-font-weight: normal;");
-            }
+
             switch (item.getType()) {
                 case INVITATION:
                     setGraphic(invitationIcon);

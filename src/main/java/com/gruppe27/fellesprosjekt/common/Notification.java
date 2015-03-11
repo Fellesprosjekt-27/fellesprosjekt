@@ -7,7 +7,6 @@ public class Notification {
     String message;
     String username;
     LocalDateTime timestamp;
-    Boolean isRead;
     NotificationType type;
 
     public enum NotificationType {
@@ -32,10 +31,6 @@ public class Notification {
         this.type = type;
     }
 
-    public Boolean isRead() {
-        return isRead;
-    }
-
     public NotificationType getType() {
         return type;
     }
@@ -54,9 +49,5 @@ public class Notification {
 
     public String getUsername() {
         return username;
-    }
-
-    public void setIsRead(Boolean isRead) {
-        this.isRead = isRead;
     }
 }

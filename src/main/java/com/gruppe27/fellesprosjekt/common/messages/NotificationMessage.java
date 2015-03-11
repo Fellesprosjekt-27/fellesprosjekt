@@ -27,6 +27,11 @@ public class NotificationMessage {
         this.notifications.add(notification);
     }
 
+    public NotificationMessage(Command command, ArrayList<Notification> notifications) {
+        this.command = command;
+        this.notifications = notifications;
+    }
+
     public Command getCommand() {
         return command;
     }
