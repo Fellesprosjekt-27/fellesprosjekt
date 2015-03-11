@@ -37,6 +37,9 @@ public class Network {
         kryo.register(ErrorMessage.class);
         kryo.register(EventMessage.class);
         kryo.register(EventMessage.Command.class);
+        kryo.register(ParticipantStatusMessage.class);
+        kryo.register(ParticipantStatusMessage.Command.class);
+        kryo.register(ParticipantStatusMessage.Status.class);
         kryo.register(HashSet.class);
     }
 

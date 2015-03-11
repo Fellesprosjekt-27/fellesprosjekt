@@ -6,16 +6,17 @@ import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 
 public class Event {
-    private LocalDate date;
-    private LocalTime startTime;
-    private LocalTime endTime;
+    int id;
 
-    private User creator;
+    LocalDate date;
+    LocalTime startTime;
+    LocalTime endTime;
 
-    private HashSet<User> userParticipants;
-    private HashSet<Group> groupParticipants;
-    private String name;
-    private Room room;
+    User creator;
+    HashSet<User> userParticipants;
+    HashSet<Group> groupParticipants;
+    String name;
+    Room room;
 
     public Event() {
         this.creator = null;
@@ -109,5 +110,13 @@ public class Event {
 
     public Room getRoom() {
         return room;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 }

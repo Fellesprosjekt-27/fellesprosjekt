@@ -5,9 +5,9 @@
 <?import javafx.scene.text.*?>
 <?import java.net.URL?>
 <?import com.gruppe27.fellesprosjekt.client.components.MonthCalendarComponent?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="450" prefWidth="700"
+<AnchorPane fx:id="root" xmlns:fx="http://javafx.com/fxml/1" prefHeight="450" prefWidth="700"
             fx:controller="com.gruppe27.fellesprosjekt.client.controllers.CalendarController">
-    <SplitPane dividerPositions="0.25" AnchorPane.bottomAnchor="0"
+    <SplitPane fx:id="split" dividerPositions="0.25" AnchorPane.bottomAnchor="0"
                AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
                AnchorPane.topAnchor="0">
         <AnchorPane minHeight="0" maxWidth="100">

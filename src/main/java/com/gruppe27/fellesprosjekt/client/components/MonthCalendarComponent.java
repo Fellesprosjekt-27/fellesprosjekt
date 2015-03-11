@@ -1,23 +1,18 @@
 package com.gruppe27.fellesprosjekt.client.components;
 
 import com.gruppe27.fellesprosjekt.client.controllers.CalendarController;
-import com.gruppe27.fellesprosjekt.client.events.EventBoxClicked;
 import com.gruppe27.fellesprosjekt.common.Event;
-import com.gruppe27.fellesprosjekt.common.User;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import org.controlsfx.control.PopOver;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -31,41 +26,25 @@ public class MonthCalendarComponent extends BorderPane {
     private ArrayList<MonthCalendarSquare> calendarSquares;
     private ArrayList<RowConstraints> squareRowConstraints;
     private ObservableList<Event> events;
-    private ObservableList<String> participationStatusChoice;
-
 
     private static final Font headerFont = Font.font("Helvetica", 26);
     private static final Font controlFont = Font.font("Helvetica", 36);
-    private final String formatStr = "%s\nDato: %s \nTid: %s-%s \nRom: %s \nDeltakerstatus: ";
 
     private CalendarController controller;
 
     private GridPane calendarGrid;
     private Pane header;
-    private PopOver popOver;
 
     private Text currentMonth;
     private Text currentYear;
 
     private int year;
     private int month;
-    private boolean popOverFlag;
 
     public MonthCalendarComponent() {
         calendarGrid = new GridPane();
         calendarSquares = new ArrayList<>();
         squareRowConstraints = new ArrayList<>();
-        participationStatusChoice = FXCollections.observableArrayList();
-        participationStatusChoice.addAll("Deltar", "Kanskje", "Deltar ikke");
-        popOverFlag = false;
-
-        this.setOnMouseReleased((MouseEvent mEvent) -> {
-            if (!(mEvent.getTarget() instanceof PopOver) && popOverFlag) {
-                popOver.hide();
-                popOverFlag = false;
-                this.getChildren().remove(popOver);
-            }
-        });
 
         events = FXCollections.observableArrayList();
         events.addListener(this::eventsUpdated);
@@ -108,45 +87,6 @@ public class MonthCalendarComponent extends BorderPane {
         this.year = LocalDate.now().getYear();
         this.month = LocalDate.now().getMonthValue();
         drawCurrentPeriod();
-
-        this.addEventHandler(EventBoxClicked.eventType, e -> {
-            if (!popOverFlag) {
-                EventBoxClicked event = (EventBoxClicked) e;
-                Pane pane = new Pane();
-                VBox box = new VBox();
-                HBox hBox = new HBox();
-
-                String userStr = "";
-                for (User user : event.getEvent().getUserParticipants()) {
-                    userStr = userStr + user.getName() + ",";
-                }
-                String str = String.format(formatStr, event.getEvent().getName(), event.getEvent().getDate(), event.getEvent().getStartTime(), event.getEvent().getEndTime(), event.getEvent().getRoom(), "PLACEHOLDER");
-                Text text = new Text(str);
-
-                ChoiceBox<String> status = new ChoiceBox<String>(participationStatusChoice);
-                Button button = new Button("Endre");
-                button.setOnMouseClicked((MouseEvent mEvent) -> {
-
-                    controller.handleChangeParticipationStatus(status.getValue());
-                });
-
-                hBox.getChildren().addAll(status, button);
-                box.getChildren().addAll(text, hBox);
-                pane.getChildren().add(box);
-
-
-                popOver = new PopOver(pane);
-                popOver.setDetachable(false);
-                popOver.show(this,event.getScreenX(), event.getScreenY());
-                popOverFlag = true;
-            }
-            else {
-                popOver.hide();
-                popOverFlag = false;
-                this.getChildren().remove(popOver);
-            }
-
-        });
     }
 
     public void setController(CalendarController controller) {

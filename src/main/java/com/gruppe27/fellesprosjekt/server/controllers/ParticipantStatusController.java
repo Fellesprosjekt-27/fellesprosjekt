@@ -43,6 +43,7 @@ public class ParticipantStatusController {
             PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement(
                     "UPDATE UserEvent SET status = ? WHERE username = ? AND event_id = ?"
             );
+            System.out.println(participantStatusMessage.getStatus());
             switch (participantStatusMessage.getStatus()) {
                 case ATTENDING:
                     status = "attending";

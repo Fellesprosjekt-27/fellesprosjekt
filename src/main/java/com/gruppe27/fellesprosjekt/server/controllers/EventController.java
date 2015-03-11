@@ -89,6 +89,7 @@ public class EventController {
                 event.addParticipant(participant);
 
                 event.setCreator(creator);
+                event.setId(currentEventId);
                 events.add(event);
                 System.out.println("add event");
             } else {
