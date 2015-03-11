@@ -4,7 +4,9 @@
 <?import javafx.scene.text.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
+<?import com.gruppe27.fellesprosjekt.client.controllers.ParticipantComboBox?>
 <?import java.net.URL?>
+<?import com.gruppe27.fellesprosjekt.client.controllers.ParticipantComboBox?>
 <AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
 	fx:controller="com.gruppe27.fellesprosjekt.client.controllers.CreateEventController">
 	<HBox alignment="CENTER" AnchorPane.bottomAnchor="0.0"
@@ -44,15 +46,17 @@
 
 			<Text text="Legg til deltakere:" 
 			GridPane.columnSpan="2"	GridPane.rowIndex="5" />
-			<ComboBox fx:id="participantComboBox" 
+
+			<ParticipantComboBox fx:id="participantComboBox"
 			promptText="skriv inn brukernavn" editable="true"
 			GridPane.rowIndex="6" GridPane.columnSpan="2" />
-			
-			<Button fx:id="addParticipantButton" 
+
+			<Button fx:id="addParticipantButton"
 			onAction="#handleAddParticipant"
 			text="legg til deltaker" 
 			GridPane.rowIndex="7" GridPane.columnSpan="2" />
-			<Button fx:id="fjernDeltakere" 
+
+			<Button fx:id="fjernDeltakere"
 			text="Fjern markerte deltakere" wrapText="true"
 			GridPane.columnIndex="1" GridPane.rowIndex="8" 
 			GridPane.halignment="RIGHT" GridPane.valignment="BOTTOM" />

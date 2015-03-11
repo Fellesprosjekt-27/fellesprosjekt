@@ -21,10 +21,7 @@ import javafx.scene.control.*;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.ResourceBundle;
-
+import java.util.*;
 
 
 public class CreateEventController implements Initializable {
@@ -45,7 +42,7 @@ public class CreateEventController implements Initializable {
     ListView<String> participantsListView;
 
     @FXML
-    ComboBox<String> participantComboBox;
+    ParticipantComboBox participantComboBox;
 
     @FXML
     Button addParticipantButton;
@@ -75,8 +72,8 @@ public class CreateEventController implements Initializable {
     private ArrayList<Room> roomsArray;
     private CalendarApplication application;
 
-    private ArrayList<ParticipantUser> userArrayList;
-    private ObservableList<String> allUsersObservablelist;
+    private Map<String, ParticipantUser> allUsers;
+    private ObservableList<String> availableUsersObservable;
     private HashSet<User> participants;
 
     public void emptyRoomsArray() {
@@ -84,7 +81,7 @@ public class CreateEventController implements Initializable {
     }
 
     public CreateEventController() {
-        participants = new HashSet<>();
+        participants = new LinkedHashSet<>();
         roomsArray = new ArrayList<>();
         currentRoom = null;
     }
@@ -192,30 +189,38 @@ public class CreateEventController implements Initializable {
     }
 
     private void setAllUsers(HashSet<ParticipantUser> allUsers) {
-        userArrayList = new ArrayList<>(allUsers);
-        allUsersObservablelist = FXCollections.observableArrayList();
-        for (ParticipantUser pUser : allUsers) {
-            allUsersObservablelist.add(pUser.getUsername());
+        this.allUsers = new HashMap<>();
+        availableUsersObservable = FXCollections.observableArrayList();
+        for (ParticipantUser participantUser : allUsers) {
+            this.allUsers.put(participantUser.getUsername(), participantUser);
+            availableUsersObservable.add(participantUser.getUsername());
         }
 
+        Collections.sort(availableUsersObservable);
+
+
         Platform.runLater(() -> {
-            participantComboBox.setItems(allUsersObservablelist);
+            participantComboBox.init(availableUsersObservable);
         });
     }
 
     @FXML
-    private void handleAddParticipant() {
-        String inputUsername = participantComboBox.getValue();
-        //TODO: validering hvis -1
-        participants.add(fromStringtoUser(inputUsername));
+    private void handleAddParticipant(){
+        String username = participantComboBox.getValue();
+        participants.add(allUsers.get(username));
         updateListView();
+
+        availableUsersObservable.remove(participantComboBox.getValue());
+        participantComboBox.setValue(null);
+        participantComboBox.setItems(availableUsersObservable);
     }
 
     private void updateListView() {
         ObservableList<String> observable = FXCollections.observableArrayList();
-        for (User user : participants) {
+        for (User user : participants ) {
             observable.add(user.getUsername());
         }
+
         Platform.runLater(() -> {
             participantsListView.setItems(observable);
         });
@@ -246,11 +251,6 @@ public class CreateEventController implements Initializable {
     @FXML
     private void handleCancelAction() {
         application.cancelCreateNewEvent();
-    }
-
-    private User fromStringtoUser(String username) {
-        int index = allUsersObservablelist.indexOf(username);
-        return userArrayList.get(index);
     }
 
 }
