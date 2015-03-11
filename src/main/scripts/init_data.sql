@@ -18,4 +18,5 @@ INSERT INTO Room(name, capacity) VALUES ('rom 206','20');
 INSERT INTO UserEvent (username, event_id) VALUES ('anddor', 1);
 INSERT INTO UserEvent (username, event_id) VALUES ('user1', 1);
 
-INSERT INTO Notification (event_id, user_username, message) VALUES (1, 'user1', 'You have been invited to an event');
+INSERT INTO Notification (event_id, user_username, message, type)
+VALUES (1, 'user1', 'You have been invited to an event', 'INVITATION');

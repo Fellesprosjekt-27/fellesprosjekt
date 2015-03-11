@@ -65,6 +65,7 @@ CREATE TABLE Notification (
   event_id INT NOT NULL,
   user_username VARCHAR(32) NOT NULL,
   message VARCHAR(200),
+  type ENUM('INVITATION', 'PARTICIPATION_DECLINED', 'EVENT_CHANGED', 'CONFLICTING_EVENTS'),
   PRIMARY KEY (id),
   FOREIGN KEY (event_id) REFERENCES Event (id),
   FOREIGN KEY (user_username) REFERENCES User (username)
