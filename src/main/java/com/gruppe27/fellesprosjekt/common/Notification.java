@@ -47,6 +47,10 @@ public class Notification {
         return timestamp;
     }
 
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
+    }
+
     public String getUsername() {
         return username;
     }

@@ -13,6 +13,7 @@ import com.gruppe27.fellesprosjekt.server.DatabaseConnector;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class NotificationController {
@@ -25,7 +26,7 @@ public class NotificationController {
             "Event.room  AS `event.room`, Creator.username AS `creator.username`, Creator.name AS `creator.name` " +
             "from Notification INNER JOIN Event ON Event.id=Notification.event_id " +
             "INNER JOIN User as Creator ON Creator.username=Event.creator " +
-            "WHERE user_username=?";
+            "WHERE user_username=? ORDER BY Notification.timestamp DESC";
 
     protected NotificationController() {
     }
@@ -104,19 +105,26 @@ public class NotificationController {
 
     private void createNotification(Notification notification) throws SQLException {
         PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement(
-                "INSERT INTO Notification(event_id, user_username, message, type) VALUES (?,?,?, ?)"
+                "INSERT INTO Notification(event_id, user_username, message, type, timestamp) " +
+                        "VALUES (?, ?, ?, ?, ?)"
         );
 
         statement.setInt(1, notification.getEvent().getId());
         statement.setString(2, notification.getUsername());
         statement.setString(3, notification.getMessage());
         statement.setString(4, notification.getType().toString());
-        statement.executeUpdate();
+        statement.setString(5, notification.getTimestamp().toString());
+        int affectedRows = statement.executeUpdate();
+
+        if (affectedRows == 0) {
+            throw new SQLException("Couldn't create notification");
+        }
     }
 
     public void newEventNotification(Event event, User user) {
         String message = "You have been invited to join: " + event.getName();
         Notification notification = new Notification(user.getUsername(), event, message,
+                LocalDateTime.now(),
                 Notification.NotificationType.INVITATION);
 
         try {

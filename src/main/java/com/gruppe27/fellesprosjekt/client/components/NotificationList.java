@@ -5,6 +5,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.gruppe27.fellesprosjekt.client.CalendarClient;
 import com.gruppe27.fellesprosjekt.common.Notification;
 import com.gruppe27.fellesprosjekt.common.messages.NotificationMessage;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
@@ -32,7 +33,7 @@ public class NotificationList extends ListView {
 
                     switch (message.getCommand()) {
                         case RECEIVE_NOTIFICATION:
-                            notifications.addAll(message.getNotifications());
+                            Platform.runLater(() -> notifications.addAll(0, message.getNotifications()));
                             break;
                     }
                 }
