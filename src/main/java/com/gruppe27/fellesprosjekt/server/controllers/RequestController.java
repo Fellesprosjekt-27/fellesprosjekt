@@ -40,7 +40,8 @@ public class RequestController {
         String busyQuery = " FROM User JOIN UserEvent" +
                 " ON User.username = UserEvent.username JOIN Event ON Event.id = UserEvent.event_id" +
                 " WHERE Event.date = ? AND (" +
-                " (Event.start < ? AND ? < Event.end) OR " +
+                " (? < Event.end AND Event.end < ?) OR " +
+                " (? < Event.start AND Event.start < ?) OR" +
                 " (Event.start < ? AND ? < Event.end))";
         try {
 
@@ -48,9 +49,11 @@ public class RequestController {
 
             busyUsersStatement.setString(1, message.getDate().toString());
             busyUsersStatement.setString(2, message.getStartTime().toString());
-            busyUsersStatement.setString(3, message.getStartTime().toString());
-            busyUsersStatement.setString(4, message.getEndTime().toString());
+            busyUsersStatement.setString(3, message.getEndTime().toString());
+            busyUsersStatement.setString(4, message.getStartTime().toString());
             busyUsersStatement.setString(5, message.getEndTime().toString());
+            busyUsersStatement.setString(6, message.getStartTime().toString());
+            busyUsersStatement.setString(7, message.getEndTime().toString());
 
             PreparedStatement freeUsersStatement = DatabaseConnector.getConnection().prepareStatement(
                     "SELECT User.username, User.name FROM User WHERE User.username NOT IN (SELECT User.username" + busyQuery + ")"
@@ -58,9 +61,11 @@ public class RequestController {
             
             freeUsersStatement.setString(1, message.getDate().toString());
             freeUsersStatement.setString(2, message.getStartTime().toString());
-            freeUsersStatement.setString(3, message.getStartTime().toString());
-            freeUsersStatement.setString(4, message.getEndTime().toString());
+            freeUsersStatement.setString(3, message.getEndTime().toString());
+            freeUsersStatement.setString(4, message.getStartTime().toString());
             freeUsersStatement.setString(5, message.getEndTime().toString());
+            freeUsersStatement.setString(6, message.getStartTime().toString());
+            freeUsersStatement.setString(7, message.getEndTime().toString());
 
 
 
