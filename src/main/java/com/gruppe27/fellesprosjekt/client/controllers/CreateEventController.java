@@ -176,11 +176,12 @@ public class CreateEventController implements Initializable {
             public void received(Connection connection, Object object) {
                 System.out.println("Listening for ParticipantUserMessage");
                 if (object instanceof ParticipantUserMessage) {
+                    System.out.println("Received participantUserMessage.");
                     ParticipantUserMessage complete = (ParticipantUserMessage) object;
                     switch (complete.getCommand()) {
                         case RECEIVE_ALL:
-                            setAllUsers(complete.getParticipantUsers());
                             System.out.println("Got users");
+                            setAllUsers(complete.getParticipantUsers());
                             break;
                         case SEND_ALL:
                             break;

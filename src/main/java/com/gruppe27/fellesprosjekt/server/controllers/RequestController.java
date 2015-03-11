@@ -2,7 +2,6 @@ package com.gruppe27.fellesprosjekt.server.controllers;
 
 import com.gruppe27.fellesprosjekt.common.ParticipantUser;
 import com.gruppe27.fellesprosjekt.common.Room;
-import com.gruppe27.fellesprosjekt.common.User;
 import com.gruppe27.fellesprosjekt.common.messages.*;
 import com.gruppe27.fellesprosjekt.server.CalendarConnection;
 import com.gruppe27.fellesprosjekt.server.DatabaseConnector;
@@ -38,47 +37,56 @@ public class RequestController {
     }
 
     private void sendAllParticipantUsers(CalendarConnection connection, RequestMessage message) {
-        String busyQuery = " SELECT User.username FROM User JOIN UserEvent" +
+        String busyQuery = " FROM User JOIN UserEvent" +
                 " ON User.username = UserEvent.username JOIN Event ON Event.id = UserEvent.event_id" +
                 " WHERE Event.date = ? AND (" +
                 " (Event.start < ? AND ? < Event.end) OR " +
                 " (Event.start < ? AND ? < Event.end))";
         try {
 
-            PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement(busyQuery);
+            PreparedStatement busyUsersStatement = DatabaseConnector.getConnection().prepareStatement("SELECT User.username, User.name" + busyQuery);
 
-            statement.setString(1, message.getDate().toString());
-            statement.setString(2, message.getStartTime().toString());
-            statement.setString(3, message.getStartTime().toString());
-            statement.setString(4, message.getEndTime().toString());
-            statement.setString(5, message.getEndTime().toString());
+            busyUsersStatement.setString(1, message.getDate().toString());
+            busyUsersStatement.setString(2, message.getStartTime().toString());
+            busyUsersStatement.setString(3, message.getStartTime().toString());
+            busyUsersStatement.setString(4, message.getEndTime().toString());
+            busyUsersStatement.setString(5, message.getEndTime().toString());
 
             PreparedStatement freeUsersStatement = DatabaseConnector.getConnection().prepareStatement(
-                    "SELECT User.username, User.name FROM User WHERE NOT IN ( " + busyQuery + ")"
+                    "SELECT User.username, User.name FROM User WHERE User.username NOT IN (SELECT User.username" + busyQuery + ")"
             );
+            
+            freeUsersStatement.setString(1, message.getDate().toString());
+            freeUsersStatement.setString(2, message.getStartTime().toString());
+            freeUsersStatement.setString(3, message.getStartTime().toString());
+            freeUsersStatement.setString(4, message.getEndTime().toString());
+            freeUsersStatement.setString(5, message.getEndTime().toString());
 
 
 
             HashSet<ParticipantUser> participantUsers = new HashSet<>();
+            
+            System.out.println(busyUsersStatement);
+            System.out.println(freeUsersStatement);
 
 
-            ResultSet busyUsersResult = statement.executeQuery();
+            ResultSet busyUsersResult = busyUsersStatement.executeQuery();
             ResultSet freeUsersResult = freeUsersStatement.executeQuery();
 
 
 
             while (busyUsersResult.next()) {
-                ParticipantUser pUSer = new ParticipantUser();
-                pUSer.setUsername(busyUsersResult.getString(1));
-                pUSer.setName(busyUsersResult.getString(2));
-                pUSer.setBusy(true);
-                participantUsers.add(pUSer);
+                ParticipantUser busyUser = new ParticipantUser();
+                busyUser.setUsername(busyUsersResult.getString(1));
+                busyUser.setName(busyUsersResult.getString(2));
+                busyUser.setBusy(true);
+                participantUsers.add(busyUser);
             }
             while (freeUsersResult.next()) {
-                ParticipantUser pUser = new ParticipantUser();
-                pUser.setUsername(freeUsersResult.getString(1));
-                pUser.setName(freeUsersResult.getString(2));
-                participantUsers.add(pUser);
+                ParticipantUser freeUser = new ParticipantUser();
+                freeUser.setUsername(freeUsersResult.getString(1));
+                freeUser.setName(freeUsersResult.getString(2));
+                participantUsers.add(freeUser);
             }
             System.out.println(participantUsers.size() + " users found!");
             ParticipantUserMessage createdMessage = new ParticipantUserMessage(ParticipantUserMessage.Command.RECEIVE_ALL, participantUsers);

@@ -4,6 +4,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.gruppe27.fellesprosjekt.common.messages.AuthMessage;
 import com.gruppe27.fellesprosjekt.common.messages.EventMessage;
+import com.gruppe27.fellesprosjekt.common.messages.RequestMessage;
 import com.gruppe27.fellesprosjekt.common.messages.UserMessage;
 import com.gruppe27.fellesprosjekt.server.controllers.AuthController;
 import com.gruppe27.fellesprosjekt.server.controllers.EventController;
@@ -11,7 +12,6 @@ import com.gruppe27.fellesprosjekt.server.controllers.UserController;
 import com.gruppe27.fellesprosjekt.common.messages.RoomMessage;
 import com.gruppe27.fellesprosjekt.server.controllers.RoomController;
 import com.gruppe27.fellesprosjekt.server.controllers.RequestController;
-import com.sun.corba.se.impl.protocol.giopmsgheaders.RequestMessage;
 
 
 public class CalendarListener extends Listener {
