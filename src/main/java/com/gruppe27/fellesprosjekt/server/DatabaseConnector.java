@@ -1,23 +1,15 @@
 package com.gruppe27.fellesprosjekt.server;
 
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 
 public class DatabaseConnector {
-
-    /*
-    static final String DB_URL = "jdbc:mysql://localhost/fellesprosjekt";
-    static final String USER = "root";
-    static final String PASS = "";
-    */
-
-    static final String DB_URL = "jdbc:mysql://mysql.stud.ntnu.no/andreahd_cal";
-    static final String USER = "andreahd";
-    static final String PASS = "gurgle1";
-
     private static Connection connection = null;
 
     protected DatabaseConnector() {
@@ -25,9 +17,22 @@ public class DatabaseConnector {
 
     public static Connection getConnection() {
         if (connection == null) {
+            Properties properties = new Properties();
             try {
-                connection = DriverManager.getConnection(DB_URL, USER, PASS);
+                InputStream inputStream = DatabaseConnector.class.getClassLoader().getResourceAsStream("config.properties");
+                if (inputStream != null) {
+                    properties.load(inputStream);
+                } else {
+                    System.out.println("Couldn't find config.properties");
+                    System.exit(1);
+                }
+
+                connection = DriverManager.getConnection(properties.getProperty("DB_URL"),
+                        properties.getProperty("DB_USER"), properties.getProperty("DB_PASSWORD"));
             } catch (SQLException e) {
+                e.printStackTrace();
+                System.exit(1);
+            } catch (IOException e) {
                 e.printStackTrace();
                 System.exit(1);
             }
