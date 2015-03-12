@@ -48,16 +48,12 @@ public class CalendarController implements Initializable {
         this.calendar.setController(this);
         this.calendar.findEvents();
         popOverFlag = false;
-        calendar.addEventHandler(MouseEvent.MOUSE_RELEASED, mEvent -> {
+        root.addEventFilter(MouseEvent.MOUSE_RELEASED, event -> {
             if (popOverFlag) {
                 dismissPopOver();
             }
         });
-        testPane.setOnMouseReleased((MouseEvent mEvent) -> {
-            if (popOverFlag) {
-                dismissPopOver();
-            }
-        });
+
         root.addEventHandler(EventBoxClicked.eventType, e -> {
             if (!popOverFlag) {
                 popOver = new EventPopOver((EventBoxClicked) e, this);
