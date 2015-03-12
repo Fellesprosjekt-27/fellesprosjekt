@@ -1,6 +1,6 @@
-DROP DATABASE andreahd_cal;
-CREATE DATABASE andreahd_cal;
-USE andreahd_cal;
+DROP DATABASE fellesprosjekt;
+CREATE DATABASE fellesprosjekt;
+USE fellesprosjekt;
 
 CREATE TABLE User (
   username VARCHAR(32) NOT NULL,

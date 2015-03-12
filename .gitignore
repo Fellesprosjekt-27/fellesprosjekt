@@ -29,5 +29,8 @@ release.properties
 .idea/
 *.iml
 
-#Mac
+# Mac
 .DS_STORE
+
+# Config
+config.properties
