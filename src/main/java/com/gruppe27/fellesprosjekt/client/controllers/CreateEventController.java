@@ -325,6 +325,24 @@ public class CreateEventController implements Initializable {
                             }
                         }, "Sluttidspunkt må være etter starttidspunkt", Severity.ERROR)));
 
+        vd.registerValidator(toTimeField,
+                Validator.combine(
+                        Validator.createEmptyValidator("Sluttidspunkt mangler", Severity.WARNING),
+                        Validator.createRegexValidator("Tid må være på formen hh:mm", "^$|([0-1]?[0-9]|2[0-3]):[0-5][0-9]", Severity.ERROR),
+                        Validator.createPredicateValidator(new Predicate<String>() {
+                            @Override
+                            public boolean test(String o) {
+                                return isTimeValid(fromTimeField.getText(), toTimeField.getText());
+                            }
+                        }, "Sluttidspunkt må være etter starttidspunkt", Severity.ERROR)));
+
+        vd.registerValidator(fromTimeField,
+                Validator.combine(
+                        Validator.createEmptyValidator("Starttidspunkt mangler", Severity.WARNING),
+                        Validator.createRegexValidator("Tid må være på formen hh:mm", "^$|([0-1]?[0-9]|2[0-3]):[0-5][0-9]", Severity.ERROR)));
+
+
+
         vd.setValidationDecorator(new ValidationDecoration());
     }
     }
