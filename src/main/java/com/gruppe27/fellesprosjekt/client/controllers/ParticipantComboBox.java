@@ -18,7 +18,7 @@ public class ParticipantComboBox extends ComboBox<String>{
         allUserNames = usernames;
         this.configAutoFilterListener();
     }
-    
+
     private void configAutoFilterListener(){
         final ParticipantComboBox currentInstance = this;
         this.getEditor().textProperty().addListener(new ChangeListener<String>() {

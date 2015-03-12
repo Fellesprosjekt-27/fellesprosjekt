@@ -23,7 +23,7 @@
 
 			<Text text="Dato" GridPane.rowIndex="2" />
 			<DatePicker fx:id="datePicker"
-			GridPane.columnIndex="1" GridPane.rowIndex="2" />
+			GridPane.columnIndex="1" GridPane.rowIndex="2" editable="false"/>
 
 			<Text text="Fra" GridPane.rowIndex="3" />
 			<TextField fx:id="fromTimeField" 
