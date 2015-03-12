@@ -325,8 +325,6 @@ public class CreateEventController implements Initializable {
                             }
                         }, "Sluttidspunkt må være etter starttidspunkt", Severity.ERROR)));
 
-        //     vd.registerValidator(participantComboBox, Validator.createEqualsValidator("message", Severity.ERROR, participantComboBox.getBufferList()));
-
         vd.setValidationDecorator(new ValidationDecoration());
     }
     }
