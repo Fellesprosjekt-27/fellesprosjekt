@@ -102,45 +102,19 @@ public class CreateEventController implements Initializable {
                 currentRoom = roomsArray.get(newValue.intValue());
             }
         });
+        disableButtons();
 
-        vd.registerValidator(emne, Validator.createEmptyValidator("Tittel mangler", Severity.WARNING));
-        vd.registerValidator(fromTimeField, Validator.combine(
-                Validator.createEmptyValidator("Must supply value", Severity.WARNING),
-                Validator.createRegexValidator("Tid må være på formen hh:mm", "^$|([0-1]?[0-9]|2[0-3]):[0-5][0-9]", Severity.ERROR),
-                Validator.createPredicateValidator(new Predicate<String>() {
-                    @Override
-                    public boolean test(String o) {
-                        try {
-                            LocalTime fromTime = LocalTime.parse(fromTimeField.getText());
-                            LocalTime toTime = LocalTime.parse(toTimeField.getText());
+        addListeners();
 
-                            return fromTime.compareTo(toTime) <= 0;
-                        } catch (Exception e) {
-                            return o.compareTo("") == 0;
-                        }
-                    }
-                }, "Starttidspunkt må være før sluttidspunkt", Severity.ERROR)));
+        registerValidators();
 
-        vd.registerValidator(toTimeField,
-                Validator.combine(
-                        Validator.createEmptyValidator("Must supply value", Severity.WARNING),
-                        Validator.createRegexValidator("Tid må være på formen hh:mm", "^$|([0-1]?[0-9]|2[0-3]):[0-5][0-9]", Severity.ERROR),
-                        Validator.createPredicateValidator(new Predicate<String>() {
-                            @Override
-                            public boolean test(String o) {
-                                try {
-                                    LocalTime fromTime = LocalTime.parse(fromTimeField.getText());
-                                    LocalTime toTime = LocalTime.parse(toTimeField.getText());
-
-                                    return fromTime.compareTo(toTime) <= 0;
-                                } catch (Exception e) {
-                                    return o.compareTo("") == 0;
-                                }
-                            }
-                        }, "Sluttidspunkt må være etter starttidspunkt", Severity.ERROR)));
-
-        vd.setValidationDecorator(new ValidationDecoration());
     }
+
+    public boolean isTimeValid(String fromTime, String toTime) {
+        return fromTime.matches("([0-1]?[0-9]|2[0-3]):[0-5][0-9]") && toTime.matches("([0-1]?[0-9]|2[0-3]):[0-5][0-9]") && LocalTime.parse(toTime).compareTo(LocalTime.parse(fromTime)) > 0;
+    }
+
+    ;
 
     public void setApp(CalendarApplication application) {
         this.application = application;
@@ -169,6 +143,7 @@ public class CreateEventController implements Initializable {
         client.addListener(getUsersListener);
         client.sendMessage(message);
     }
+
     @FXML
     private void handleChoiceboxClicked() {
         System.out.println("Cbox clicked.");
@@ -176,14 +151,14 @@ public class CreateEventController implements Initializable {
         LocalTime start = LocalTime.parse(fromTimeField.getText());
         LocalTime end = LocalTime.parse(toTimeField.getText());
         int capacity = Integer.parseInt(capacityField.getText());
-        this.updateCurrentRooms(date,start,end,capacity);
+        this.updateCurrentRooms(date, start, end, capacity);
         //TODO needs time to update rooms before I can do something.
 
     }
 
     @FXML
     private void updateCurrentRooms(LocalDate date, LocalTime start, LocalTime end, int capacity) {
-        RoomRequestMessage message = new RoomRequestMessage(RoomRequestMessage.Command.ROOM_REQUEST, date,start,end,capacity);
+        RoomRequestMessage message = new RoomRequestMessage(RoomRequestMessage.Command.ROOM_REQUEST, date, start, end, capacity);
 
         CalendarClient client = CalendarClient.getInstance();
 
@@ -212,7 +187,7 @@ public class CreateEventController implements Initializable {
         this.emptyRoomsArray();
         this.roomsArray.addAll(rooms);
         ArrayList<String> stringArrayList = new ArrayList<>();
-        for(Room room: roomsArray) {
+        for (Room room : roomsArray) {
             String roomString = room.toString();
             stringArrayList.add(roomString);
         }
@@ -242,8 +217,9 @@ public class CreateEventController implements Initializable {
         });
     }
 
+
     @FXML
-    private void handleAddParticipant(){
+    private void handleAddParticipant() {
         String username = participantComboBox.getValue();
         participants.add(allUsers.get(username));
         updateListView();
@@ -255,7 +231,7 @@ public class CreateEventController implements Initializable {
 
     private void updateListView() {
         ObservableList<String> observable = FXCollections.observableArrayList();
-        for (User user : participants ) {
+        for (User user : participants) {
             observable.add(user.getUsername());
         }
 
@@ -264,8 +240,10 @@ public class CreateEventController implements Initializable {
         });
     }
 
+
     @FXML
     private void handleCreateEventAction() {
+
         Event event = new Event();
         event.setName(emne.getText());
 
@@ -290,5 +268,69 @@ public class CreateEventController implements Initializable {
     private void handleCancelAction() {
         application.cancelCreateNewEvent();
     }
+    private void disableButtons(){
+        createEventButton.setDisable(true);
+        roomChoiceBox.setDisable(true);
+    }
+    private void addListeners(){
+        emne.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!emne.getText().isEmpty() && datePicker.getValue() != null && isTimeValid(fromTimeField.getText(), toTimeField.getText())) {
+                createEventButton.setDisable(false);
+            } else {
+                createEventButton.setDisable(true);
+            }
+        });
+        datePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (!emne.getText().isEmpty() && datePicker.getValue() != null && isTimeValid(fromTimeField.getText(), toTimeField.getText())) {
+                createEventButton.setDisable(false);
+            } else {
+                createEventButton.setDisable(true);
+            }
+        });
+        fromTimeField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!emne.getText().isEmpty() && datePicker.getValue() != null && isTimeValid(fromTimeField.getText(), toTimeField.getText())) {
+                createEventButton.setDisable(false);
+            } else {
+                createEventButton.setDisable(true);
+            }
+        });
+        toTimeField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!emne.getText().isEmpty() && datePicker.getValue() != null && isTimeValid(fromTimeField.getText(), toTimeField.getText())) {
+                createEventButton.setDisable(false);
+            } else {
+                createEventButton.setDisable(true);
+            }
+        });
+        capacityField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (capacityField.getText().matches("[1-9]+")) {
+                roomChoiceBox.setDisable(false);
+            } else {
+                roomChoiceBox.setDisable(true);
+            }
+        });
+    }
+    private void registerValidators(){
+        vd.registerValidator(emne, Validator.createEmptyValidator("Tittel mangler", Severity.WARNING));
+        vd.registerValidator(datePicker, Validator.createEmptyValidator("Dato mangler", Severity.WARNING));
+        vd.registerValidator(capacityField, Validator.createRegexValidator("Kapasiteten må være et tall lavere enn 20", "^$|[0-9]+", Severity.ERROR));
 
-}
+        vd.registerValidator(toTimeField,
+                Validator.combine(
+                        Validator.createEmptyValidator("Sluttidspunkt mangler", Severity.WARNING),
+                        Validator.createRegexValidator("Tid må være på formen hh:mm", "^$|([0-1]?[0-9]|2[0-3]):[0-5][0-9]", Severity.ERROR),
+                        Validator.createPredicateValidator(new Predicate<String>() {
+                            @Override
+                            public boolean test(String o) {
+                                return isTimeValid(fromTimeField.getText(), toTimeField.getText());
+                            }
+                        }, "Sluttidspunkt må være etter starttidspunkt", Severity.ERROR)));
+
+        //     vd.registerValidator(participantComboBox, Validator.createEqualsValidator("message", Severity.ERROR, participantComboBox.getBufferList()));
+
+        vd.setValidationDecorator(new ValidationDecoration());
+    }
+    }
+
+
+
+

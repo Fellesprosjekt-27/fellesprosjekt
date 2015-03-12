@@ -11,7 +11,7 @@ import java.time.LocalTime;
 import java.util.HashSet;
 
 public class Network {
-    public static final int PORT = 5000;
+    public static final int     PORT = 5000;
 
     public static void register(EndPoint endPoint) {
         Kryo kryo = endPoint.getKryo();

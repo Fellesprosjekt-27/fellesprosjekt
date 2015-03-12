@@ -18,7 +18,18 @@ public class ParticipantComboBox extends ComboBox<String>{
         allUserNames = usernames;
         this.configAutoFilterListener();
     }
-    
+
+ /*   public ArrayList<String> getBufferList() {
+        ArrayList<String> filter = new ArrayList<>();
+        for(String name: bufferList){
+            filter.add(name);
+        }
+        return (ArrayList<String>)filter;
+
+
+    }
+    */
+
     private void configAutoFilterListener(){
         final ParticipantComboBox currentInstance = this;
         this.getEditor().textProperty().addListener(new ChangeListener<String>() {
