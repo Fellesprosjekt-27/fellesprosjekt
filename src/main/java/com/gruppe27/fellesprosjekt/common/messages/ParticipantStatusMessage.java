@@ -1,24 +1,21 @@
 package com.gruppe27.fellesprosjekt.common.messages;
 
+import com.gruppe27.fellesprosjekt.common.Event;
+
 public class ParticipantStatusMessage {
 
     public enum Command {
         CHANGE_STATUS
     }
-    public enum Status {
-        ATTENDING,
-        NOT_ATTENDING,
-        MAYBE
-    }
 
-    Status status;
+    Event.Status status;
     Command command;
     int eventId;
 
     public ParticipantStatusMessage() {
     }
 
-    public ParticipantStatusMessage(Command command, Status status, int eventId) {
+    public ParticipantStatusMessage(Command command, Event.Status status, int eventId) {
         this.command = command;
         this.status = status;
         this.eventId = eventId;
@@ -28,7 +25,7 @@ public class ParticipantStatusMessage {
         return command;
     }
 
-    public Status getStatus() {
+    public Event.Status getStatus() {
         return status;
     }
 

@@ -35,27 +35,34 @@ public class EventPopOver {
         Text text = new Text(str);
 
         ChoiceBox<String> status = new ChoiceBox<String>(participationStatusChoice);
-        String sValue = event.getStatus();
-        if (participationStatusChoice.indexOf(sValue) == -1) {
-            switch (event.getStatus()) {
-                case "maybe":
-                    sValue = "Kanskje";
-                    break;
-                case "attending":
-                    sValue = "Deltar";
-                    break;
-                case "not attending":
-                    sValue = "Deltar ikke";
-                    break;
-            }
+        String sValue = "Kanskje";
+        switch (event.getStatus()) {
+            case ATTENDING:
+                sValue = "Deltar";
+                break;
+            case MAYBE:
+                sValue = "Kanskje";
+                break;
+            case NOT_ATTENDING:
+                sValue = "Deltar ikke";
+                break;
         }
-
         status.getSelectionModel().select(participationStatusChoice.indexOf(sValue));
         Button button = new Button("Endre");
         button.setOnMouseClicked((MouseEvent mEvent) -> {
+            switch ( status.getValue()) {
+                case "Deltar":
+                    event.setStatus(Event.Status.ATTENDING);
+                    break;
+                case "Kanskje":
+                    event.setStatus(Event.Status.MAYBE);
+                    break;
+                case "Deltar ikke":
+                    event.setStatus(Event.Status.NOT_ATTENDING);
+                    break;
+            }
 
-            controller.handleChangeParticipationStatus(status.getValue(), event.getId());
-            event.setStatus(status.getValue());
+            controller.handleChangeParticipationStatus(event.getStatus(), event.getId());
         });
 
         hBox.getChildren().addAll(status, button);

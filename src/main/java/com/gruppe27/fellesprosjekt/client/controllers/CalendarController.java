@@ -26,7 +26,7 @@ public class CalendarController implements Initializable {
     private CalendarApplication application;
     private boolean popOverFlag;
     private EventPopOver popOver;
-    ParticipantStatusMessage.Status pStatus;
+    Event.Status pStatus;
 
     @FXML
     private MonthCalendarComponent calendar;
@@ -98,21 +98,11 @@ public class CalendarController implements Initializable {
         client.sendMessage(eventMessage);
     }
 
-    public void handleChangeParticipationStatus(String status, int id) {
+    public void handleChangeParticipationStatus(Event.Status status, int id) {
         CalendarClient client = CalendarClient.getInstance();
-        pStatus = ParticipantStatusMessage.Status.MAYBE;
-        switch(status){
-            case "Deltar":
-                pStatus = ParticipantStatusMessage.Status.ATTENDING;
-                break;
-            case "Kanskje":
-                pStatus = ParticipantStatusMessage.Status.MAYBE;
-                break;
-            case "Deltar ikke":
-                pStatus = ParticipantStatusMessage.Status.NOT_ATTENDING;
-                break;
-        }
-        ParticipantStatusMessage statusMessage = new ParticipantStatusMessage(ParticipantStatusMessage.Command.CHANGE_STATUS, pStatus, id);
+        pStatus = status;
+        ParticipantStatusMessage statusMessage = new ParticipantStatusMessage(
+                ParticipantStatusMessage.Command.CHANGE_STATUS, pStatus, id);
         client.sendMessage(statusMessage);
     }
 

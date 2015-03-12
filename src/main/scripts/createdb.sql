@@ -53,7 +53,7 @@ CREATE TABLE TeamEvent (
 CREATE TABLE UserEvent (
   username VARCHAR(32) NOT NULL,
   event_id INT         NOT NULL,
-  status ENUM('attending','maybe','not attending') NOT NULL DEFAULT 'maybe',
+  status ENUM('ATTENDING','MAYBE','NOT_ATTENDING') NOT NULL DEFAULT 'MAYBE',
   PRIMARY KEY (username, event_id),
   FOREIGN KEY (username) REFERENCES User (username),
   FOREIGN KEY (event_id) REFERENCES Event (id)

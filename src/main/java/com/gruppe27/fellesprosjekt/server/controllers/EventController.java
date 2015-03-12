@@ -19,7 +19,7 @@ public class EventController {
 
     private static final String EVENT_QUERY =
             "SELECT Event.id, Event.name, Event.date, Event.start, Event.end, Creator.username, Creator.name, " +
-            "Participant.username, Participant.name, status " +
+            "Participant.username, Participant.name, UserEvent.status " +
             "FROM Event JOIN User AS Creator ON Event.creator = Creator.username " +
             "JOIN UserEvent ON Event.id = UserEvent.event_id " +
             "JOIN User AS Participant ON UserEvent.username = Participant.username ";
@@ -48,7 +48,9 @@ public class EventController {
 
     private void sendEvents(CalendarConnection connection, LocalDate from, LocalDate to) {
         try {
-            String query = EVENT_QUERY + "WHERE Event.date >= ? AND Event.date <= ? ORDER BY Event.id";
+            String query = EVENT_QUERY + "WHERE Event.date >= ? AND Event.date <= ? AND ? " +
+                    "IN(SELECT User.username FROM UserEvent JOIN User ON User.username = UserEvent.username) " +
+                    "ORDER BY Event.id";
             PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement(query);
             statement.setString(1, from.toString());
             statement.setString(2, to.toString());
@@ -84,8 +86,8 @@ public class EventController {
                 creator.setName(result.getString(7));
                 participant.setUsername(result.getString(8));
                 participant.setName(result.getString(9));
-                if (participant.getUsername() == username) {
-                    event.setStatus(result.getString(10));
+                if (participant.getUsername().equals(username)) {
+                    event.setStatus(Event.Status.valueOf(result.getString(10)));
                 }
 
                 event.addParticipant(participant);
@@ -101,8 +103,8 @@ public class EventController {
                 User participant = new User();
                 participant.setUsername(result.getString(8));
                 participant.setName(result.getString(9));
-                if (participant.getUsername() == username) {
-                    event.setStatus(result.getString(10));
+                if (participant.getUsername().equals(username)) {
+                    event.setStatus(Event.Status.valueOf(result.getString(10)));
                 }
                 event.addParticipant(participant);
                 System.out.println("Add user");

@@ -18,6 +18,7 @@ public class Network {
         kryo.register(TestMessage.class);
         kryo.register(User.class);
         kryo.register(Event.class);
+        kryo.register(Event.Status.class);
         kryo.register(Room.class);
         kryo.register(LocalTime.class, new LocalTimeSerializer());
         kryo.register(LocalDate.class, new LocalDateSerializer());
@@ -39,7 +40,6 @@ public class Network {
         kryo.register(EventMessage.Command.class);
         kryo.register(ParticipantStatusMessage.class);
         kryo.register(ParticipantStatusMessage.Command.class);
-        kryo.register(ParticipantStatusMessage.Status.class);
         kryo.register(HashSet.class);
     }
 

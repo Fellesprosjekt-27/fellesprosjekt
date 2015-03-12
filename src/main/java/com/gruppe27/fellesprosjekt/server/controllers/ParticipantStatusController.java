@@ -36,7 +36,7 @@ public class ParticipantStatusController {
 
     private void change_status(CalendarConnection connection, ParticipantStatusMessage participantStatusMessage) {
         User user = connection.getUser();
-        String status = "maybe";
+        String status = "MAYBE";
 
         try {
 
@@ -46,13 +46,13 @@ public class ParticipantStatusController {
             System.out.println(participantStatusMessage.getStatus());
             switch (participantStatusMessage.getStatus()) {
                 case ATTENDING:
-                    status = "attending";
+                    status = "ATTENDING";
                     break;
                 case NOT_ATTENDING:
-                    status = "not attending";
+                    status = "NOT_ATTENDING";
                     break;
                 case MAYBE:
-                    status = "maybe";
+                    status = "MAYBE";
                     break;
             }
 
