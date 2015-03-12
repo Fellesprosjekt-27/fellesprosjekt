@@ -19,7 +19,7 @@ public class EventController {
 
     private static final String EVENT_QUERY =
             "SELECT Event.id, Event.name, Event.date, Event.start, Event.end, Creator.username, Creator.name, " +
-            "Participant.username, Participant.name " +
+            "Participant.username, Participant.name, status " +
             "FROM Event JOIN User AS Creator ON Event.creator = Creator.username " +
             "JOIN UserEvent ON Event.id = UserEvent.event_id " +
             "JOIN User AS Participant ON UserEvent.username = Participant.username ";
@@ -48,15 +48,14 @@ public class EventController {
 
     private void sendEvents(CalendarConnection connection, LocalDate from, LocalDate to) {
         try {
-            String query = EVENT_QUERY + "WHERE Event.date >= ? AND Event.date <= ? " +
-                    "AND Participant.username = ?";
+            String query = EVENT_QUERY + "WHERE Event.date >= ? AND Event.date <= ? ORDER BY Event.id";
             PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement(query);
             statement.setString(1, from.toString());
             statement.setString(2, to.toString());
             statement.setString(3, connection.getUser().getUsername());
 
             ResultSet resultSet = statement.executeQuery();
-            HashSet<Event> events = parseEventResult(resultSet);
+            HashSet<Event> events = parseEventResult(resultSet, connection.getUser().getUsername());
             EventMessage createdMessage = new EventMessage(EventMessage.Command.RECEIVE_EVENTS, events);
             connection.sendTCP(createdMessage);
             System.out.println("sent " + events.size() + "events.");
@@ -67,12 +66,12 @@ public class EventController {
         }
     }
 
-    private HashSet<Event> parseEventResult(ResultSet result) throws SQLException {
+    private HashSet<Event> parseEventResult(ResultSet result, String username) throws SQLException {
         int currentEventId = -1;
         Event event = null;
         HashSet<Event> events = new HashSet<>();
         while (result.next()) {
-            if (result.getInt("Event.id") != currentEventId) {
+            if (result.getInt(1) != currentEventId) {
                 event = new Event();
                 User creator = new User();
                 User participant = new User();
@@ -85,6 +84,9 @@ public class EventController {
                 creator.setName(result.getString(7));
                 participant.setUsername(result.getString(8));
                 participant.setName(result.getString(9));
+                if (participant.getUsername() == username) {
+                    event.setStatus(result.getString(10));
+                }
 
                 event.addParticipant(participant);
 
@@ -99,6 +101,9 @@ public class EventController {
                 User participant = new User();
                 participant.setUsername(result.getString(8));
                 participant.setName(result.getString(9));
+                if (participant.getUsername() == username) {
+                    event.setStatus(result.getString(10));
+                }
                 event.addParticipant(participant);
                 System.out.println("Add user");
             }

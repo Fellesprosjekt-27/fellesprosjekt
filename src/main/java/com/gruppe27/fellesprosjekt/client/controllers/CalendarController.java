@@ -14,9 +14,9 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.TitledPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import org.controlsfx.control.PopOver;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -37,6 +37,9 @@ public class CalendarController implements Initializable {
     @FXML
     private AnchorPane root;
 
+    @FXML
+    private TitledPane testPane;
+
     public CalendarController() {
     }
 
@@ -46,10 +49,13 @@ public class CalendarController implements Initializable {
         this.calendar.findEvents();
         popOverFlag = false;
         calendar.addEventHandler(MouseEvent.MOUSE_RELEASED, mEvent -> {
-            if (!(mEvent.getTarget() instanceof PopOver) && popOverFlag) {
-                popOver.hide();
-                popOverFlag = false;
-                root.getChildren().remove(popOver.getPopOver());
+            if (popOverFlag) {
+                dismissPopOver();
+            }
+        });
+        testPane.setOnMouseReleased((MouseEvent mEvent) -> {
+            if (popOverFlag) {
+                dismissPopOver();
             }
         });
         root.addEventHandler(EventBoxClicked.eventType, e -> {
@@ -57,9 +63,7 @@ public class CalendarController implements Initializable {
                 popOver = new EventPopOver((EventBoxClicked) e, this);
                 popOverFlag = true;
             } else {
-                popOver.hide();
-                popOverFlag = false;
-                root.getChildren().remove(popOver.getPopOver());
+                dismissPopOver();
             }
 
         });
@@ -71,6 +75,9 @@ public class CalendarController implements Initializable {
     }
 
     public void handleCreateNewEvent() {
+        if (popOverFlag) {
+            dismissPopOver();
+        }
         application.createNewEvent();
 
     }
@@ -111,6 +118,12 @@ public class CalendarController implements Initializable {
         }
         ParticipantStatusMessage statusMessage = new ParticipantStatusMessage(ParticipantStatusMessage.Command.CHANGE_STATUS, pStatus, id);
         client.sendMessage(statusMessage);
+    }
+
+    public void dismissPopOver() {
+        popOver.hide();
+        popOverFlag = false;
+        root.getChildren().remove(popOver.getPopOver());
     }
 
     public AnchorPane getRoot() {

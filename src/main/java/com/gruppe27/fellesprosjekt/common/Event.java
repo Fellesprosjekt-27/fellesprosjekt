@@ -15,6 +15,7 @@ public class Event {
     User creator;
     HashSet<User> userParticipants;
     HashSet<Group> groupParticipants;
+    String status;
     String name;
     Room room;
 
@@ -118,5 +119,13 @@ public class Event {
 
     public int getId() {
         return id;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getStatus() {
+        return status;
     }
 }
