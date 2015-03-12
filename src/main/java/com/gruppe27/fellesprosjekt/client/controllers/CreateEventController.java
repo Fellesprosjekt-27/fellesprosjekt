@@ -85,7 +85,6 @@ public class CreateEventController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //getAllUsers();
         roomChoiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -101,7 +100,6 @@ public class CreateEventController implements Initializable {
 
     @FXML
     private void handleChoiceboxClicked() {
-        System.out.println("Cbox clicked.");
         LocalDate date = datePicker.getValue();
         LocalTime start = LocalTime.parse(fromTimeField.getText());
         LocalTime end = LocalTime.parse(toTimeField.getText());
@@ -157,13 +155,11 @@ public class CreateEventController implements Initializable {
 
     @FXML
     private void handleComboBoxClicked() {
-        System.out.println("combobox clicked");
         getAllUsers();
         //TODO Validering
     }
 
     private void getAllUsers() {
-        System.out.println("Getting all users");
         LocalDate date = datePicker.getValue();
         LocalTime start = LocalTime.parse(fromTimeField.getText());
         LocalTime end = LocalTime.parse(toTimeField.getText());
@@ -174,13 +170,10 @@ public class CreateEventController implements Initializable {
 
         Listener getUsersListener = new Listener() {
             public void received(Connection connection, Object object) {
-                System.out.println("Listening for ParticipantUserMessage");
                 if (object instanceof ParticipantUserMessage) {
-                    System.out.println("Received participantUserMessage.");
                     ParticipantUserMessage complete = (ParticipantUserMessage) object;
                     switch (complete.getCommand()) {
                         case RECEIVE_ALL:
-                            System.out.println("Got users");
                             setAllUsers(complete.getParticipantUsers());
                             break;
                         case SEND_ALL:
@@ -196,7 +189,6 @@ public class CreateEventController implements Initializable {
     }
 
     private void setAllUsers(HashSet<ParticipantUser> allUsers) {
-        System.out.println("Setting all users.");
         this.allUsers = new HashMap<>();
         availableUsersObservable = FXCollections.observableArrayList();
         for (ParticipantUser participantUser : allUsers) {
