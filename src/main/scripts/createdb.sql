@@ -59,4 +59,14 @@ CREATE TABLE UserEvent (
   FOREIGN KEY (event_id) REFERENCES Event (id)
 );
 
-
+CREATE TABLE Notification (
+  id INT NOT NULL AUTO_INCREMENT,
+  timestamp DATETIME NOT NULL DEFAULT NOW(),
+  event_id INT NOT NULL,
+  user_username VARCHAR(32) NOT NULL,
+  message VARCHAR(200),
+  type ENUM('INVITATION', 'PARTICIPATION_DECLINED', 'EVENT_CHANGED', 'CONFLICTING_EVENTS'),
+  PRIMARY KEY (id),
+  FOREIGN KEY (event_id) REFERENCES Event (id),
+  FOREIGN KEY (user_username) REFERENCES User (username)
+);

@@ -7,28 +7,21 @@ import java.util.Set;
 
 public class User {
 
-    private String username;
-
-    private String name;
-
-    private Set<Group> groups;
+    String username;
+    String name;
+    Set<Group> groups;
 
     public User() {
         groups = new HashSet<Group>();
     }
 
     public User(String username, String name) {
-        this.setName(name);
-        this.setUsername(username);
-    }
-
-    public User(String username) {
-        this.setUsername(username);
+        this.username = username;
+        this.name = name;
     }
 
     @Override
     public String toString() {
-
         return "User{" +
                 "groups=" + groups +
                 ", username='" + username + '\'' +
@@ -36,7 +29,6 @@ public class User {
                 '}';
 
     }
-
 
     /**
      * Takes in a group and adds it to the user's other groups
@@ -54,13 +46,6 @@ public class User {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getName() {
         return name;

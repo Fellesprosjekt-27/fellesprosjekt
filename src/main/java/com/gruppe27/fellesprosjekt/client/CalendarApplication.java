@@ -33,6 +33,7 @@ public class CalendarApplication extends Application {
         this.stage.setTitle("Kalender");
         gotoLogin();
         this.stage.show();
+
     }
 
     public User getUser() {

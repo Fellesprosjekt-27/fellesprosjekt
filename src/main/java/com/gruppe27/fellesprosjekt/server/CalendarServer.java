@@ -8,32 +8,37 @@ import java.io.IOException;
 
 
 public class CalendarServer {
-    Server server;
+    private static Server server = null;
     DatabaseConnector connector;
 
-    public CalendarServer() {
-        server = new Server() {
-            protected Connection newConnection() {
-                return new CalendarConnection();
-            }
-        };
-
-        Network.register(server);
-
-        server.addListener(new CalendarListener(server));
-
-        try {
-            server.bind(Network.PORT);
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
-
-        server.start();
+    protected CalendarServer() {
     }
 
+    public static Server getServer() {
+        if (server == null) {
+            server = new Server() {
+                protected Connection newConnection() {
+                    return new CalendarConnection();
+                }
+            };
+
+            Network.register(server);
+
+            server.addListener(new CalendarListener(server));
+
+            try {
+                server.bind(Network.PORT);
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.exit(1);
+            }
+
+            server.start();
+        }
+        return server;
+    }
 
     public static void main(String[] args) {
-        CalendarServer server = new CalendarServer();
+        CalendarServer.getServer();
     }
 }

@@ -2,12 +2,16 @@ package com.gruppe27.fellesprosjekt.common;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
+
 import com.gruppe27.fellesprosjekt.common.messages.*;
 import com.gruppe27.fellesprosjekt.common.serializers.LocalDateSerializer;
+import com.gruppe27.fellesprosjekt.common.serializers.LocalDateTimeSerializer;
 import com.gruppe27.fellesprosjekt.common.serializers.LocalTimeSerializer;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 public class Network {
@@ -16,18 +20,21 @@ public class Network {
     public static void register(EndPoint endPoint) {
         Kryo kryo = endPoint.getKryo();
 
-//        -- COMMON --
+        // -- COMMON --
 
         kryo.register(Event.class);
         kryo.register(Group.class);
         kryo.register(HashSet.class);
+        kryo.register(ArrayList.class);
         kryo.register(LocalDate.class, new LocalDateSerializer());
         kryo.register(LocalTime.class, new LocalTimeSerializer());
+        kryo.register(LocalDateTime.class, new LocalDateTimeSerializer());
+        kryo.register(Notification.class);
         kryo.register(Room.class);
         kryo.register(String.class);
         kryo.register(User.class);
 
-//         -- MESSAGES --
+        // -- MESSAGES --
         kryo.register(AuthCompleteMessage.class);
         kryo.register(AuthCompleteMessage.Command.class);
 
@@ -54,10 +61,16 @@ public class Network {
         kryo.register(RoomRequestMessage.class);
         kryo.register(RoomRequestMessage.Command.class);
 
-        kryo.register(TestMessage.class);
-
         kryo.register(UserMessage.class);
         kryo.register(UserMessage.Command.class);
+
+        kryo.register(GeneralMessage.class);
+        kryo.register(GeneralMessage.Command.class);
+
+        kryo.register(Notification.class);
+        kryo.register(NotificationMessage.class);
+        kryo.register(NotificationMessage.Command.class);
+        kryo.register(Notification.NotificationType.class);
     }
 
 }
