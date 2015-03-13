@@ -62,9 +62,6 @@ public class Network {
         kryo.register(RoomMessage.class);
         kryo.register(RoomMessage.Command.class);
 
-        kryo.register(RoomRequestMessage.class);
-        kryo.register(RoomRequestMessage.Command.class);
-
         kryo.register(UserMessage.class);
         kryo.register(UserMessage.Command.class);
 
@@ -72,9 +69,16 @@ public class Network {
         kryo.register(GeneralMessage.Command.class);
 
         kryo.register(Notification.class);
+        kryo.register(Notification.NotificationType.class);
         kryo.register(NotificationMessage.class);
         kryo.register(NotificationMessage.Command.class);
-        kryo.register(Notification.NotificationType.class);
+
+        kryo.register(RequestMessage.class);
+        kryo.register(RequestMessage.Command.class);
+
+        kryo.register(ParticipantUser.class);
+        kryo.register(ParticipantUserMessage.class);
+        kryo.register(ParticipantUserMessage.Command.class);
     }
 
 }

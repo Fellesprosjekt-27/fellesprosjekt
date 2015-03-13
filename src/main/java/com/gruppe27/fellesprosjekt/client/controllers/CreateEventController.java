@@ -6,12 +6,10 @@ import com.gruppe27.fellesprosjekt.client.CalendarApplication;
 import com.gruppe27.fellesprosjekt.client.CalendarClient;
 import com.gruppe27.fellesprosjekt.client.components.ValidationDecoration;
 import com.gruppe27.fellesprosjekt.common.Event;
+import com.gruppe27.fellesprosjekt.common.ParticipantUser;
 import com.gruppe27.fellesprosjekt.common.Room;
 import com.gruppe27.fellesprosjekt.common.User;
-import com.gruppe27.fellesprosjekt.common.messages.EventMessage;
-import com.gruppe27.fellesprosjekt.common.messages.RoomMessage;
-import com.gruppe27.fellesprosjekt.common.messages.RoomRequestMessage;
-import com.gruppe27.fellesprosjekt.common.messages.UserMessage;
+import com.gruppe27.fellesprosjekt.common.messages.*;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -55,9 +53,6 @@ public class CreateEventController implements Initializable {
     Button addParticipantButton;
 
     @FXML
-    ChoiceBox<User> romValg;
-
-    @FXML
     Button fjernDeltakere;
 
     @FXML
@@ -77,7 +72,7 @@ public class CreateEventController implements Initializable {
     private ArrayList<Room> roomsArray;
     private CalendarApplication application;
 
-    private Map<String, User> allUsers;
+    private Map<String, ParticipantUser> allUsers;
     private ObservableList<String> availableUsersObservable;
     private HashSet<User> participants;
 
@@ -95,7 +90,6 @@ public class CreateEventController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        getAllUsers();
         roomChoiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -120,33 +114,8 @@ public class CreateEventController implements Initializable {
         this.application = application;
     }
 
-    private void getAllUsers() {
-        UserMessage message = new UserMessage(UserMessage.Command.SEND_ALL);
-
-        CalendarClient client = CalendarClient.getInstance();
-
-        Listener getUsersListener = new Listener() {
-            public void received(Connection connection, Object object) {
-                if (object instanceof UserMessage) {
-                    UserMessage complete = (UserMessage) object;
-                    switch (complete.getCommand()) {
-                        case RECEIVE_ALL:
-                            setAllUsers(complete.getUsers());
-                            break;
-                        case SEND_ALL:
-                            break;
-                    }
-                    client.removeListener(this);
-                }
-            }
-        };
-        client.addListener(getUsersListener);
-        client.sendMessage(message);
-    }
-
     @FXML
     private void handleChoiceboxClicked() {
-        System.out.println("Cbox clicked.");
         LocalDate date = datePicker.getValue();
         LocalTime start = LocalTime.parse(fromTimeField.getText());
         LocalTime end = LocalTime.parse(toTimeField.getText());
@@ -155,10 +124,9 @@ public class CreateEventController implements Initializable {
         //TODO needs time to update rooms before I can do something.
 
     }
-
     @FXML
     private void updateCurrentRooms(LocalDate date, LocalTime start, LocalTime end, int capacity) {
-        RoomRequestMessage message = new RoomRequestMessage(RoomRequestMessage.Command.ROOM_REQUEST, date, start, end, capacity);
+        RequestMessage message = new RequestMessage(RequestMessage.Command.ROOM_REQUEST, date,start,end,capacity);
 
         CalendarClient client = CalendarClient.getInstance();
 
@@ -201,12 +169,51 @@ public class CreateEventController implements Initializable {
 
     }
 
-    private void setAllUsers(HashSet<User> allUsers) {
+    @FXML
+    private void handleComboBoxClicked() {
+        getAllUsers();
+        //TODO Validering
+    }
+
+    private void getAllUsers() {
+        LocalDate date = datePicker.getValue();
+        LocalTime start = LocalTime.parse(fromTimeField.getText());
+        LocalTime end = LocalTime.parse(toTimeField.getText());
+
+        RequestMessage message = new RequestMessage(RequestMessage.Command.USER_REQUEST, date, start, end, -1);
+
+        CalendarClient client = CalendarClient.getInstance();
+
+        Listener getUsersListener = new Listener() {
+            public void received(Connection connection, Object object) {
+                if (object instanceof ParticipantUserMessage) {
+                    ParticipantUserMessage complete = (ParticipantUserMessage) object;
+                    switch (complete.getCommand()) {
+                        case RECEIVE_ALL:
+                            setAllUsers(complete.getParticipantUsers());
+                            break;
+                        case SEND_ALL:
+                            break;
+                    }
+                    client.removeListener(this);
+                }
+            }
+
+        };
+        client.addListener(getUsersListener);
+        client.sendMessage(message);
+    }
+
+    private void setAllUsers(HashSet<ParticipantUser> allUsers) {
         this.allUsers = new HashMap<>();
         availableUsersObservable = FXCollections.observableArrayList();
-        for (User user : allUsers) {
-            this.allUsers.put(user.getUsername(), user);
-            availableUsersObservable.add(user.getUsername());
+        for (ParticipantUser participantUser : allUsers) {
+            this.allUsers.put(participantUser.getUsername(), participantUser);
+            if (participantUser.isBusy()) {
+                availableUsersObservable.add(participantUser.getUsername().toUpperCase());
+            } else {
+                availableUsersObservable.add(participantUser.getUsername().toLowerCase());
+            }
         }
 
         Collections.sort(availableUsersObservable);

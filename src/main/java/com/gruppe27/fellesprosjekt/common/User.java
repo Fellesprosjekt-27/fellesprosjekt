@@ -12,7 +12,11 @@ public class User {
     Set<Group> groups;
 
     public User() {
-        groups = new HashSet<Group>();
+        groups = new HashSet<>();
+    }
+
+    public User(String username) {
+        this.username = username;
     }
 
     public User(String username, String name) {
@@ -46,9 +50,12 @@ public class User {
         return username;
     }
 
-
     public String getName() {
         return name;
+    }
+
+    public Set<Group> getGroups(){
+        return groups;
     }
 
     public void removeUserFromGroup(Group group) {
