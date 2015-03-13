@@ -231,6 +231,12 @@ public class CreateEventController implements Initializable {
     
     @FXML
     private void handleRemoveParticipant(){
+        String username = participantsListView.getSelectionModel().getSelectedItem();
+        participants.remove(allUsers.get(username));
+        updateListView();
+        
+        availableUsersObservable.add(username);
+        participantComboBox.setItems(availableUsersObservable);
     }
 
     private void updateListView() {
