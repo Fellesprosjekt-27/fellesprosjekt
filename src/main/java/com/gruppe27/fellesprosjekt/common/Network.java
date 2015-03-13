@@ -23,9 +23,13 @@ public class Network {
         // -- COMMON --
 
         kryo.register(Event.class);
+        kryo.register(Event.Status.class);
+
+        kryo.register(Room.class);
         kryo.register(Group.class);
         kryo.register(HashSet.class);
         kryo.register(ArrayList.class);
+
         kryo.register(LocalDate.class, new LocalDateSerializer());
         kryo.register(LocalTime.class, new LocalTimeSerializer());
         kryo.register(LocalDateTime.class, new LocalDateTimeSerializer());

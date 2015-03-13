@@ -42,9 +42,7 @@ public class ParticipantStatusController {
             PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement(
                     "UPDATE UserEvent SET status = ? WHERE username = ? AND event_id = ?"
             );
-
-
-            statement.setString(1, participantStatusMessage.getCommand().toString());
+            statement.setString(1, participantStatusMessage.getStatus().toString());
             statement.setString(2, user.getUsername());
             statement.setInt(3, participantStatusMessage.getEventId());
 

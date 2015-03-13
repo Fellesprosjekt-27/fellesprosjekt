@@ -8,13 +8,7 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
@@ -26,6 +20,7 @@ import java.time.Month;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Locale;
+
 
 public class MonthCalendarComponent extends BorderPane {
     private ArrayList<MonthCalendarSquare> calendarSquares;

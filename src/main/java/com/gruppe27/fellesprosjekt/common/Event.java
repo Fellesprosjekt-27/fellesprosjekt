@@ -6,6 +6,14 @@ import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 
 public class Event {
+
+    public enum Status {
+        ATTENDING,
+        NOT_ATTENDING,
+        MAYBE
+    }
+
+
     int id;
 
     LocalDate date;
@@ -13,6 +21,7 @@ public class Event {
     LocalTime endTime;
 
     User creator;
+    Status status;
 
     HashSet<User> userParticipants;
     HashSet<Group> groupParticipants;
@@ -119,5 +128,13 @@ public class Event {
 
     public int getId() {
         return id;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public Status getStatus() {
+        return status;
     }
 }
