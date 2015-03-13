@@ -19,11 +19,11 @@ public class EventPopOver {
     private final String formatStr = "%s\nDato: %s \nTid: %s-%s \nRom: %s \nDeltakerstatus: ";
     private PopOver popOver;
     private Event event;
-    private ObservableList<String> participationStatusChoice;
 
     public EventPopOver(EventBoxClicked e, CalendarController controller) {
         event = e.getEvent();
-        participationStatusChoice = FXCollections.observableArrayList();
+
+        ObservableList<String> participationStatusChoice = FXCollections.observableArrayList();
         participationStatusChoice.addAll("Kanskje", "Deltar", "Deltar ikke");
 
         Pane pane = new Pane();
@@ -31,7 +31,7 @@ public class EventPopOver {
         HBox hBox = new HBox();
 
         String str = String.format(formatStr, event.getName(), event.getDate(), event.getStartTime(),
-                event.getEndTime(), event.getRoom(), "PLACEHOLDER");
+                event.getEndTime(), event.getRoom());
         Text text = new Text(str);
 
         ChoiceBox<String> status = new ChoiceBox<String>(participationStatusChoice);

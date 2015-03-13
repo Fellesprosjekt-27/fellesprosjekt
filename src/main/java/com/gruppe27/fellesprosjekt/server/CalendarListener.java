@@ -5,7 +5,6 @@ import com.esotericsoftware.kryonet.Server;
 import com.gruppe27.fellesprosjekt.common.messages.*;
 import com.gruppe27.fellesprosjekt.server.controllers.*;
 
-
 public class CalendarListener extends Listener {
     Server server;
 
@@ -42,6 +41,9 @@ public class CalendarListener extends Listener {
         if (message instanceof ParticipantStatusMessage) {
             ParticipantStatusController.getInstance().handleMessage(connection, message);
             return;
+        }
+        if (message instanceof NotificationMessage) {
+            NotificationController.getInstance().handleMessage(connection, message);
         }
 
     }

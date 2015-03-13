@@ -8,13 +8,13 @@ import com.gruppe27.fellesprosjekt.client.components.EventPopOver;
 import com.gruppe27.fellesprosjekt.client.components.MonthCalendarComponent;
 import com.gruppe27.fellesprosjekt.client.events.EventBoxClicked;
 import com.gruppe27.fellesprosjekt.common.Event;
+import com.gruppe27.fellesprosjekt.client.components.NotificationList;
 import com.gruppe27.fellesprosjekt.common.messages.EventMessage;
 import com.gruppe27.fellesprosjekt.common.messages.ParticipantStatusMessage;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.TitledPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
@@ -38,7 +38,7 @@ public class CalendarController implements Initializable {
     private AnchorPane root;
 
     @FXML
-    private TitledPane testPane;
+    private NotificationList notificationList;
 
     public CalendarController() {
     }
@@ -75,7 +75,6 @@ public class CalendarController implements Initializable {
             dismissPopOver();
         }
         application.createNewEvent();
-
     }
 
     public void getEventsForPeriod(LocalDate from, LocalDate to, ObservableList<Event> observableEvents) {
@@ -102,7 +101,7 @@ public class CalendarController implements Initializable {
         CalendarClient client = CalendarClient.getInstance();
         pStatus = status;
         ParticipantStatusMessage statusMessage = new ParticipantStatusMessage(
-                ParticipantStatusMessage.Command.CHANGE_STATUS, pStatus, id);
+                ParticipantStatusMessage.Command.CHANGE_STATUS, status, id);
         client.sendMessage(statusMessage);
     }
 

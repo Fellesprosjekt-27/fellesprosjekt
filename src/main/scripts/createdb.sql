@@ -1,6 +1,6 @@
-DROP DATABASE andreahd_cal;
-CREATE DATABASE andreahd_cal;
-USE andreahd_cal;
+DROP DATABASE fellesprosjekt;
+CREATE DATABASE fellesprosjekt;
+USE fellesprosjekt;
 
 CREATE TABLE User (
   username VARCHAR(32) NOT NULL,
@@ -52,11 +52,21 @@ CREATE TABLE TeamEvent (
 
 CREATE TABLE UserEvent (
   username VARCHAR(32) NOT NULL,
-  event_id INT         NOT NULL,
+  event_id INT NOT NULL,
   status ENUM('ATTENDING','MAYBE','NOT_ATTENDING') NOT NULL DEFAULT 'MAYBE',
   PRIMARY KEY (username, event_id),
   FOREIGN KEY (username) REFERENCES User (username),
   FOREIGN KEY (event_id) REFERENCES Event (id)
 );
 
-
+CREATE TABLE Notification (
+  id INT NOT NULL AUTO_INCREMENT,
+  timestamp DATETIME NOT NULL DEFAULT NOW(),
+  event_id INT NOT NULL,
+  user_username VARCHAR(32) NOT NULL,
+  message VARCHAR(200),
+  type ENUM('INVITATION', 'PARTICIPATION_DECLINED', 'EVENT_CHANGED', 'CONFLICTING_EVENTS'),
+  PRIMARY KEY (id),
+  FOREIGN KEY (event_id) REFERENCES Event (id),
+  FOREIGN KEY (user_username) REFERENCES User (username)
+);

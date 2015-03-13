@@ -11,6 +11,7 @@ import com.gruppe27.fellesprosjekt.server.DatabaseConnector;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.HashSet;
 
@@ -75,20 +76,18 @@ public class EventController {
         while (result.next()) {
             if (result.getInt(1) != currentEventId) {
                 event = new Event();
-                User creator = new User();
-                User participant = new User();
                 currentEventId = result.getInt(1);
                 event.setName(result.getString(2));
                 event.setDate(result.getDate(3).toLocalDate());
                 event.setStartTime(result.getTime(4).toLocalTime());
                 event.setEndTime(result.getTime(5).toLocalTime());
-                creator.setUsername(result.getString(6));
-                creator.setName(result.getString(7));
-                participant.setUsername(result.getString(8));
-                participant.setName(result.getString(9));
+
+                User creator = new User(result.getString(6), result.getString(7));
+                User participant = new User(result.getString(8), result.getString(9));
                 if (participant.getUsername().equals(username)) {
                     event.setStatus(Event.Status.valueOf(result.getString(10)));
                 }
+
 
                 event.addParticipant(participant);
 
@@ -100,9 +99,7 @@ public class EventController {
                 if (event == null) {
                     return events;
                 }
-                User participant = new User();
-                participant.setUsername(result.getString(8));
-                participant.setName(result.getString(9));
+                User participant = new User(result.getString(8), result.getString(9));
                 if (participant.getUsername().equals(username)) {
                     event.setStatus(Event.Status.valueOf(result.getString(10)));
                 }
@@ -117,7 +114,8 @@ public class EventController {
         try {
 
             PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement(
-                    "INSERT INTO Event(name, date, start, end, creator,room) VALUES (?,?,?,?,?,?)"
+                    "INSERT INTO Event(name, date, start, end, creator, room) VALUES (?,?,?,?,?,?)",
+                    Statement.RETURN_GENERATED_KEYS
             );
 
             statement.setString(1, event.getName());
@@ -128,12 +126,30 @@ public class EventController {
             statement.setString(6, event.getRoom().getRoomName());
             int result = statement.executeUpdate();
 
+            int eventId;
+            ResultSet eventIdResultSet = statement.getGeneratedKeys();
+            eventIdResultSet.next();
+            eventId = eventIdResultSet.getInt(1);
+            event.setId(eventId);
+
+            int number_of_participants = 0;
+            for (User participant: event.getUserParticipants()) {
+                PreparedStatement participantStatement = DatabaseConnector.getConnection().prepareStatement(
+                        "INSERT INTO UserEvent(username,event_id) VALUES (?,?)"
+                );
+                participantStatement.setString(1, participant.getUsername());
+                participantStatement.setInt(2, eventId);
+                int participantResult = participantStatement.executeUpdate();
+                number_of_participants += participantResult;
+
+                NotificationController.getInstance().newEventNotification(event, participant);
+            }
+
+            System.out.println(number_of_participants + " participants added to event.");
             System.out.println(result + " rows affected");
             GeneralMessage createdMessage = new GeneralMessage(GeneralMessage.Command.SUCCESSFUL_CREATE,
                     "Avtalen " + event.getName() + " opprettet.");
             connection.sendTCP(createdMessage);
-
-
         } catch (SQLException e) {
             e.printStackTrace();
             ErrorMessage error = new ErrorMessage();

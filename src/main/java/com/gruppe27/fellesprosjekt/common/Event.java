@@ -13,6 +13,7 @@ public class Event {
         MAYBE
     }
 
+
     int id;
 
     LocalDate date;
@@ -20,16 +21,17 @@ public class Event {
     LocalTime endTime;
 
     User creator;
+    Status status;
+
     HashSet<User> userParticipants;
     HashSet<Group> groupParticipants;
-    Status status;
     String name;
     Room room;
 
     public Event() {
         this.creator = null;
-        userParticipants = new HashSet<User>();
-        groupParticipants = new HashSet<Group>();
+        userParticipants = new HashSet<>();
+        groupParticipants = new HashSet<>();
     }
 
     public Event(String name, User creator, LocalDate date, LocalTime startTime, LocalTime endTime) {

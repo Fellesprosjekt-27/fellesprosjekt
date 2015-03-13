@@ -12,6 +12,14 @@ Button{
     -fx-font-family: helvetica;
 }
 
+.validation_error {
+    -fx-background-color: red;
+}
+
+.validation_warning {
+    -fx-background-color: yellow;
+}
+
 #postItPane{
     -fx-background-image: url("../images/PostIt.jpg");
     -fx-background-size: stretch;

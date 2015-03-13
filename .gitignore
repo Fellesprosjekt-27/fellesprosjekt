@@ -28,6 +28,10 @@ release.properties
 # IntelliJ
 .idea/
 *.iml
+*.properties
 
-#Mac
+# Mac
 .DS_STORE
+
+# Config
+config.properties
