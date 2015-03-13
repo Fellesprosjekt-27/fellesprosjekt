@@ -12,12 +12,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.awt.*;
 import java.io.IOException;
 
 
 public class CalendarApplication extends Application {
     public static final int WIDTH = 1400;
     public static final int HEIGHT = 800;
+
+    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
     private Stage stage;
 

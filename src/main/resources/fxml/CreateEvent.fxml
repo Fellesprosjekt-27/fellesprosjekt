@@ -58,7 +58,8 @@
 			GridPane.rowIndex="7" GridPane.columnSpan="2" />
 
 			<Button fx:id="fjernDeltakere"
-			text="Fjern markerte deltakere" wrapText="true"
+                    onAction="#handleRemoveParticipant"
+			text="Fjern markert deltaker" wrapText="true"
 			GridPane.columnIndex="1" GridPane.rowIndex="8" 
 			GridPane.halignment="RIGHT" GridPane.valignment="BOTTOM" />
 			
