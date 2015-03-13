@@ -245,8 +245,8 @@ public class CreateEventController implements Initializable {
         participants.remove(allUsers.get(username));
         updateListView();
         
-        availableUsersObservable.add(username);
-        participantComboBox.setItems(availableUsersObservable);
+        availableUsersObservable.add(new SortableText(username));
+        participantComboBox.init(availableUsersObservable);
     }
 
     private void updateListView() {
