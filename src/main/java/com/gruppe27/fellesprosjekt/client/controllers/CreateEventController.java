@@ -224,6 +224,8 @@ public class CreateEventController implements Initializable {
         this.allUsers = new HashMap<>();
         availableUsersObservable = FXCollections.observableArrayList();
         for (ParticipantUser participantUser : allUsers) {
+            if(participantUser.getUsername().equals(application.getUser().getUsername()))
+                continue;
 
             this.allUsers.put(participantUser.getUsername(), participantUser);
             SortableText text = new SortableText(participantUser.getUsername());
