@@ -247,9 +247,12 @@ public class CreateEventController implements Initializable {
     private void handleAddParticipant() {
         String username = participantComboBox.getValue().getText();
         participants.add(allUsers.get(username));
-        updateListView();
+        participantsListView.getItems().add(username);
+        
         availableUsersObservable.remove(participantComboBox.getValue());
         participantComboBox.setValue(null);
+//        Don't know why this method was here.
+//        participantComboBox.getItems().clear();
         participantComboBox.init(availableUsersObservable);
     }
     
@@ -257,21 +260,18 @@ public class CreateEventController implements Initializable {
     private void handleRemoveParticipant(){
         String username = participantsListView.getSelectionModel().getSelectedItem();
         participants.remove(allUsers.get(username));
-        updateListView();
+        participantsListView.getSelectionModel().select(null);
+        participantsListView.getItems().remove(username);
         
-        availableUsersObservable.add(new SortableText(username));
-        participantComboBox.init(availableUsersObservable);
-    }
-
-    private void updateListView() {
-        ObservableList<String> observable = FXCollections.observableArrayList();
-        for (User user : participants) {
-            observable.add(user.getUsername());
+        SortableText text = new SortableText(username);
+        if(allUsers.get(username).isBusy()){
+            text.setFill(Color.RED);
+        }else {
+            text.setFill(Color.GREEN);
         }
-
-        Platform.runLater(() -> {
-            participantsListView.setItems(observable);
-        });
+        availableUsersObservable.add(text);
+        Collections.sort(availableUsersObservable);
+        participantComboBox.init(availableUsersObservable);
     }
 
 
@@ -289,6 +289,7 @@ public class CreateEventController implements Initializable {
         participants.add(event.getCreator());
         event.setStartTime(startTime);
         event.setEndTime(endTime);
+        //Eventuelt gå igjennom observableListView og gjøre om til participant liste
         event.setAllParticipants(participants);
         event.setRoom(currentRoom);
 
