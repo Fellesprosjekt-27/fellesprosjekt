@@ -113,13 +113,10 @@ public class CreateEventController implements Initializable {
     }
 
     public boolean isTimeValid(String fromTime, String toTime) {
-        try {
-            return fromTime.matches("([0-1]?[0-9]|2[0-3]):[0-5][0-9]") &&
-                    toTime.matches("([0-1]?[0-9]|2[0-3]):[0-5][0-9]") &&
-                    LocalTime.parse(toTime).compareTo(LocalTime.parse(fromTime)) > 0;
-        } catch (DateTimeParseException e) {
-            return false;
-        }
+            LocalTime from = toLocalTime(fromTime);
+            LocalTime to = toLocalTime(toTime);
+
+            return from != null && to != null && from.compareTo(to) < 0;
     }
 
     public void setApp(CalendarApplication application) {
@@ -129,8 +126,8 @@ public class CreateEventController implements Initializable {
     @FXML
     private void handleChoiceboxClicked() {
         LocalDate date = datePicker.getValue();
-        LocalTime start = LocalTime.parse(fromTimeField.getText());
-        LocalTime end = LocalTime.parse(toTimeField.getText());
+        LocalTime start = toLocalTime(fromTimeField.getText());
+        LocalTime end = toLocalTime(toTimeField.getText());
         int capacity = Integer.parseInt(capacityField.getText());
         this.updateCurrentRooms(date, start, end, capacity);
         //TODO needs time to update rooms before I can do something.
@@ -191,10 +188,28 @@ public class CreateEventController implements Initializable {
         //TODO Validering
     }
 
+    LocalTime toLocalTime(String time) {
+        try {
+            return LocalTime.parse(time);
+        } catch (DateTimeParseException e) {
+            // Accept time not starting with 0.
+            try {
+                return LocalTime.parse("0" + time);
+            }
+            catch (DateTimeParseException e2) {
+                return null;
+            }
+        }
+    }
+
     private void getAllUsers() {
         LocalDate date = datePicker.getValue();
-        LocalTime start = LocalTime.parse(fromTimeField.getText());
-        LocalTime end = LocalTime.parse(toTimeField.getText());
+        LocalTime start = toLocalTime(fromTimeField.getText());
+        LocalTime end = toLocalTime(toTimeField.getText());
+
+        // If time is not yet set: bail.
+        // TODO: Visualize this with a validation.
+        if (start == null || end == null) return;
 
         RequestMessage message = new RequestMessage(RequestMessage.Command.USER_REQUEST, date, start, end, -1);
 
@@ -272,8 +287,8 @@ public class CreateEventController implements Initializable {
 
         event.setDate(datePicker.getValue());
 
-        LocalTime startTime = LocalTime.parse(fromTimeField.getText());
-        LocalTime endTime = LocalTime.parse(toTimeField.getText());
+        LocalTime startTime = toLocalTime(fromTimeField.getText());
+        LocalTime endTime = toLocalTime(toTimeField.getText());
         event.setCreator(application.getUser());
         participants.add(event.getCreator());
         event.setStartTime(startTime);
