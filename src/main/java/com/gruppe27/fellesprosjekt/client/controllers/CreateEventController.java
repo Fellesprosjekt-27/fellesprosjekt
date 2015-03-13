@@ -16,7 +16,6 @@ import com.gruppe27.fellesprosjekt.common.messages.RequestMessage;
 import com.gruppe27.fellesprosjekt.common.messages.RoomMessage;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -105,13 +104,6 @@ public class CreateEventController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        roomChoiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                currentRoom = roomsArray.get(newValue.intValue());
-            }
-        });
-
         setDisableStates(true);
 
         addListeners();
@@ -316,6 +308,10 @@ public class CreateEventController implements Initializable {
     }
 
     private void addListeners() {
+        roomChoiceBox.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
+            currentRoom = roomsArray.get(newValue.intValue());
+        });
+
         emne.textProperty().addListener((observable, oldValue, newValue) -> {
             if (isValid()) {
                 setDisableStates(false);
@@ -324,7 +320,8 @@ public class CreateEventController implements Initializable {
             }
         });
 
-        datePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
+        ChangeListener roomListener = (observable, oldValue, newValue) -> {
+            roomChoiceBox.setValue(null);
             if (isValid()) {
                 setDisableStates(false);
             } else if (canPickRoom()) {
@@ -332,37 +329,12 @@ public class CreateEventController implements Initializable {
             } else {
                 setDisableStates(true);
             }
-        });
+        };
 
-        fromTimeField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (isValid()) {
-                setDisableStates(false);
-            } else if (canPickRoom()) {
-                roomChoiceBox.setDisable(false);
-            } else {
-                setDisableStates(true);
-            }
-        });
-
-        toTimeField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (isValid()) {
-                setDisableStates(false);
-            } else if (canPickRoom()) {
-                roomChoiceBox.setDisable(false);
-            } else {
-                setDisableStates(true);
-            }
-        });
-
-        capacityField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (isValid()) {
-                setDisableStates(false);
-            } else if (canPickRoom()) {
-                roomChoiceBox.setDisable(false);
-            } else {
-                setDisableStates(true);
-            }
-        });
+        datePicker.valueProperty().addListener(roomListener);
+        fromTimeField.textProperty().addListener(roomListener);
+        toTimeField.textProperty().addListener(roomListener);
+        capacityField.textProperty().addListener(roomListener);
 
         roomChoiceBox.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (isValid()) {
