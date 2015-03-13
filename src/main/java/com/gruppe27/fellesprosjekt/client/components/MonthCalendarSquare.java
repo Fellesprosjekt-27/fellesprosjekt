@@ -12,11 +12,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class MonthCalendarSquare extends Pane {
+    private final static Font labelFont = new Font("Helvetica", 12);
     private ArrayList<Event> events;
     private LocalDate date;
-
-    private final static Font labelFont = new Font("Helvetica", 12);
-
     private VBox eventBox;
 
     public MonthCalendarSquare(LocalDate date, int month) {

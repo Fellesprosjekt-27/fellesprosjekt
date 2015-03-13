@@ -5,14 +5,8 @@ import com.gruppe27.fellesprosjekt.common.Notification;
 import java.util.ArrayList;
 
 public class NotificationMessage {
-    public enum Command {
-        GETALL_NOTIFICATIONS,
-        RECEIVE_NOTIFICATION
-    }
-
     ArrayList<Notification> notifications;
     Command command;
-
     public NotificationMessage() {
     }
 
@@ -38,6 +32,11 @@ public class NotificationMessage {
 
     public ArrayList<Notification> getNotifications() {
         return notifications;
+    }
+
+    public enum Command {
+        GETALL_NOTIFICATIONS,
+        RECEIVE_NOTIFICATION
     }
 }
 

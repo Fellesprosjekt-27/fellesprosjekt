@@ -6,18 +6,11 @@ import java.time.LocalTime;
 
 public class RequestMessage {
 
-    public enum Command{
-        ROOM_REQUEST,
-        USER_REQUEST
-    }
-
     Command command;
-
     LocalDate date;
     LocalTime startTime;
     LocalTime endTime;
     int capacity;
-
     public RequestMessage() {
     }
 
@@ -48,6 +41,11 @@ public class RequestMessage {
 
     public LocalDate getDate() {
         return date;
+    }
+
+    public enum Command {
+        ROOM_REQUEST,
+        USER_REQUEST
     }
 
 }

@@ -7,27 +7,16 @@ import java.util.HashSet;
 
 public class Event {
 
-    public enum Status {
-        ATTENDING,
-        NOT_ATTENDING,
-        MAYBE
-    }
-
-
     int id;
-
     LocalDate date;
     LocalTime startTime;
     LocalTime endTime;
-
     User creator;
     Status status;
-
     HashSet<User> userParticipants;
     HashSet<Group> groupParticipants;
     String name;
     Room room;
-
     public Event() {
         this.creator = null;
         userParticipants = new HashSet<>();
@@ -92,22 +81,18 @@ public class Event {
         return name;
     }
 
-    public User getCreator() {
-        return creator;
-    }
-
     public void setName(String s) {
         this.name = s;
 
 
     }
 
-    public void setCreator(User user) {
-        this.creator = user;
+    public User getCreator() {
+        return creator;
     }
 
-    public void setRoom(Room room) {
-        this.room = room;
+    public void setCreator(User user) {
+        this.creator = user;
     }
 
     public String toString() {
@@ -122,19 +107,29 @@ public class Event {
         return room;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setRoom(Room room) {
+        this.room = room;
     }
 
     public int getId() {
         return id;
     }
 
-    public void setStatus(Status status) {
-        this.status = status;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public Status getStatus() {
         return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public enum Status {
+        ATTENDING,
+        NOT_ATTENDING,
+        MAYBE
     }
 }

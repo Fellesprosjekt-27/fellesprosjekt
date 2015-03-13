@@ -2,8 +2,20 @@ package com.gruppe27.fellesprosjekt.server;
 
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
-import com.gruppe27.fellesprosjekt.common.messages.*;
-import com.gruppe27.fellesprosjekt.server.controllers.*;
+import com.gruppe27.fellesprosjekt.common.messages.AuthMessage;
+import com.gruppe27.fellesprosjekt.common.messages.EventMessage;
+import com.gruppe27.fellesprosjekt.common.messages.NotificationMessage;
+import com.gruppe27.fellesprosjekt.common.messages.ParticipantStatusMessage;
+import com.gruppe27.fellesprosjekt.common.messages.RequestMessage;
+import com.gruppe27.fellesprosjekt.common.messages.RoomMessage;
+import com.gruppe27.fellesprosjekt.common.messages.UserMessage;
+import com.gruppe27.fellesprosjekt.server.controllers.AuthController;
+import com.gruppe27.fellesprosjekt.server.controllers.EventController;
+import com.gruppe27.fellesprosjekt.server.controllers.NotificationController;
+import com.gruppe27.fellesprosjekt.server.controllers.ParticipantStatusController;
+import com.gruppe27.fellesprosjekt.server.controllers.RequestController;
+import com.gruppe27.fellesprosjekt.server.controllers.RoomController;
+import com.gruppe27.fellesprosjekt.server.controllers.UserController;
 
 public class CalendarListener extends Listener {
     Server server;
@@ -25,7 +37,7 @@ public class CalendarListener extends Listener {
             return;
         }
         if (message instanceof RoomMessage) {
-            RoomController.getInstance().handleMessage(connection,message);
+            RoomController.getInstance().handleMessage(connection, message);
             return;
         }
 

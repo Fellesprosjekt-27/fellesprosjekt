@@ -50,7 +50,7 @@ public class ParticipantStatusController {
 
 
             GeneralMessage createdMessage = new GeneralMessage(GeneralMessage.Command.SUCCESSFUL_CREATE,
-                   user.getName() + " har endret status på avtale nummer " + participantStatusMessage.getEventId());
+                    user.getName() + " har endret status på avtale nummer " + participantStatusMessage.getEventId());
             connection.sendTCP(createdMessage);
 
 

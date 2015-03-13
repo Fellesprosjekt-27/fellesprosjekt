@@ -4,13 +4,16 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.gruppe27.fellesprosjekt.client.CalendarApplication;
 import com.gruppe27.fellesprosjekt.client.CalendarClient;
-import com.gruppe27.fellesprosjekt.client.components.ValidationDecoration;
 import com.gruppe27.fellesprosjekt.client.SortableText;
+import com.gruppe27.fellesprosjekt.client.components.ValidationDecoration;
 import com.gruppe27.fellesprosjekt.common.Event;
 import com.gruppe27.fellesprosjekt.common.ParticipantUser;
 import com.gruppe27.fellesprosjekt.common.Room;
 import com.gruppe27.fellesprosjekt.common.User;
-import com.gruppe27.fellesprosjekt.common.messages.*;
+import com.gruppe27.fellesprosjekt.common.messages.EventMessage;
+import com.gruppe27.fellesprosjekt.common.messages.ParticipantUserMessage;
+import com.gruppe27.fellesprosjekt.common.messages.RequestMessage;
+import com.gruppe27.fellesprosjekt.common.messages.RoomMessage;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -18,16 +21,26 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
 import org.controlsfx.validation.Severity;
 import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
-import javafx.scene.paint.Color;
 
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
 
@@ -80,14 +93,14 @@ public class CreateEventController implements Initializable {
 
     private ValidationSupport vd = new ValidationSupport();
 
-    public void emptyRoomsArray() {
-        this.roomsArray = new ArrayList<>();
-    }
-
     public CreateEventController() {
         participants = new LinkedHashSet<>();
         roomsArray = new ArrayList<>();
         currentRoom = null;
+    }
+
+    public void emptyRoomsArray() {
+        this.roomsArray = new ArrayList<>();
     }
 
     @Override
@@ -124,9 +137,10 @@ public class CreateEventController implements Initializable {
         //TODO needs time to update rooms before I can do something.
 
     }
+
     @FXML
     private void updateCurrentRooms(LocalDate date, LocalTime start, LocalTime end, int capacity) {
-        RequestMessage message = new RequestMessage(RequestMessage.Command.ROOM_REQUEST, date,start,end,capacity);
+        RequestMessage message = new RequestMessage(RequestMessage.Command.ROOM_REQUEST, date, start, end, capacity);
 
         CalendarClient client = CalendarClient.getInstance();
 
@@ -172,7 +186,7 @@ public class CreateEventController implements Initializable {
     @FXML
     private void handleComboBoxClicked() {
         System.out.println("combobox clicked");
-        if(allUsers == null) {
+        if (allUsers == null) {
             getAllUsers();
         }
         //TODO Validering
@@ -230,7 +244,7 @@ public class CreateEventController implements Initializable {
 
 
     @FXML
-    private void handleAddParticipant(){
+    private void handleAddParticipant() {
         String username = participantComboBox.getValue().getText();
         participants.add(allUsers.get(username));
         updateListView();
@@ -288,11 +302,13 @@ public class CreateEventController implements Initializable {
     private void handleCancelAction() {
         application.cancelCreateNewEvent();
     }
-    private void disableButtons(){
+
+    private void disableButtons() {
         createEventButton.setDisable(true);
         roomChoiceBox.setDisable(true);
     }
-    private void addListeners(){
+
+    private void addListeners() {
         emne.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!emne.getText().isEmpty() && datePicker.getValue() != null && isTimeValid(fromTimeField.getText(), toTimeField.getText())) {
                 createEventButton.setDisable(false);
@@ -329,7 +345,8 @@ public class CreateEventController implements Initializable {
             }
         });
     }
-    private void registerValidators(){
+
+    private void registerValidators() {
         vd.registerValidator(emne, Validator.createEmptyValidator("Tittel mangler", Severity.WARNING));
         vd.registerValidator(datePicker, Validator.createEmptyValidator("Dato mangler", Severity.WARNING));
         vd.registerValidator(capacityField, Validator.createRegexValidator("Kapasiteten må være et tall lavere enn 20", "^$|[0-9]+", Severity.ERROR));
@@ -362,10 +379,9 @@ public class CreateEventController implements Initializable {
                         Validator.createRegexValidator("Tid må være på formen hh:mm", "^$|([0-1]?[0-9]|2[0-3]):[0-5][0-9]", Severity.ERROR)));
 
 
-
         vd.setValidationDecorator(new ValidationDecoration());
     }
-    }
+}
 
 
 

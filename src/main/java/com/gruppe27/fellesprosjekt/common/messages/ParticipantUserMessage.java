@@ -5,13 +5,8 @@ import com.gruppe27.fellesprosjekt.common.ParticipantUser;
 import java.util.HashSet;
 
 public class ParticipantUserMessage {
-    public enum Command {
-        SEND_ALL, RECEIVE_ALL
-    }
-
     HashSet<ParticipantUser> participantUsers;
     Command command;
-
     public ParticipantUserMessage() {
     }
 
@@ -26,5 +21,9 @@ public class ParticipantUserMessage {
 
     public HashSet<ParticipantUser> getParticipantUsers() {
         return participantUsers;
+    }
+
+    public enum Command {
+        SEND_ALL, RECEIVE_ALL
     }
 }

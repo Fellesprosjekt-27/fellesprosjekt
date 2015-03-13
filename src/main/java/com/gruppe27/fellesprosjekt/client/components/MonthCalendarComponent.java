@@ -8,7 +8,13 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
@@ -23,13 +29,11 @@ import java.util.Locale;
 
 
 public class MonthCalendarComponent extends BorderPane {
+    private static final Font headerFont = Font.font("Helvetica", 26);
+    private static final Font controlFont = Font.font("Helvetica", 36);
     private ArrayList<MonthCalendarSquare> calendarSquares;
     private ArrayList<RowConstraints> squareRowConstraints;
     private ObservableList<Event> events;
-
-    private static final Font headerFont = Font.font("Helvetica", 26);
-    private static final Font controlFont = Font.font("Helvetica", 36);
-
     private CalendarController controller;
 
     private GridPane calendarGrid;
@@ -158,9 +162,9 @@ public class MonthCalendarComponent extends BorderPane {
 
     private void addEvents(ArrayList<Event> events) {
         events.forEach((event) ->
-            Platform.runLater(() ->
-                findCalendarSquare(event.getDate()).addEvent(event)
-            )
+                        Platform.runLater(() ->
+                                        findCalendarSquare(event.getDate()).addEvent(event)
+                        )
         );
     }
 
@@ -183,7 +187,7 @@ public class MonthCalendarComponent extends BorderPane {
             calendarGrid.getRowConstraints().add(r);
 
             for (int j = 0; j < 7; j++) {
-                MonthCalendarSquare square = new MonthCalendarSquare(days.get(j+i*7), this.month);
+                MonthCalendarSquare square = new MonthCalendarSquare(days.get(j + i * 7), this.month);
 
                 if (j == 0) {
                     square.getStyleClass().add("first-in-row");

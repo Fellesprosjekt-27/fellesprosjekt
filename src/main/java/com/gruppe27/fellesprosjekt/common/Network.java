@@ -2,8 +2,18 @@ package com.gruppe27.fellesprosjekt.common;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
-
-import com.gruppe27.fellesprosjekt.common.messages.*;
+import com.gruppe27.fellesprosjekt.common.messages.AuthCompleteMessage;
+import com.gruppe27.fellesprosjekt.common.messages.AuthMessage;
+import com.gruppe27.fellesprosjekt.common.messages.ErrorMessage;
+import com.gruppe27.fellesprosjekt.common.messages.EventMessage;
+import com.gruppe27.fellesprosjekt.common.messages.GeneralMessage;
+import com.gruppe27.fellesprosjekt.common.messages.InviteMessage;
+import com.gruppe27.fellesprosjekt.common.messages.NotificationMessage;
+import com.gruppe27.fellesprosjekt.common.messages.ParticipantStatusMessage;
+import com.gruppe27.fellesprosjekt.common.messages.ParticipantUserMessage;
+import com.gruppe27.fellesprosjekt.common.messages.RequestMessage;
+import com.gruppe27.fellesprosjekt.common.messages.RoomMessage;
+import com.gruppe27.fellesprosjekt.common.messages.UserMessage;
 import com.gruppe27.fellesprosjekt.common.serializers.LocalDateSerializer;
 import com.gruppe27.fellesprosjekt.common.serializers.LocalDateTimeSerializer;
 import com.gruppe27.fellesprosjekt.common.serializers.LocalTimeSerializer;
