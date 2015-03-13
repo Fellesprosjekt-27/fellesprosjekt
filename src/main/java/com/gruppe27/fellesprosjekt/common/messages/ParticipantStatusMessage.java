@@ -4,14 +4,9 @@ import com.gruppe27.fellesprosjekt.common.Event;
 
 public class ParticipantStatusMessage {
 
-    public enum Command {
-        CHANGE_STATUS
-    }
-
     Event.Status status;
     Command command;
     int eventId;
-
     public ParticipantStatusMessage() {
     }
 
@@ -29,6 +24,12 @@ public class ParticipantStatusMessage {
         return status;
     }
 
-    public int getEventId() { return eventId; }
+    public int getEventId() {
+        return eventId;
+    }
+
+    public enum Command {
+        CHANGE_STATUS
+    }
 }
 

@@ -6,9 +6,9 @@ import com.gruppe27.fellesprosjekt.client.CalendarApplication;
 import com.gruppe27.fellesprosjekt.client.CalendarClient;
 import com.gruppe27.fellesprosjekt.client.components.EventPopOver;
 import com.gruppe27.fellesprosjekt.client.components.MonthCalendarComponent;
+import com.gruppe27.fellesprosjekt.client.components.NotificationList;
 import com.gruppe27.fellesprosjekt.client.events.EventBoxClicked;
 import com.gruppe27.fellesprosjekt.common.Event;
-import com.gruppe27.fellesprosjekt.client.components.NotificationList;
 import com.gruppe27.fellesprosjekt.common.messages.EventMessage;
 import com.gruppe27.fellesprosjekt.common.messages.ParticipantStatusMessage;
 import javafx.collections.ObservableList;
@@ -23,11 +23,10 @@ import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 public class CalendarController implements Initializable {
+    Event.Status pStatus;
     private CalendarApplication application;
     private boolean popOverFlag;
     private EventPopOver popOver;
-    Event.Status pStatus;
-
     @FXML
     private MonthCalendarComponent calendar;
 

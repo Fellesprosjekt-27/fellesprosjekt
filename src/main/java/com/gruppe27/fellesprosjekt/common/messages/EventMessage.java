@@ -8,18 +8,11 @@ import java.util.HashSet;
 public class EventMessage {
 
 
-    public enum Command {
-        CREATE_EVENT,
-        RECEIVE_EVENTS,
-        SEND_EVENTS
-    }
-
     HashSet<Event> events;
     LocalDate from;
     LocalDate to;
     Event event;
     Command command;
-
     public EventMessage() {
     }
 
@@ -65,5 +58,11 @@ public class EventMessage {
 
     public LocalDate getTo() {
         return to;
+    }
+
+    public enum Command {
+        CREATE_EVENT,
+        RECEIVE_EVENTS,
+        SEND_EVENTS
     }
 }

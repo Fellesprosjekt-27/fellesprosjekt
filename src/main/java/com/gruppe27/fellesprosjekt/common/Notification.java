@@ -9,10 +9,6 @@ public class Notification {
     LocalDateTime timestamp;
     NotificationType type;
 
-    public enum NotificationType {
-        INVITATION, PARTICIPATION_DECLINED, EVENT_CHANGED, CONFLICTING_EVENTS
-    }
-
     public Notification() {
     }
 
@@ -53,5 +49,9 @@ public class Notification {
 
     public String getUsername() {
         return username;
+    }
+
+    public enum NotificationType {
+        INVITATION, PARTICIPATION_DECLINED, EVENT_CHANGED, CONFLICTING_EVENTS
     }
 }

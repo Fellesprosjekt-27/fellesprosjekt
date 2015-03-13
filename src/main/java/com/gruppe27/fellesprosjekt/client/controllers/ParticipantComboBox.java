@@ -1,7 +1,6 @@
 package com.gruppe27.fellesprosjekt.client.controllers;
 
 import com.gruppe27.fellesprosjekt.client.SortableText;
-import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -14,8 +13,8 @@ import javafx.util.StringConverter;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ParticipantComboBox extends ComboBox<SortableText>{
-    
+public class ParticipantComboBox extends ComboBox<SortableText> {
+
     private ObservableList<String> allUserNameStrings;
     private Map<String, SortableText> stringTextMap;
     private ObservableList<String> bufferList = FXCollections.observableArrayList();
@@ -43,20 +42,20 @@ public class ParticipantComboBox extends ComboBox<SortableText>{
         });
     }
 
-    public void init(ObservableList<SortableText> usernameTexts){
+    public void init(ObservableList<SortableText> usernameTexts) {
         this.getItems().clear();
         this.setItems(usernameTexts);
         stringTextMap = new HashMap<>();
         allUserNameStrings = FXCollections.observableArrayList();
 
-        for(SortableText text : usernameTexts) {
+        for (SortableText text : usernameTexts) {
             stringTextMap.put(text.getText(), text);
             allUserNameStrings.add(text.getText());
         }
         this.configAutoFilterListener();
     }
 
-    private void configAutoFilterListener(){
+    private void configAutoFilterListener() {
         final ParticipantComboBox currentInstance = this;
         this.getEditor().textProperty().addListener(new ChangeListener<String>() {
 
@@ -66,7 +65,7 @@ public class ParticipantComboBox extends ComboBox<SortableText>{
                 TextField editor = currentInstance.getEditor();
                 Text selected = currentInstance.getSelectionModel().getSelectedItem();
 
-                if(selected == null || !selected.getText().equals(editor.getText())){
+                if (selected == null || !selected.getText().equals(editor.getText())) {
                     filterItems(newValue, currentInstance);
                     currentInstance.show();
 //                    if(currentInstance.getItems().size() == 1){
@@ -76,13 +75,13 @@ public class ParticipantComboBox extends ComboBox<SortableText>{
             }
         });
     }
-    
+
     private void filterItems(String filter, ParticipantComboBox comboBox) {
-        if(filter.startsWith(previousValue) && !previousValue.isEmpty()){
+        if (filter.startsWith(previousValue) && !previousValue.isEmpty()) {
             ObservableList<String> filteredList = this.getFilteredList(filter, bufferList);
             bufferList.clear();
             bufferList = filteredList;
-        }else{
+        } else {
             bufferList = this.getFilteredList(filter, allUserNameStrings);
         }
 
@@ -101,17 +100,17 @@ public class ParticipantComboBox extends ComboBox<SortableText>{
     private ObservableList<String> getFilteredList(String filter, ObservableList<String> originalList) {
         ObservableList<String> filteredList = FXCollections.observableArrayList();
         for (String username : originalList) {
-            if(username.toLowerCase().startsWith(filter.toLowerCase())){
+            if (username.toLowerCase().startsWith(filter.toLowerCase())) {
                 filteredList.add(username);
             }
         }
         return filteredList;
     }
-    
+
     private void setUserInputToOnlyOption(ParticipantComboBox currentInstance, final TextField editor) {
         String onlyOption = currentInstance.getItems().get(0).getText();
         String currentText = editor.getText();
-        if(onlyOption.length() > currentText.length()){
+        if (onlyOption.length() > currentText.length()) {
             editor.setText(onlyOption);
         }
     }

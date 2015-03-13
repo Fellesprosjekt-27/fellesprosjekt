@@ -1,13 +1,8 @@
 package com.gruppe27.fellesprosjekt.common.messages;
 
 public class GeneralMessage {
-    public enum Command {
-        SUCCESSFUL_CREATE
-    }
-
     String message;
     Command command;
-
     public GeneralMessage() {
     }
 
@@ -22,5 +17,9 @@ public class GeneralMessage {
 
     public String getMessage() {
         return message;
+    }
+
+    public enum Command {
+        SUCCESSFUL_CREATE
     }
 }

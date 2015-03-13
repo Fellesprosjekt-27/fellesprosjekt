@@ -54,7 +54,7 @@ public class User {
         return name;
     }
 
-    public Set<Group> getGroups(){
+    public Set<Group> getGroups() {
         return groups;
     }
 
