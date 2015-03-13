@@ -17,8 +17,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class NotificationController {
-    private static NotificationController instance = null;
-
     private static final String QUERY = "SELECT Notification.timestamp, Notification.user_username, " +
             "Notification.type, Notification.message, Event.name AS `event.name`, Event.id AS `event.id`, " +
             "Event.date AS `event.date`, " +
@@ -27,6 +25,7 @@ public class NotificationController {
             "from Notification INNER JOIN Event ON Event.id=Notification.event_id " +
             "INNER JOIN User as Creator ON Creator.username=Event.creator " +
             "WHERE user_username=? ORDER BY Notification.timestamp DESC";
+    private static NotificationController instance = null;
 
     protected NotificationController() {
     }

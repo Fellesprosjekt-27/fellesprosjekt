@@ -1,7 +1,7 @@
 package com.gruppe27.fellesprosjekt.common;
 
 public class ParticipantUser extends User {
-    
+
     private boolean busy;
 
     public ParticipantUser() {
@@ -9,7 +9,7 @@ public class ParticipantUser extends User {
         this.busy = false;
     }
 
-    public ParticipantUser(String username, String name, boolean busy){
+    public ParticipantUser(String username, String name, boolean busy) {
         super(username, name);
         this.busy = busy;
     }
@@ -25,7 +25,7 @@ public class ParticipantUser extends User {
                 '}';
 
     }
-    
+
     public boolean isBusy() {
         return busy;
     }

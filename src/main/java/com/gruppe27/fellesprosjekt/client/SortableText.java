@@ -11,7 +11,7 @@ public class SortableText extends Text implements Comparable {
 
     @Override
     public int compareTo(Object o) {
-        if(o instanceof SortableText) {
+        if (o instanceof SortableText) {
             String you = ((SortableText) o).getText();
             String me = this.getText();
 

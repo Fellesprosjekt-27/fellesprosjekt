@@ -2,7 +2,10 @@ package com.gruppe27.fellesprosjekt.server.controllers;
 
 import com.gruppe27.fellesprosjekt.common.ParticipantUser;
 import com.gruppe27.fellesprosjekt.common.Room;
-import com.gruppe27.fellesprosjekt.common.messages.*;
+import com.gruppe27.fellesprosjekt.common.messages.ErrorMessage;
+import com.gruppe27.fellesprosjekt.common.messages.ParticipantUserMessage;
+import com.gruppe27.fellesprosjekt.common.messages.RequestMessage;
+import com.gruppe27.fellesprosjekt.common.messages.RoomMessage;
 import com.gruppe27.fellesprosjekt.server.CalendarConnection;
 import com.gruppe27.fellesprosjekt.server.DatabaseConnector;
 
@@ -12,11 +15,11 @@ import java.sql.SQLException;
 import java.util.HashSet;
 
 public class RequestController {
-    private static RequestController instance = null;
     private static final String FIND_TIME_OVERLAP = " WHERE Event.date = ? AND (" +
             " (? < Event.end AND Event.end <= ?) OR " +
             " (? <= Event.start AND Event.start < ?) OR" +
             " (Event.start <= ? AND ? <= Event.end))";
+    private static RequestController instance = null;
 
     protected RequestController() {
     }
@@ -35,7 +38,7 @@ public class RequestController {
                 sendFilteredRooms(connection, requestMessage);
                 break;
             case USER_REQUEST:
-                sendAllParticipantUsers(connection,requestMessage);
+                sendAllParticipantUsers(connection, requestMessage);
                 break;
         }
     }
@@ -58,7 +61,7 @@ public class RequestController {
             PreparedStatement freeUsersStatement = DatabaseConnector.getConnection().prepareStatement(
                     "SELECT User.username, User.name FROM User WHERE User.username NOT IN (SELECT User.username" + busyQuery + ")"
             );
-            
+
             freeUsersStatement.setString(1, message.getDate().toString());
             freeUsersStatement.setString(2, message.getStartTime().toString());
             freeUsersStatement.setString(3, message.getEndTime().toString());
@@ -68,16 +71,14 @@ public class RequestController {
             freeUsersStatement.setString(7, message.getEndTime().toString());
 
 
-
             HashSet<ParticipantUser> participantUsers = new HashSet<>();
-            
+
             System.out.println(busyUsersStatement);
             System.out.println(freeUsersStatement);
 
 
             ResultSet busyUsersResult = busyUsersStatement.executeQuery();
             ResultSet freeUsersResult = freeUsersStatement.executeQuery();
-
 
 
             while (busyUsersResult.next()) {
@@ -115,7 +116,7 @@ public class RequestController {
                     "SELECT Room.name, Room.capacity FROM Room" +
                             " WHERE ? <= Room.capacity AND" +
                             " Room.name NOT IN(" +
-                            "SELECT Room.name FROM Room JOIN Event ON Event.room = Room.name" + 
+                            "SELECT Room.name FROM Room JOIN Event ON Event.room = Room.name" +
                             FIND_TIME_OVERLAP + " )"
             );
             statement.setInt(1, message.getCapacity());

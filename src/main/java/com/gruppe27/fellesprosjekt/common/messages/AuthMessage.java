@@ -1,14 +1,9 @@
 package com.gruppe27.fellesprosjekt.common.messages;
 
 public class AuthMessage {
-    public enum Command {
-        LOGIN
-    }
-
     Command command;
     String username;
     String password;
-
     public AuthMessage() {
     }
 
@@ -28,5 +23,9 @@ public class AuthMessage {
 
     public Command getCommand() {
         return command;
+    }
+
+    public enum Command {
+        LOGIN
     }
 }

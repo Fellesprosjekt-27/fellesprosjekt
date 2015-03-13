@@ -5,14 +5,8 @@ import com.gruppe27.fellesprosjekt.common.Room;
 import java.util.HashSet;
 
 public class RoomMessage {
-    public enum Command {
-        SEND_ROOMS,
-        RECEIVE_ROOMS,
-    }
-
     HashSet<Room> rooms;
     Command command;
-
     public RoomMessage() {
     }
 
@@ -27,6 +21,11 @@ public class RoomMessage {
 
     public HashSet<Room> getRooms() {
         return rooms;
+    }
+
+    public enum Command {
+        SEND_ROOMS,
+        RECEIVE_ROOMS,
     }
 }
 

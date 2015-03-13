@@ -16,14 +16,13 @@ import java.time.LocalDate;
 import java.util.HashSet;
 
 public class EventController {
-    private static EventController instance = null;
-
     private static final String EVENT_QUERY =
             "SELECT Event.id, Event.name, Event.date, Event.start, Event.end, Creator.username, Creator.name, " +
-            "Participant.username, Participant.name, UserEvent.status " +
-            "FROM Event JOIN User AS Creator ON Event.creator = Creator.username " +
-            "JOIN UserEvent ON Event.id = UserEvent.event_id " +
-            "JOIN User AS Participant ON UserEvent.username = Participant.username ";
+                    "Participant.username, Participant.name, UserEvent.status " +
+                    "FROM Event JOIN User AS Creator ON Event.creator = Creator.username " +
+                    "JOIN UserEvent ON Event.id = UserEvent.event_id " +
+                    "JOIN User AS Participant ON UserEvent.username = Participant.username ";
+    private static EventController instance = null;
 
     protected EventController() {
     }
@@ -134,7 +133,7 @@ public class EventController {
             event.setId(eventId);
 
             int number_of_participants = 0;
-            for (User participant: event.getUserParticipants()) {
+            for (User participant : event.getUserParticipants()) {
                 PreparedStatement participantStatement = DatabaseConnector.getConnection().prepareStatement(
                         "INSERT INTO UserEvent(username,event_id) VALUES (?,?)"
                 );

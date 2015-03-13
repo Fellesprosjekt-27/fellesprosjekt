@@ -9,7 +9,6 @@ import com.gruppe27.fellesprosjekt.server.DatabaseConnector;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalTime;
 import java.util.HashSet;
 
 public class UserController {

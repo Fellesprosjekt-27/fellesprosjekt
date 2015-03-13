@@ -4,13 +4,8 @@ import com.gruppe27.fellesprosjekt.common.Event;
 
 public class InviteMessage {
 
-    public enum Command {
-
-    }
-
     Event event;
     Command command;
-
     public InviteMessage() {
     }
 
@@ -25,6 +20,10 @@ public class InviteMessage {
 
     public Event getEvent() {
         return event;
+    }
+
+    public enum Command {
+
     }
 
 }

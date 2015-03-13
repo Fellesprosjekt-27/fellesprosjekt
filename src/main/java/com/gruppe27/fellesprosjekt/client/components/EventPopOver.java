@@ -50,7 +50,7 @@ public class EventPopOver {
         status.getSelectionModel().select(participationStatusChoice.indexOf(sValue));
         Button button = new Button("Endre");
         button.setOnMouseClicked((MouseEvent mEvent) -> {
-            switch ( status.getValue()) {
+            switch (status.getValue()) {
                 case "Deltar":
                     event.setStatus(Event.Status.ATTENDING);
                     break;
@@ -71,7 +71,7 @@ public class EventPopOver {
 
         popOver = new PopOver(pane);
         popOver.setDetachable(false);
-        popOver.show(controller.getRoot(),e.getScreenX(), e.getScreenY());
+        popOver.show(controller.getRoot(), e.getScreenX(), e.getScreenY());
     }
 
     public void hide() {

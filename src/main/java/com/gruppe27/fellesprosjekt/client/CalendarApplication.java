@@ -87,6 +87,7 @@ public class CalendarApplication extends Application {
     public void createNewEvent() {
         this.gotoCreateEvent();
     }
+
     public void cancelCreateNewEvent() {
         this.gotoCalendar();
     }
