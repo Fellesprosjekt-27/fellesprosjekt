@@ -89,12 +89,10 @@ public class CreateEventController implements Initializable {
 
     private Map<String, ParticipantUser> allUsers;
     private ObservableList<SortableText> availableUsersObservable;
-    private HashSet<User> participants;
 
     private ValidationSupport vd = new ValidationSupport();
 
     public CreateEventController() {
-        participants = new LinkedHashSet<>();
         roomsArray = new ArrayList<>();
         currentRoom = null;
     }
@@ -207,6 +205,7 @@ public class CreateEventController implements Initializable {
                     ParticipantUserMessage complete = (ParticipantUserMessage) object;
                     switch (complete.getCommand()) {
                         case RECEIVE_ALL:
+                            //TODO The HashSet returned contains a duplicate of user 'a', something wrong with the request.
                             setAllUsers(complete.getParticipantUsers());
                             break;
                         case SEND_ALL:
@@ -246,12 +245,11 @@ public class CreateEventController implements Initializable {
     @FXML
     private void handleAddParticipant() {
         String username = participantComboBox.getValue().getText();
-        participants.add(allUsers.get(username));
         participantsListView.getItems().add(username);
         
         availableUsersObservable.remove(participantComboBox.getValue());
         participantComboBox.setValue(null);
-//        Don't know why this method was here.
+//        Don't remember why this method is here.
 //        participantComboBox.getItems().clear();
         participantComboBox.init(availableUsersObservable);
     }
@@ -259,7 +257,6 @@ public class CreateEventController implements Initializable {
     @FXML
     private void handleRemoveParticipant(){
         String username = participantsListView.getSelectionModel().getSelectedItem();
-        participants.remove(allUsers.get(username));
         participantsListView.getSelectionModel().select(null);
         participantsListView.getItems().remove(username);
         
@@ -286,17 +283,24 @@ public class CreateEventController implements Initializable {
         LocalTime startTime = LocalTime.parse(fromTimeField.getText());
         LocalTime endTime = LocalTime.parse(toTimeField.getText());
         event.setCreator(application.getUser());
-        participants.add(event.getCreator());
         event.setStartTime(startTime);
         event.setEndTime(endTime);
-        //Eventuelt gå igjennom observableListView og gjøre om til participant liste
+        HashSet<User> participants = getListViewParticipant();
+        participants.add(event.getCreator());
         event.setAllParticipants(participants);
         event.setRoom(currentRoom);
 
         EventMessage message = new EventMessage(EventMessage.Command.CREATE_EVENT, event);
-        //TODO: add functions backend to invite all users from the eventmessage
-        //TODO: make an invite message
         CalendarClient.getInstance().sendMessage(message);
+        application.cancelCreateNewEvent();
+    }
+    
+    private HashSet<User> getListViewParticipant(){
+        HashSet<User> participants = new HashSet<>();
+         for (String username : participantsListView.getItems()) {
+            participants.add(allUsers.get(username));
+        }
+        return participants;
     }
 
     @FXML
