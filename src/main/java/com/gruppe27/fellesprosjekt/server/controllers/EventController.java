@@ -50,7 +50,8 @@ public class EventController {
     private void sendEvents(CalendarConnection connection, LocalDate from, LocalDate to) {
         try {
             String query = EVENT_QUERY + "WHERE (Event.date >= ? AND Event.date <= ?) AND " +
-                    "? IN (SELECT username FROM UserEvent WHERE event_id=Event.id)";
+                    "? IN (SELECT username FROM UserEvent WHERE event_id=Event.id) " +
+                    " ORDER BY Event.id";
 
             PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement(query);
             statement.setString(1, from.toString());
