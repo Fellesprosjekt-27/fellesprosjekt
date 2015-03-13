@@ -5,6 +5,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.gruppe27.fellesprosjekt.client.CalendarApplication;
 import com.gruppe27.fellesprosjekt.client.CalendarClient;
 import com.gruppe27.fellesprosjekt.client.components.ValidationDecoration;
+import com.gruppe27.fellesprosjekt.client.SortableText;
 import com.gruppe27.fellesprosjekt.common.Event;
 import com.gruppe27.fellesprosjekt.common.ParticipantUser;
 import com.gruppe27.fellesprosjekt.common.Room;
@@ -21,6 +22,7 @@ import javafx.scene.control.*;
 import org.controlsfx.validation.Severity;
 import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
+import javafx.scene.paint.Color;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -73,7 +75,7 @@ public class CreateEventController implements Initializable {
     private CalendarApplication application;
 
     private Map<String, ParticipantUser> allUsers;
-    private ObservableList<String> availableUsersObservable;
+    private ObservableList<SortableText> availableUsersObservable;
     private HashSet<User> participants;
 
     private ValidationSupport vd = new ValidationSupport();
@@ -107,8 +109,6 @@ public class CreateEventController implements Initializable {
     public boolean isTimeValid(String fromTime, String toTime) {
         return fromTime.matches("([0-1]?[0-9]|2[0-3]):[0-5][0-9]") && toTime.matches("([0-1]?[0-9]|2[0-3]):[0-5][0-9]") && LocalTime.parse(toTime).compareTo(LocalTime.parse(fromTime)) > 0;
     }
-
-    ;
 
     public void setApp(CalendarApplication application) {
         this.application = application;
@@ -171,7 +171,10 @@ public class CreateEventController implements Initializable {
 
     @FXML
     private void handleComboBoxClicked() {
-        getAllUsers();
+        System.out.println("combobox clicked");
+        if(allUsers == null) {
+            getAllUsers();
+        }
         //TODO Validering
     }
 
@@ -208,17 +211,18 @@ public class CreateEventController implements Initializable {
         this.allUsers = new HashMap<>();
         availableUsersObservable = FXCollections.observableArrayList();
         for (ParticipantUser participantUser : allUsers) {
+
             this.allUsers.put(participantUser.getUsername(), participantUser);
+            SortableText text = new SortableText(participantUser.getUsername());
             if (participantUser.isBusy()) {
-                availableUsersObservable.add(participantUser.getUsername().toUpperCase());
+                text.setFill(Color.RED);
             } else {
-                availableUsersObservable.add(participantUser.getUsername().toLowerCase());
+                text.setFill(Color.GREEN);
             }
+            availableUsersObservable.add(text);
         }
 
         Collections.sort(availableUsersObservable);
-
-
         Platform.runLater(() -> {
             participantComboBox.init(availableUsersObservable);
         });
@@ -226,14 +230,13 @@ public class CreateEventController implements Initializable {
 
 
     @FXML
-    private void handleAddParticipant() {
-        String username = participantComboBox.getValue();
+    private void handleAddParticipant(){
+        String username = participantComboBox.getValue().getText();
         participants.add(allUsers.get(username));
         updateListView();
-
         availableUsersObservable.remove(participantComboBox.getValue());
         participantComboBox.setValue(null);
-        participantComboBox.setItems(availableUsersObservable);
+        participantComboBox.init(availableUsersObservable);
     }
 
     private void updateListView() {
@@ -309,7 +312,7 @@ public class CreateEventController implements Initializable {
             }
         });
         capacityField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (capacityField.getText().matches("[1-9]+")) {
+            if (capacityField.getText().matches("[\\d]+")) {
                 roomChoiceBox.setDisable(false);
             } else {
                 roomChoiceBox.setDisable(true);
