@@ -58,7 +58,7 @@ public class CreateEventController implements Initializable {
     ChoiceBox<User> romValg;
 
     @FXML
-    Button fjernDeltakere;
+    Button removeParticipantButton;
 
     @FXML
     ChoiceBox<String> roomChoiceBox;
@@ -227,6 +227,10 @@ public class CreateEventController implements Initializable {
         availableUsersObservable.remove(participantComboBox.getValue());
         participantComboBox.setValue(null);
         participantComboBox.setItems(availableUsersObservable);
+    }
+    
+    @FXML
+    private void handleRemoveParticipant(){
     }
 
     private void updateListView() {
