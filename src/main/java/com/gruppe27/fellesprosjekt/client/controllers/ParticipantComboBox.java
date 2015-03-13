@@ -1,21 +1,58 @@
 package com.gruppe27.fellesprosjekt.client.controllers;
 
+import com.gruppe27.fellesprosjekt.client.SortableText;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
+import javafx.util.StringConverter;
 
-public class ParticipantComboBox extends ComboBox<String>{
+import java.util.HashMap;
+import java.util.Map;
+
+public class ParticipantComboBox extends ComboBox<SortableText>{
     
-    private ObservableList<String> allUserNames;
+    private ObservableList<String> allUserNameStrings;
+    private Map<String, SortableText> stringTextMap;
     private ObservableList<String> bufferList = FXCollections.observableArrayList();
     private String previousValue = "";
-    
-    public void init(ObservableList<String> usernames){
-        this.setItems(usernames);
-        allUserNames = usernames;
+
+    public ParticipantComboBox() {
+        this.setConverter(new StringConverter<SortableText>() {
+            @Override
+            public String toString(SortableText object) {
+                if (object == null) {
+                    return null;
+                } else {
+                    return object.getText();
+                }
+            }
+
+            @Override
+            public SortableText fromString(String string) {
+                if (string == null) {
+                    return null;
+                } else {
+                    return stringTextMap.get(string);
+                }
+            }
+        });
+    }
+
+    public void init(ObservableList<SortableText> usernameTexts){
+        this.getItems().clear();
+        this.setItems(usernameTexts);
+        stringTextMap = new HashMap<>();
+        allUserNameStrings = FXCollections.observableArrayList();
+
+        for(SortableText text : usernameTexts) {
+            stringTextMap.put(text.getText(), text);
+            allUserNameStrings.add(text.getText());
+        }
         this.configAutoFilterListener();
     }
 
@@ -27,9 +64,9 @@ public class ParticipantComboBox extends ComboBox<String>{
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 previousValue = oldValue;
                 TextField editor = currentInstance.getEditor();
-                String selected = currentInstance.getSelectionModel().getSelectedItem();
+                Text selected = currentInstance.getSelectionModel().getSelectedItem();
 
-                if(selected == null || !selected.equals(editor.getText())){
+                if(selected == null || !selected.getText().equals(editor.getText())){
                     filterItems(newValue, currentInstance);
                     currentInstance.show();
 //                    if(currentInstance.getItems().size() == 1){
@@ -46,9 +83,19 @@ public class ParticipantComboBox extends ComboBox<String>{
             bufferList.clear();
             bufferList = filteredList;
         }else{
-            bufferList = this.getFilteredList(filter, allUserNames);
+            bufferList = this.getFilteredList(filter, allUserNameStrings);
         }
-        comboBox.setItems(bufferList);
+
+        comboBox.setItems(getTextBufferList(bufferList));
+    }
+
+    private ObservableList<SortableText> getTextBufferList(ObservableList<String> bufferList) {
+        ObservableList<SortableText> textBufferList = FXCollections.observableArrayList();
+        for (String username : bufferList) {
+            SortableText text = stringTextMap.get(username);
+            textBufferList.add(text);
+        }
+        return textBufferList;
     }
 
     private ObservableList<String> getFilteredList(String filter, ObservableList<String> originalList) {
@@ -62,7 +109,7 @@ public class ParticipantComboBox extends ComboBox<String>{
     }
     
     private void setUserInputToOnlyOption(ParticipantComboBox currentInstance, final TextField editor) {
-        String onlyOption = currentInstance.getItems().get(0);
+        String onlyOption = currentInstance.getItems().get(0).getText();
         String currentText = editor.getText();
         if(onlyOption.length() > currentText.length()){
             editor.setText(onlyOption);

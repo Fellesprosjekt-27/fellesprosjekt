@@ -26,16 +26,16 @@ public class CalendarListener extends Listener {
         }
         if (message instanceof RoomMessage) {
             RoomController.getInstance().handleMessage(connection,message);
+            return;
         }
 
-        if (message instanceof RoomRequestMessage) {
-            RoomRequestController.getInstance().handleMessage(connection, message);
+        if (message instanceof RequestMessage) {
+            RequestController.getInstance().handleMessage(connection, message);
             return;
         }
 
         if (message instanceof UserMessage) {
             UserController.getInstance().handleMessage(connection, message);
-            return;
         }
 
         if (message instanceof ParticipantStatusMessage) {

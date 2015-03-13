@@ -49,6 +49,7 @@
 
 			<ParticipantComboBox fx:id="participantComboBox"
 			promptText="skriv inn brukernavn" editable="true"
+            onMouseClicked="#handleComboBoxClicked"
 			GridPane.rowIndex="6" GridPane.columnSpan="2" />
 
 			<Button fx:id="addParticipantButton"

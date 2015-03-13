@@ -4,10 +4,11 @@ package com.gruppe27.fellesprosjekt.common.messages;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class RoomRequestMessage {
+public class RequestMessage {
 
     public enum Command{
         ROOM_REQUEST,
+        USER_REQUEST
     }
 
     Command command;
@@ -17,11 +18,10 @@ public class RoomRequestMessage {
     LocalTime endTime;
     int capacity;
 
-    public RoomRequestMessage() {
-
+    public RequestMessage() {
     }
 
-    public RoomRequestMessage(Command command, LocalDate date, LocalTime startTime, LocalTime endTime, int capacity) {
+    public RequestMessage(Command command, LocalDate date, LocalTime startTime, LocalTime endTime, int capacity) {
         this.command = command;
         this.date = date;
         this.startTime = startTime;
