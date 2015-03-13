@@ -34,6 +34,7 @@ import org.controlsfx.validation.Validator;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -41,7 +42,6 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.function.Predicate;
 
 
 public class CreateEventController implements Initializable {
@@ -111,7 +111,8 @@ public class CreateEventController implements Initializable {
                 currentRoom = roomsArray.get(newValue.intValue());
             }
         });
-        disableButtons();
+
+        setDisableStates(true);
 
         addListeners();
 
@@ -120,7 +121,13 @@ public class CreateEventController implements Initializable {
     }
 
     public boolean isTimeValid(String fromTime, String toTime) {
-        return fromTime.matches("([0-1]?[0-9]|2[0-3]):[0-5][0-9]") && toTime.matches("([0-1]?[0-9]|2[0-3]):[0-5][0-9]") && LocalTime.parse(toTime).compareTo(LocalTime.parse(fromTime)) > 0;
+        try {
+            return fromTime.matches("([0-1]?[0-9]|2[0-3]):[0-5][0-9]") &&
+                    toTime.matches("([0-1]?[0-9]|2[0-3]):[0-5][0-9]") &&
+                    LocalTime.parse(toTime).compareTo(LocalTime.parse(fromTime)) > 0;
+        } catch (DateTimeParseException e) {
+            return false;
+        }
     }
 
     public void setApp(CalendarApplication application) {
@@ -293,45 +300,75 @@ public class CreateEventController implements Initializable {
         application.cancelCreateNewEvent();
     }
 
-    private void disableButtons() {
-        createEventButton.setDisable(true);
-        roomChoiceBox.setDisable(true);
+    private void setDisableStates(boolean state) {
+        createEventButton.setDisable(state);
+        roomChoiceBox.setDisable(state);
+    }
+
+    private boolean isValid() {
+        return !emne.getText().isEmpty() && canPickRoom();
+    }
+
+    private boolean canPickRoom() {
+        return datePicker.getValue() != null &&
+                isTimeValid(fromTimeField.getText(), toTimeField.getText()) &&
+                capacityField.getText().matches("[\\d]+");
     }
 
     private void addListeners() {
         emne.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!emne.getText().isEmpty() && datePicker.getValue() != null && isTimeValid(fromTimeField.getText(), toTimeField.getText())) {
-                createEventButton.setDisable(false);
+            if (isValid()) {
+                setDisableStates(false);
             } else {
                 createEventButton.setDisable(true);
             }
         });
+
         datePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if (!emne.getText().isEmpty() && datePicker.getValue() != null && isTimeValid(fromTimeField.getText(), toTimeField.getText())) {
-                createEventButton.setDisable(false);
-            } else {
-                createEventButton.setDisable(true);
-            }
-        });
-        fromTimeField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!emne.getText().isEmpty() && datePicker.getValue() != null && isTimeValid(fromTimeField.getText(), toTimeField.getText())) {
-                createEventButton.setDisable(false);
-            } else {
-                createEventButton.setDisable(true);
-            }
-        });
-        toTimeField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!emne.getText().isEmpty() && datePicker.getValue() != null && isTimeValid(fromTimeField.getText(), toTimeField.getText())) {
-                createEventButton.setDisable(false);
-            } else {
-                createEventButton.setDisable(true);
-            }
-        });
-        capacityField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (capacityField.getText().matches("[\\d]+")) {
+            if (isValid()) {
+                setDisableStates(false);
+            } else if (canPickRoom()) {
                 roomChoiceBox.setDisable(false);
             } else {
-                roomChoiceBox.setDisable(true);
+                setDisableStates(true);
+            }
+        });
+
+        fromTimeField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (isValid()) {
+                setDisableStates(false);
+            } else if (canPickRoom()) {
+                roomChoiceBox.setDisable(false);
+            } else {
+                setDisableStates(true);
+            }
+        });
+
+        toTimeField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (isValid()) {
+                setDisableStates(false);
+            } else if (canPickRoom()) {
+                roomChoiceBox.setDisable(false);
+            } else {
+                setDisableStates(true);
+            }
+        });
+
+        capacityField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (isValid()) {
+                setDisableStates(false);
+            } else if (canPickRoom()) {
+                roomChoiceBox.setDisable(false);
+            } else {
+                setDisableStates(true);
+            }
+        });
+
+        roomChoiceBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (isValid()) {
+                createEventButton.setDisable(false);
+            } else {
+                createEventButton.setDisable(true);
             }
         });
     }
@@ -345,28 +382,23 @@ public class CreateEventController implements Initializable {
                 Validator.combine(
                         Validator.createEmptyValidator("Sluttidspunkt mangler", Severity.WARNING),
                         Validator.createRegexValidator("Tid må være på formen hh:mm", "^$|([0-1]?[0-9]|2[0-3]):[0-5][0-9]", Severity.ERROR),
-                        Validator.createPredicateValidator(new Predicate<String>() {
-                            @Override
-                            public boolean test(String o) {
-                                return isTimeValid(fromTimeField.getText(), toTimeField.getText());
-                            }
-                        }, "Sluttidspunkt må være etter starttidspunkt", Severity.ERROR)));
+                        Validator.createPredicateValidator(o -> isTimeValid(fromTimeField.getText(),
+                                toTimeField.getText()),
+                                "Sluttidspunkt må være etter starttidspunkt",
+                                Severity.ERROR)));
 
         vd.registerValidator(toTimeField,
                 Validator.combine(
                         Validator.createEmptyValidator("Sluttidspunkt mangler", Severity.WARNING),
                         Validator.createRegexValidator("Tid må være på formen hh:mm", "^$|([0-1]?[0-9]|2[0-3]):[0-5][0-9]", Severity.ERROR),
-                        Validator.createPredicateValidator(new Predicate<String>() {
-                            @Override
-                            public boolean test(String o) {
-                                return isTimeValid(fromTimeField.getText(), toTimeField.getText());
-                            }
-                        }, "Sluttidspunkt må være etter starttidspunkt", Severity.ERROR)));
+                        Validator.createPredicateValidator(o -> isTimeValid(fromTimeField.getText(),
+                                toTimeField.getText()), "Sluttidspunkt må være etter starttidspunkt", Severity.ERROR)));
 
         vd.registerValidator(fromTimeField,
                 Validator.combine(
                         Validator.createEmptyValidator("Starttidspunkt mangler", Severity.WARNING),
-                        Validator.createRegexValidator("Tid må være på formen hh:mm", "^$|([0-1]?[0-9]|2[0-3]):[0-5][0-9]", Severity.ERROR)));
+                        Validator.createRegexValidator("Tid må være på formen hh:mm",
+                                "^$|([0-1]?[0-9]|2[0-3]):[0-5][0-9]", Severity.ERROR)));
 
 
         vd.setValidationDecorator(new ValidationDecoration());
