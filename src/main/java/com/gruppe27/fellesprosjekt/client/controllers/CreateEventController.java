@@ -101,18 +101,16 @@ public class CreateEventController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-        setDisableStates(true);
+        enableStates();
         addListeners();
 
         registerValidators();
-
     }
 
 
-    public boolean isTimeValid(String fromTime, String toTime) {
-            LocalTime from = toLocalTime(fromTime);
-            LocalTime to = toLocalTime(toTime);
+    public boolean isTimeValid() {
+            LocalTime from = toLocalTime(fromTimeField.getText());
+            LocalTime to = toLocalTime(toTimeField.getText());
 
             return from != null && to != null && from.compareTo(to) < 0;
     }
@@ -164,7 +162,6 @@ public class CreateEventController implements Initializable {
                     client.removeListener(this);
                 }
             }
-
         };
 
         client.addListener(roomListener);
@@ -318,19 +315,32 @@ public class CreateEventController implements Initializable {
         application.cancelCreateNewEvent();
     }
 
-    private void setDisableStates(boolean state) {
-        createEventButton.setDisable(state);
-        roomChoiceBox.setDisable(state);
+    private boolean isTimeDateSet(){
+        return datePicker.getValue() != null && isTimeValid();
     }
 
-    private boolean isValid() {
-        return !emne.getText().isEmpty() && canPickRoom();
+    private boolean canCreateEvent() {
+        return !emne.getText().isEmpty() && isTimeDateSet();
     }
 
     private boolean canPickRoom() {
-        return datePicker.getValue() != null &&
-                isTimeValid(fromTimeField.getText(), toTimeField.getText()) &&
-                capacityField.getText().matches("[\\d]+");
+        return isTimeDateSet() && capacityField.getText().matches("[\\d]+");
+    }
+
+    private boolean canAddParticipant(){
+        return isTimeDateSet() &&  participantComboBox.getItems().contains(participantComboBox.getValue());
+    }
+
+    private void enableStates(){
+        createEventButton.setDisable(!canCreateEvent());
+
+        roomChoiceBox.setDisable(!canPickRoom());
+
+        participantComboBox.setDisable(!isTimeDateSet());
+
+        addParticipantButton.setDisable(!canAddParticipant());
+
+
     }
 
     private void addListeners() {
@@ -339,45 +349,23 @@ public class CreateEventController implements Initializable {
         });
 
         emne.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (isValid()) {
-                setDisableStates(false);
-            } else {
-                createEventButton.setDisable(true);
-            }
+                createEventButton.setDisable(!canCreateEvent());
+
         });
 
-        ChangeListener roomListener = (observable, oldValue, newValue) -> {
+        ChangeListener enableActionListener = (observable, oldValue, newValue) -> {
             roomChoiceBox.setValue(null);
-            if (isValid()) {
-                setDisableStates(false);
-            } else if (canPickRoom()) {
-                roomChoiceBox.setDisable(false);
-            } else {
-                setDisableStates(true);
-            }
+           enableStates();
         };
 
-        datePicker.valueProperty().addListener(roomListener);
-        fromTimeField.textProperty().addListener(roomListener);
-        toTimeField.textProperty().addListener(roomListener);
-        capacityField.textProperty().addListener(roomListener);
+        datePicker.valueProperty().addListener(enableActionListener);
+        fromTimeField.textProperty().addListener(enableActionListener);
+        toTimeField.textProperty().addListener(enableActionListener);
+        capacityField.textProperty().addListener(enableActionListener);
+        participantComboBox.getEditor().textProperty().addListener(enableActionListener);
 
-        roomChoiceBox.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if (isValid()) {
-                createEventButton.setDisable(false);
-            } else {
-                createEventButton.setDisable(true);
-            }
-        });
-
-        capacityField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (capacityField.getText().matches("[1-9]+")) {
-                roomChoiceBox.setDisable(false);
-            } else {
-                roomChoiceBox.setDisable(true);
-            }
-        });
     }
+
 
     private void registerValidators() {
         vd.registerValidator(emne, Validator.createEmptyValidator("Tittel mangler", Severity.WARNING));
@@ -388,8 +376,7 @@ public class CreateEventController implements Initializable {
                 Validator.combine(
                         Validator.createEmptyValidator("Sluttidspunkt mangler", Severity.WARNING),
                         Validator.createRegexValidator("Tid må være på formen hh:mm", "^$|([0-1]?[0-9]|2[0-3]):[0-5][0-9]", Severity.ERROR),
-                        Validator.createPredicateValidator(o -> isTimeValid(fromTimeField.getText(),
-                                toTimeField.getText()), "Sluttidspunkt må være etter starttidspunkt", Severity.ERROR)));
+                        Validator.createPredicateValidator(o -> isTimeValid(), "Sluttidspunkt må være etter starttidspunkt", Severity.ERROR)));
 
 
         vd.registerValidator(fromTimeField,
