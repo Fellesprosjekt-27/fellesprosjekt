@@ -29,7 +29,6 @@ import org.controlsfx.validation.Validator;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeParseException;
 import java.util.*;
 
 
@@ -115,19 +114,6 @@ public class CreateEventController implements Initializable {
             return from != null && to != null && from.compareTo(to) < 0;
     }
 
-    private static LocalTime stringToLocalTime(String time){
-        boolean isValid = time.matches("([0-1]?[0-9]|2[0-3]):[0-5][0-9]");
-        if(isValid){
-            // LocalTime.parse requires exactly 2 digit hours.
-            if (time.length() < 5) {
-                time = "0" + time;
-            }
-            return LocalTime.parse(time);
-        } else {
-            return null;
-        }
-    }
-
     public void setApp(CalendarApplication application) {
         this.application = application;
     }
@@ -196,16 +182,15 @@ public class CreateEventController implements Initializable {
     }
 
     LocalTime toLocalTime(String time) {
-        try {
+        boolean isValid = time.matches("([0-1]?[0-9]|2[0-3]):[0-5][0-9]");
+        if(isValid){
+            // LocalTime.parse requires exactly 2 digit hours.
+            if (time.length() < 5) {
+                time = "0" + time;
+            }
             return LocalTime.parse(time);
-        } catch (DateTimeParseException e) {
-            // Accept time not starting with 0.
-            try {
-                return LocalTime.parse("0" + time);
-            }
-            catch (DateTimeParseException e2) {
-                return null;
-            }
+        } else {
+            return null;
         }
     }
 
