@@ -20,11 +20,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import org.controlsfx.validation.Severity;
 import org.controlsfx.validation.ValidationSupport;
@@ -33,14 +29,7 @@ import org.controlsfx.validation.Validator;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 
 
 public class CreateEventController implements Initializable {
@@ -83,43 +72,46 @@ public class CreateEventController implements Initializable {
 
     private Room currentRoom;
 
-    private ArrayList<Room> roomsArray;
+    private HashMap<String, Room> availableRooms;
+
     private CalendarApplication application;
 
     private Map<String, ParticipantUser> allUsers;
     private ObservableList<SortableText> availableUsersObservable;
+
+
+    private ObservableList<String> availableRoomsObservable;
+
+
     private HashSet<User> participants;
 
     private ValidationSupport vd = new ValidationSupport();
 
-    public CreateEventController() {
-        participants = new LinkedHashSet<>();
-        roomsArray = new ArrayList<>();
-        currentRoom = null;
-    }
 
     public void emptyRoomsArray() {
-        this.roomsArray = new ArrayList<>();
+        this.availableRooms = new HashMap<>();
+    }
+
+    public CreateEventController() {
+        participants = new LinkedHashSet<>();
+        availableRooms = new HashMap<>();
+        currentRoom = null;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setDisableStates(true);
-
+        enableStates();
         addListeners();
 
         registerValidators();
-
     }
 
-    public boolean isTimeValid(String fromTime, String toTime) {
-        try {
-            return fromTime.matches("([0-1]?[0-9]|2[0-3]):[0-5][0-9]") &&
-                    toTime.matches("([0-1]?[0-9]|2[0-3]):[0-5][0-9]") &&
-                    LocalTime.parse(toTime).compareTo(LocalTime.parse(fromTime)) > 0;
-        } catch (DateTimeParseException e) {
-            return false;
-        }
+
+    public boolean isTimeValid() {
+            LocalTime from = toLocalTime(fromTimeField.getText());
+            LocalTime to = toLocalTime(toTimeField.getText());
+
+            return from != null && to != null && from.compareTo(to) < 0;
     }
 
     public void setApp(CalendarApplication application) {
@@ -129,8 +121,8 @@ public class CreateEventController implements Initializable {
     @FXML
     private void handleChoiceboxClicked() {
         LocalDate date = datePicker.getValue();
-        LocalTime start = LocalTime.parse(fromTimeField.getText());
-        LocalTime end = LocalTime.parse(toTimeField.getText());
+        LocalTime start = toLocalTime(fromTimeField.getText());
+        LocalTime end = toLocalTime(toTimeField.getText());
         int capacity = Integer.parseInt(capacityField.getText());
         this.updateCurrentRooms(date, start, end, capacity);
         //TODO needs time to update rooms before I can do something.
@@ -156,7 +148,6 @@ public class CreateEventController implements Initializable {
                     client.removeListener(this);
                 }
             }
-
         };
 
         client.addListener(roomListener);
@@ -166,17 +157,16 @@ public class CreateEventController implements Initializable {
 
     private void updateChoiceBox(HashSet<Room> rooms) {
         this.emptyRoomsArray();
-        this.roomsArray.addAll(rooms);
-        ArrayList<String> stringArrayList = new ArrayList<>();
-        for (Room room : roomsArray) {
-            String roomString = room.toString();
-            stringArrayList.add(roomString);
+
+        availableRoomsObservable = FXCollections.observableArrayList();
+
+        for(Room r: rooms){
+            this.availableRooms.put(r.toString(), r);
+            availableRoomsObservable.add(r.toString());
         }
 
-        ObservableList<String> observableList = FXCollections.observableArrayList(stringArrayList);
-
         Platform.runLater(() -> {
-            roomChoiceBox.setItems(observableList);
+      roomChoiceBox.setItems(availableRoomsObservable);
             roomChoiceBox.show();
         });
 
@@ -191,10 +181,27 @@ public class CreateEventController implements Initializable {
         //TODO Validering
     }
 
+    LocalTime toLocalTime(String time) {
+        boolean isValid = time.matches("([0-1]?[0-9]|2[0-3]):[0-5][0-9]");
+        if(isValid){
+            // LocalTime.parse requires exactly 2 digit hours.
+            if (time.length() < 5) {
+                time = "0" + time;
+            }
+            return LocalTime.parse(time);
+        } else {
+            return null;
+        }
+    }
+
     private void getAllUsers() {
         LocalDate date = datePicker.getValue();
-        LocalTime start = LocalTime.parse(fromTimeField.getText());
-        LocalTime end = LocalTime.parse(toTimeField.getText());
+        LocalTime start = toLocalTime(fromTimeField.getText());
+        LocalTime end = toLocalTime(toTimeField.getText());
+
+        // If time is not yet set: bail.
+        // TODO: Visualize this with a validation.
+        if (start == null || end == null) return;
 
         RequestMessage message = new RequestMessage(RequestMessage.Command.USER_REQUEST, date, start, end, -1);
 
@@ -244,23 +251,24 @@ public class CreateEventController implements Initializable {
 
     @FXML
     private void handleAddParticipant() {
+
         String username = participantComboBox.getValue().getText();
         participants.add(allUsers.get(username));
-        updateListView();
+
         availableUsersObservable.remove(participantComboBox.getValue());
         participantComboBox.setValue(null);
         participantComboBox.init(availableUsersObservable);
     }
 
-    private void updateListView() {
-        ObservableList<String> observable = FXCollections.observableArrayList();
-        for (User user : participants) {
-            observable.add(user.getUsername());
-        }
+    @FXML
+    private void handleRemoveParticipant(){
+        String selectedItem = participantsListView.getSelectionModel().getSelectedItem();
 
-        Platform.runLater(() -> {
-            participantsListView.setItems(observable);
-        });
+        participantsListView.getSelectionModel().select(null);
+        participantsListView.getItems().remove(selectedItem);
+
+        availableUsersObservable.addAll(new SortableText(selectedItem));
+        participantComboBox.init(availableUsersObservable);
     }
 
 
@@ -272,8 +280,8 @@ public class CreateEventController implements Initializable {
 
         event.setDate(datePicker.getValue());
 
-        LocalTime startTime = LocalTime.parse(fromTimeField.getText());
-        LocalTime endTime = LocalTime.parse(toTimeField.getText());
+        LocalTime startTime = toLocalTime(fromTimeField.getText());
+        LocalTime endTime = toLocalTime(toTimeField.getText());
         event.setCreator(application.getUser());
         participants.add(event.getCreator());
         event.setStartTime(startTime);
@@ -292,58 +300,68 @@ public class CreateEventController implements Initializable {
         application.cancelCreateNewEvent();
     }
 
-    private void setDisableStates(boolean state) {
-        createEventButton.setDisable(state);
-        roomChoiceBox.setDisable(state);
+    private boolean isTimeDateSet(){
+        return datePicker.getValue() != null && isTimeValid();
     }
 
-    private boolean isValid() {
-        return !emne.getText().isEmpty() && canPickRoom();
+    private boolean canCreateEvent() {
+        return !emne.getText().isEmpty() && isTimeDateSet();
     }
 
     private boolean canPickRoom() {
-        return datePicker.getValue() != null &&
-                isTimeValid(fromTimeField.getText(), toTimeField.getText()) &&
-                capacityField.getText().matches("[\\d]+");
+        return isTimeDateSet() && capacityField.getText().matches("[\\d]+");
+    }
+
+    private boolean canAddParticipant(){
+        return isTimeDateSet() &&  participantComboBox.getItems().contains(participantComboBox.getValue());
+    }
+
+    private void enableStates(){
+        createEventButton.setDisable(!canCreateEvent());
+
+        roomChoiceBox.setDisable(!canPickRoom());
+
+        participantComboBox.setDisable(!isTimeDateSet());
+
+        addParticipantButton.setDisable(!canAddParticipant());
+
+
     }
 
     private void addListeners() {
         roomChoiceBox.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
-            currentRoom = roomsArray.get(newValue.intValue());
+            currentRoom = availableRooms.get(newValue);
         });
 
         emne.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (isValid()) {
-                setDisableStates(false);
-            } else {
-                createEventButton.setDisable(true);
-            }
+            createEventButton.setDisable(!canCreateEvent());
+
         });
 
-        ChangeListener roomListener = (observable, oldValue, newValue) -> {
-            roomChoiceBox.setValue(null);
-            if (isValid()) {
-                setDisableStates(false);
-            } else if (canPickRoom()) {
-                roomChoiceBox.setDisable(false);
-            } else {
-                setDisableStates(true);
-            }
+        ChangeListener enableActionListener = (observable, oldValue, newValue) -> {
+           enableStates();
         };
 
-        datePicker.valueProperty().addListener(roomListener);
-        fromTimeField.textProperty().addListener(roomListener);
-        toTimeField.textProperty().addListener(roomListener);
-        capacityField.textProperty().addListener(roomListener);
+        ChangeListener clearRoomChoice = (observable, oldValue, newValue) -> {
+            roomChoiceBox.setValue(null);
+        };
 
-        roomChoiceBox.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if (isValid()) {
-                createEventButton.setDisable(false);
-            } else {
-                createEventButton.setDisable(true);
-            }
-        });
+        datePicker.valueProperty().addListener(enableActionListener);
+        datePicker.valueProperty().addListener(clearRoomChoice);
+
+        fromTimeField.textProperty().addListener(enableActionListener);
+        fromTimeField.textProperty().addListener(clearRoomChoice);
+
+        toTimeField.textProperty().addListener(enableActionListener);
+        toTimeField.textProperty().addListener(clearRoomChoice);
+
+        capacityField.textProperty().addListener(enableActionListener);
+        capacityField.textProperty().addListener(clearRoomChoice);
+
+        participantComboBox.getEditor().textProperty().addListener(enableActionListener);
+
     }
+
 
     private void registerValidators() {
         vd.registerValidator(emne, Validator.createEmptyValidator("Tittel mangler", Severity.WARNING));
@@ -354,24 +372,14 @@ public class CreateEventController implements Initializable {
                 Validator.combine(
                         Validator.createEmptyValidator("Sluttidspunkt mangler", Severity.WARNING),
                         Validator.createRegexValidator("Tid må være på formen hh:mm", "^$|([0-1]?[0-9]|2[0-3]):[0-5][0-9]", Severity.ERROR),
-                        Validator.createPredicateValidator(o -> isTimeValid(fromTimeField.getText(),
-                                toTimeField.getText()),
-                                "Sluttidspunkt må være etter starttidspunkt",
-                                Severity.ERROR)));
+                        Validator.createPredicateValidator(o -> isTimeValid(), "Sluttidspunkt må være etter starttidspunkt", Severity.ERROR)));
 
-        vd.registerValidator(toTimeField,
-                Validator.combine(
-                        Validator.createEmptyValidator("Sluttidspunkt mangler", Severity.WARNING),
-                        Validator.createRegexValidator("Tid må være på formen hh:mm", "^$|([0-1]?[0-9]|2[0-3]):[0-5][0-9]", Severity.ERROR),
-                        Validator.createPredicateValidator(o -> isTimeValid(fromTimeField.getText(),
-                                toTimeField.getText()), "Sluttidspunkt må være etter starttidspunkt", Severity.ERROR)));
 
         vd.registerValidator(fromTimeField,
                 Validator.combine(
                         Validator.createEmptyValidator("Starttidspunkt mangler", Severity.WARNING),
                         Validator.createRegexValidator("Tid må være på formen hh:mm",
                                 "^$|([0-1]?[0-9]|2[0-3]):[0-5][0-9]", Severity.ERROR)));
-
 
         vd.setValidationDecorator(new ValidationDecoration());
     }
