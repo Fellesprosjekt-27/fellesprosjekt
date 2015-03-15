@@ -349,19 +349,30 @@ public class CreateEventController implements Initializable {
         });
 
         emne.textProperty().addListener((observable, oldValue, newValue) -> {
-                createEventButton.setDisable(!canCreateEvent());
+            createEventButton.setDisable(!canCreateEvent());
 
         });
 
         ChangeListener enableActionListener = (observable, oldValue, newValue) -> {
-            roomChoiceBox.setValue(null);
            enableStates();
         };
 
+        ChangeListener clearRoomChoice = (observable, oldValue, newValue) -> {
+            roomChoiceBox.setValue(null);
+        };
+
         datePicker.valueProperty().addListener(enableActionListener);
+        datePicker.valueProperty().addListener(clearRoomChoice);
+
         fromTimeField.textProperty().addListener(enableActionListener);
+        fromTimeField.textProperty().addListener(clearRoomChoice);
+
         toTimeField.textProperty().addListener(enableActionListener);
+        toTimeField.textProperty().addListener(clearRoomChoice);
+
         capacityField.textProperty().addListener(enableActionListener);
+        capacityField.textProperty().addListener(clearRoomChoice);
+
         participantComboBox.getEditor().textProperty().addListener(enableActionListener);
 
     }
