@@ -70,8 +70,6 @@ public class CreateEventController implements Initializable {
     @FXML
     Button cancelButton;
 
-    private Room currentRoom;
-
     private HashMap<String, Room> availableRooms;
 
     private CalendarApplication application;
@@ -79,9 +77,7 @@ public class CreateEventController implements Initializable {
     private Map<String, ParticipantUser> allUsers;
     private ObservableList<SortableText> availableUsersObservable;
 
-
     private ObservableList<String> availableRoomsObservable;
-
 
     private HashSet<User> participants;
 
@@ -95,7 +91,6 @@ public class CreateEventController implements Initializable {
     public CreateEventController() {
         participants = new LinkedHashSet<>();
         availableRooms = new HashMap<>();
-        currentRoom = null;
     }
 
     @Override
@@ -166,10 +161,9 @@ public class CreateEventController implements Initializable {
         }
 
         Platform.runLater(() -> {
-      roomChoiceBox.setItems(availableRoomsObservable);
+        roomChoiceBox.setItems(availableRoomsObservable);
             roomChoiceBox.show();
         });
-
     }
 
     @FXML
@@ -287,7 +281,7 @@ public class CreateEventController implements Initializable {
         event.setStartTime(startTime);
         event.setEndTime(endTime);
         event.setAllParticipants(participants);
-        event.setRoom(currentRoom);
+        event.setRoom(availableRooms.get(roomChoiceBox.getValue()));
 
         EventMessage message = new EventMessage(EventMessage.Command.CREATE_EVENT, event);
         //TODO: add functions backend to invite all users from the eventmessage
@@ -329,10 +323,6 @@ public class CreateEventController implements Initializable {
     }
 
     private void addListeners() {
-        roomChoiceBox.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
-            currentRoom = availableRooms.get(newValue);
-        });
-
         emne.textProperty().addListener((observable, oldValue, newValue) -> {
             createEventButton.setDisable(!canCreateEvent());
 
