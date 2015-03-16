@@ -57,10 +57,10 @@ public class CalendarApplication extends Application {
         controller.setApp(this);
     }
 
-    private void gotoCalendar() {
-        CalendarController controller = (CalendarController) replaceSceneContent("/fxml/Calendar.fxml");
-        controller.setApp(this);
-    }
+   public void gotoCalendar() {
+       CalendarController controller = (CalendarController) replaceSceneContent("/fxml/Calendar.fxml");
+       controller.setApp(this);
+   }
 
     private Initializable replaceSceneContent(String fxml) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxml));
@@ -86,9 +86,5 @@ public class CalendarApplication extends Application {
 
     public void createNewEvent() {
         this.gotoCreateEvent();
-    }
-
-    public void cancelCreateNewEvent() {
-        this.gotoCalendar();
     }
 }

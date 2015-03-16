@@ -288,11 +288,12 @@ public class CreateEventController implements Initializable {
         //TODO: add functions backend to invite all users from the eventmessage
         //TODO: make an invite message
         CalendarClient.getInstance().sendMessage(message);
+        application.gotoCalendar();
     }
 
     @FXML
     private void handleCancelAction() {
-        application.cancelCreateNewEvent();
+        application.gotoCalendar();
     }
 
     private boolean isTimeDateSet(){
@@ -357,13 +358,16 @@ public class CreateEventController implements Initializable {
     private void registerValidators() {
         vd.registerValidator(emne, Validator.createEmptyValidator("Tittel mangler", Severity.WARNING));
         vd.registerValidator(datePicker, Validator.createEmptyValidator("Dato mangler", Severity.WARNING));
-        vd.registerValidator(capacityField, Validator.createRegexValidator("Kapasiteten må være et tall lavere enn 20", "^$|[0-9]+", Severity.ERROR));
+        vd.registerValidator(capacityField, Validator.createRegexValidator("Kapasiteten må være et tall", "[0-9]*",
+                Severity.ERROR));
 
         vd.registerValidator(toTimeField,
                 Validator.combine(
                         Validator.createEmptyValidator("Sluttidspunkt mangler", Severity.WARNING),
-                        Validator.createRegexValidator("Tid må være på formen hh:mm", "^$|([0-1]?[0-9]|2[0-3]):[0-5][0-9]", Severity.ERROR),
-                        Validator.createPredicateValidator(o -> isTimeValid(), "Sluttidspunkt må være etter starttidspunkt", Severity.ERROR)));
+                        Validator.createRegexValidator("Tid må være på formen hh:mm",
+                                "^$|([0-1]?[0-9]|2[0-3]):[0-5][0-9]", Severity.ERROR),
+                        Validator.createPredicateValidator(o -> isTimeValid(),
+                                "Sluttidspunkt må være etter starttidspunkt", Severity.ERROR)));
 
 
         vd.registerValidator(fromTimeField,

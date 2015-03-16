@@ -17,9 +17,9 @@ import java.time.LocalDate;
 import java.util.HashSet;
 
 public class EventController {
-    private static final String EVENT_QUERY =
-            "SELECT Event.id, Event.name, Event.date, Event.start, Event.end, Event.room, Creator.username, " +
-                    "Creator.name, Participant.username, Participant.name, UserEvent.status " +
+    public static final String EVENT_QUERY =
+            "SELECT Event.id, Event.name, Event.date, Event.start, Event.end, Creator.username, Creator.name, " +
+                    "Participant.username, Participant.name, UserEvent.status " +
                     "FROM Event JOIN User AS Creator ON Event.creator = Creator.username " +
                     "JOIN UserEvent ON Event.id = UserEvent.event_id " +
                     "JOIN User AS Participant ON UserEvent.username = Participant.username ";
@@ -70,7 +70,7 @@ public class EventController {
         }
     }
 
-    private HashSet<Event> parseEventResult(ResultSet result, String username) throws SQLException {
+    public HashSet<Event> parseEventResult(ResultSet result, String username) throws SQLException {
         int currentEventId = -1;
         Event event = null;
         HashSet<Event> events = new HashSet<>();
