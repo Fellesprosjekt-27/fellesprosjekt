@@ -87,7 +87,7 @@ public class CreateEventController implements Initializable {
     private CalendarApplication application;
 
     private Map<String, ParticipantUser> allUsers;
-    private ObservableList<SortableText> availableUsersObservable;
+    public ObservableList<SortableText> availableUsersObservable;
     private HashSet<User> participants;
 
     private ValidationSupport vd = new ValidationSupport();
@@ -99,6 +99,9 @@ public class CreateEventController implements Initializable {
         roomsArray = new ArrayList<>();
         availableUsersObservable = FXCollections.observableArrayList();
         currentRoom = null;
+        availableUsersObservable.addListener((ListChangeListener<SortableText>) c -> {
+            System.out.println(c);
+        });
     }
 
     public void emptyRoomsArray() {
@@ -189,12 +192,14 @@ public class CreateEventController implements Initializable {
 
     @FXML
     private void handleComboBoxClicked() {
-        System.out.println("combobox clicked");
         if (allUsers == null) {
             getAllUsers();
         }
+        System.out.println(availableUsersObservable);
         //TODO Validering
     }
+
+
 
     private void getAllUsers() {
         LocalDate date = datePicker.getValue();
@@ -239,11 +244,19 @@ public class CreateEventController implements Initializable {
             availableUsers.add(text);
         }
 
-        availableUsersObservable.setAll(availableUsers);
+        this.availableUsersObservable.setAll(availableUsers);
         Collections.sort(availableUsersObservable);
+        System.out.println("sorted " + availableUsersObservable);
         Platform.runLater(() -> {
+            System.out.println("to init: " + availableUsersObservable);
             participantComboBox.init(availableUsersObservable);
+            System.out.println("Init ran.");
         });
+        if(currentEvent.getUserParticipants() != null) {
+            for(User user : currentEvent.getUserParticipants()) {
+                addParticipant(user.getUsername());
+            }
+        }
     }
 
 
@@ -252,19 +265,30 @@ public class CreateEventController implements Initializable {
         addParticipant(participantComboBox.getValue().getText());
     }
     private void addParticipant(String username) {
-        System.out.println("adding user " + username);
-        System.out.println("all users: " + allUsers);
         participants.add(allUsers.get(username));
         updateListView();
-        removeUserFromAvailableUsers(username);
-        participantComboBox.setValue(null);
-        participantComboBox.init(availableUsersObservable);
+        Platform.runLater(() -> {
+            removeUserFromObservable(username);
+            participantComboBox.setValue(null);
+            participantComboBox.init(availableUsersObservable);
+        });
+
+
     }
 
-    private void removeUserFromAvailableUsers(String username) {
-        availableUsersObservable.stream()
-                .filter(text -> text.getText().equals(username))
-                .forEach(availableUsersObservable::remove);
+    private boolean removeUserFromObservable(String username) {
+        SortableText removeText = null;
+        for(SortableText text: availableUsersObservable) {
+            if(text.getText().equals(username)) {
+                removeText = text;
+            }
+        }
+        if(removeText != null) {
+            availableUsersObservable.remove(removeText);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private void updateListView() {
@@ -399,21 +423,6 @@ public class CreateEventController implements Initializable {
 //        roomChoiceBox.setValue(event.getRoom().toString());
 
         getAllUsers();
-        availableUsersObservable.addListener(new ListChangeListener<SortableText>() {
-            @Override
-            public void onChanged(Change<? extends SortableText> c) {
-                availableUsersObservable.removeListener(this);
-                for(User user : event.getUserParticipants()) {
-                    addParticipant(user.getUsername());
-                }
-
-            }
-
-        });
-
-
-
-
     }
 
     public void setCurrentEvent(Event currentEvent) {
