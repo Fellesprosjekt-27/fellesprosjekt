@@ -6,14 +6,8 @@ import com.gruppe27.fellesprosjekt.client.CalendarApplication;
 import com.gruppe27.fellesprosjekt.client.CalendarClient;
 import com.gruppe27.fellesprosjekt.client.SortableText;
 import com.gruppe27.fellesprosjekt.client.components.ValidationDecoration;
-import com.gruppe27.fellesprosjekt.common.Event;
-import com.gruppe27.fellesprosjekt.common.ParticipantUser;
-import com.gruppe27.fellesprosjekt.common.Room;
-import com.gruppe27.fellesprosjekt.common.User;
-import com.gruppe27.fellesprosjekt.common.messages.EventMessage;
-import com.gruppe27.fellesprosjekt.common.messages.ParticipantUserMessage;
-import com.gruppe27.fellesprosjekt.common.messages.RequestMessage;
-import com.gruppe27.fellesprosjekt.common.messages.RoomMessage;
+import com.gruppe27.fellesprosjekt.common.*;
+import com.gruppe27.fellesprosjekt.common.messages.*;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
@@ -22,6 +16,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import org.controlsfx.validation.Severity;
 import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
@@ -56,6 +51,12 @@ public class CreateEventController implements Initializable {
     Button addParticipantButton;
 
     @FXML
+    ComboBox teamComboBox;
+
+    @FXML
+    Button addTeamButton;
+
+    @FXML
     Button fjernDeltakere;
 
     @FXML
@@ -75,7 +76,9 @@ public class CreateEventController implements Initializable {
     private CalendarApplication application;
 
     private Map<String, ParticipantUser> allUsers;
+    private Map<Integer, Team> teams;
     private ObservableList<SortableText> availableUsersObservable;
+    private ObservableList<Text> availableTeamsObservable;
 
     private ObservableList<String> availableRoomsObservable;
 
@@ -175,6 +178,14 @@ public class CreateEventController implements Initializable {
         //TODO Validering
     }
 
+    @FXML
+    private void handleTeamsClicked() {
+        if (teams == null) {
+            getAllTeams();
+        }
+    }
+
+
     LocalTime toLocalTime(String time) {
         boolean isValid = time.matches("([0-1]?[0-9]|2[0-3]):[0-5][0-9]");
         if(isValid){
@@ -221,6 +232,30 @@ public class CreateEventController implements Initializable {
         client.sendMessage(message);
     }
 
+    private void getAllTeams() {
+        TeamMessage message = new TeamMessage(TeamMessage.Command.SEND_TEAMS);
+        CalendarClient client = CalendarClient.getInstance();
+
+        Listener getUsersListener = new Listener() {
+            public void received(Connection connection, Object object) {
+                if (object instanceof TeamMessage) {
+                    TeamMessage complete = (TeamMessage) object;
+                    switch (complete.getCommand()) {
+                        case RECEIVE_TEAMS:
+                            setAllTeams(complete.getTeams());
+                            break;
+                        case SEND_TEAMS:
+                            break;
+                    }
+                    client.removeListener(this);
+                }
+            }
+
+        };
+        client.addListener(getUsersListener);
+        client.sendMessage(message);
+    }
+
     private void setAllUsers(HashSet<ParticipantUser> allUsers) {
         this.allUsers = new HashMap<>();
         availableUsersObservable = FXCollections.observableArrayList();
@@ -242,6 +277,23 @@ public class CreateEventController implements Initializable {
         });
     }
 
+    private void setAllTeams(HashSet<Team> teams) {
+        this.teams = new HashMap<>();
+        availableTeamsObservable = FXCollections.observableArrayList();
+        for (Team team : teams) {
+            this.teams.put(team.getNumber(), team);
+            Text text = new Text(team.getNumber() + "");
+            availableTeamsObservable.add(text);
+        }
+        Platform.runLater(() -> {
+            initComboBox();
+        });
+    }
+
+    private void initComboBox() {
+        teamComboBox.getItems().addAll(availableTeamsObservable);
+    }
+
 
     @FXML
     private void handleAddParticipant() {
@@ -253,6 +305,18 @@ public class CreateEventController implements Initializable {
         availableUsersObservable.remove(participantComboBox.getValue());
         participantComboBox.setValue(null);
         participantComboBox.init(availableUsersObservable);
+    }
+
+    @FXML
+    private void handleAddTeam() {
+        Integer number = Integer.parseInt((String) teamComboBox.getValue());
+        Team team = teams.get(number);
+        for (User member : team.getTeamMembers()) {
+            participantsListView.getItems().add(member.getUsername());
+        }
+        availableTeamsObservable.remove(teamComboBox.getValue());
+        teamComboBox.getItems().clear();
+        initComboBox();
     }
 
     @FXML
@@ -375,7 +439,3 @@ public class CreateEventController implements Initializable {
         vd.setValidationDecorator(new ValidationDecoration());
     }
 }
-
-
-
-

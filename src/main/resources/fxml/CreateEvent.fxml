@@ -58,6 +58,13 @@
             disable="true"
 			GridPane.rowIndex="7" GridPane.columnSpan="2" />
 
+            <ComboBox fx:id="teamComboBox" editable="true"
+                      promptText="testur" onMouseClicked="#handleTeamsClicked"
+                      GridPane.rowIndex="8" GridPane.columnSpan="2" />
+
+            <Button fx:id="addTeamButton" onAction="#handleAddTeam"
+                    GridPane.rowIndex="9" GridPane.columnSpan="2" />
+
 			<Button fx:id="fjernDeltakere"
                     onAction="#handleRemoveParticipant"
 			text="Fjern markert deltaker" wrapText="true"
