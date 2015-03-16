@@ -11,6 +11,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import org.controlsfx.control.PopOver;
 
@@ -67,6 +68,15 @@ public class EventPopOver {
 
         hBox.getChildren().addAll(status, button);
         box.getChildren().addAll(text, hBox);
+        if (e.getConflictingEvents().size() != 0) {
+            String conflicts = "Overlappende avtaler: ";
+            for (Event conflictingEvent : e.getConflictingEvents()) {
+                conflicts = conflicts + conflictingEvent.getName() + " ";
+            }
+            Text conflictsText = new Text(conflicts);
+            box.getChildren().add(conflictsText);
+            conflictsText.setFill(Color.RED);
+        }
         pane.getChildren().add(box);
 
         popOver = new PopOver(pane);
