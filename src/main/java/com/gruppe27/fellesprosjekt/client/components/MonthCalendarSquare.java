@@ -50,15 +50,19 @@ public class MonthCalendarSquare extends Pane {
     }
 
     public void addEvent(Event event) {
+        Color colour = Color.DODGERBLUE;
         conflictingEvents = new ArrayList<>();
         for (int i = 0; i < events.size(); i++) {
             if (isConflicting(events.get(i), event)) {
                 conflictingEvents.add(events.get(i));
                 squares.get(i).addConflictingEvent(event);
+                squares.get(i).getTitle().setFill(Color.RED);
+                colour = Color.RED;
             }
         }
         MonthEventSquare square = new MonthEventSquare(event, conflictingEvents);
         eventBox.getChildren().add(square);
+        square.getTitle().setFill(colour);
         this.events.add(event);
         squares.add(square);
     }

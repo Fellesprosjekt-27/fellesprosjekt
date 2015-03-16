@@ -72,10 +72,7 @@ public class EventPopOver {
         if (e.getConflictingEvents().size() != 0) {
             String conflicts = "Overlappende avtaler: ";
             for (Event conflictingEvent : e.getConflictingEvents()) {
-                if (conflicts.length() + conflictingEvent.getName().length() > 35 ) {
-                    conflicts = conflicts +"\n";
-                }
-                conflicts = conflicts + conflictingEvent.getName() + " ";
+                conflicts = conflicts + "\n" + conflictingEvent.getName();
             }
             Text conflictsText = new Text(conflicts);
             box.getChildren().add(conflictsText);
