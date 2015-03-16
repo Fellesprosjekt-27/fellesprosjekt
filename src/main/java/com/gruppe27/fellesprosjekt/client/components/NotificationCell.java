@@ -14,6 +14,8 @@ public class NotificationCell extends ListCell<Notification> {
     Shape declineIcon = new Circle(5.0, Paint.valueOf("red"));
     Shape changedIcon = new Circle(5.0, Paint.valueOf("blue"));
     Shape conflictingIcon = new Circle(5.0, Paint.valueOf("black"));
+    Shape statusIcon = new Circle(5.0, Paint.valueOf("orange"));
+    Shape defaultIcon = new Circle(5.0, Paint.valueOf("yellow"));
 
     public NotificationCell() {
         super();
@@ -41,6 +43,11 @@ public class NotificationCell extends ListCell<Notification> {
                 case CONFLICTING_EVENTS:
                     setGraphic(conflictingIcon);
                     break;
+                case PARTICIPATION_STATUS:
+                    setGraphic(statusIcon);
+                    break;
+                default:
+                    setGraphic(defaultIcon);
             }
         } else {
             setGraphic(null);

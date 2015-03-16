@@ -1,6 +1,7 @@
 package com.gruppe27.fellesprosjekt.server.controllers;
 
 import com.gruppe27.fellesprosjekt.common.Event;
+import com.gruppe27.fellesprosjekt.common.Room;
 import com.gruppe27.fellesprosjekt.common.User;
 import com.gruppe27.fellesprosjekt.common.messages.ErrorMessage;
 import com.gruppe27.fellesprosjekt.common.messages.EventMessage;
@@ -16,7 +17,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 
 public class EventController {
-    private static final String EVENT_QUERY =
+    public static final String EVENT_QUERY =
             "SELECT Event.id, Event.name, Event.date, Event.start, Event.end, Creator.username, Creator.name, " +
                     "Participant.username, Participant.name, UserEvent.status " +
                     "FROM Event JOIN User AS Creator ON Event.creator = Creator.username " +
@@ -69,7 +70,7 @@ public class EventController {
         }
     }
 
-    private HashSet<Event> parseEventResult(ResultSet result, String username) throws SQLException {
+    public HashSet<Event> parseEventResult(ResultSet result, String username) throws SQLException {
         int currentEventId = -1;
         Event event = null;
         HashSet<Event> events = new HashSet<>();
@@ -82,11 +83,16 @@ public class EventController {
                 event.setStartTime(result.getTime(4).toLocalTime());
                 event.setEndTime(result.getTime(5).toLocalTime());
 
-                User creator = new User(result.getString(6), result.getString(7));
-                User participant = new User(result.getString(8), result.getString(9));
+                Room room =  new Room();
+                room.setRoomName(result.getString(6));
+                event.setRoom(room);
+
+                User creator = new User(result.getString(7), result.getString(8));
+                User participant = new User(result.getString(9), result.getString(10));
                 if (participant.getUsername().equals(username)) {
-                    event.setStatus(Event.Status.valueOf(result.getString(10)));
+                    event.setStatus(Event.Status.valueOf(result.getString(11)));
                 }
+
 
 
                 event.addParticipant(participant);
@@ -99,9 +105,9 @@ public class EventController {
                 if (event == null) {
                     return events;
                 }
-                User participant = new User(result.getString(8), result.getString(9));
+                User participant = new User(result.getString(9), result.getString(10));
                 if (participant.getUsername().equals(username)) {
-                    event.setStatus(Event.Status.valueOf(result.getString(10)));
+                    event.setStatus(Event.Status.valueOf(result.getString(11)));
                 }
                 event.addParticipant(participant);
                 System.out.println("Add user");
@@ -123,7 +129,13 @@ public class EventController {
             statement.setString(3, event.getStartTime().toString());
             statement.setString(4, event.getEndTime().toString());
             statement.setString(5, connection.getUser().getUsername());
-            statement.setString(6, event.getRoom().getRoomName());
+
+            if (event.getRoom() == null) {
+                statement.setString(6, null);
+            } else {
+                statement.setString(6, event.getRoom().getRoomName());
+            }
+
             int result = statement.executeUpdate();
 
             int eventId;
@@ -131,6 +143,14 @@ public class EventController {
             eventIdResultSet.next();
             eventId = eventIdResultSet.getInt(1);
             event.setId(eventId);
+
+            PreparedStatement creatorStatus = DatabaseConnector.getConnection().prepareStatement(
+                    "INSERT INTO UserEvent(username, event_id, status) VALUES (?,?,?)"
+            );
+            creatorStatus.setString(1, event.getCreator().getUsername());
+            creatorStatus.setInt(2, eventId);
+            creatorStatus.setString(3, Event.Status.ATTENDING.toString());
+            result = creatorStatus.executeUpdate();
 
             int number_of_participants = 0;
             for (User participant : event.getUserParticipants()) {

@@ -5,12 +5,14 @@ import com.gruppe27.fellesprosjekt.client.events.EventBoxClicked;
 import com.gruppe27.fellesprosjekt.common.Event;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import org.controlsfx.control.PopOver;
 
@@ -30,23 +32,13 @@ public class EventPopOver {
         VBox box = new VBox();
         HBox hBox = new HBox();
 
+        ChoiceBox<String> status = new ChoiceBox<String>(participationStatusChoice);
+        String sValue = event.statusToString();
+
         String str = String.format(formatStr, event.getName(), event.getDate(), event.getStartTime(),
-                event.getEndTime(), event.getRoom());
+                event.getEndTime(), event.getRoom().getRoomName());
         Text text = new Text(str);
 
-        ChoiceBox<String> status = new ChoiceBox<String>(participationStatusChoice);
-        String sValue = "Kanskje";
-        switch (event.getStatus()) {
-            case ATTENDING:
-                sValue = "Deltar";
-                break;
-            case MAYBE:
-                sValue = "Kanskje";
-                break;
-            case NOT_ATTENDING:
-                sValue = "Deltar ikke";
-                break;
-        }
         status.getSelectionModel().select(participationStatusChoice.indexOf(sValue));
         Button button = new Button("Endre");
         button.setOnMouseClicked((MouseEvent mEvent) -> {
@@ -62,12 +54,26 @@ public class EventPopOver {
                     break;
             }
 
-            controller.handleChangeParticipationStatus(event.getStatus(), event.getId());
+            controller.handleChangeParticipationStatus(event);
         });
 
         hBox.getChildren().addAll(status, button);
         box.getChildren().addAll(text, hBox);
+        if (e.getConflictingEvents().size() != 0) {
+            String conflicts = "Overlappende avtaler: ";
+            for (Event conflictingEvent : e.getConflictingEvents()) {
+                conflicts = conflicts + "\n" + conflictingEvent.getName();
+            }
+            Text conflictsText = new Text(conflicts);
+            box.getChildren().add(conflictsText);
+            conflictsText.setFill(Color.RED);
+        }
         pane.getChildren().add(box);
+
+        box.setPadding(new Insets(10));
+        box.setSpacing(6);
+        hBox.setSpacing(5);
+        text.setLineSpacing(2);
 
         popOver = new PopOver(pane);
         popOver.setDetachable(false);

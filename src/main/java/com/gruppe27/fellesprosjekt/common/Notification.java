@@ -13,11 +13,11 @@ public class Notification {
     }
 
     public Notification(String username, Event event, String message, LocalDateTime timestamp, NotificationType type) {
-        this.username = username;
         this.event = event;
         this.message = message;
         this.timestamp = timestamp;
         this.type = type;
+        this.username = username;
     }
 
     public Notification(String username, Event event, String message, NotificationType type) {
@@ -25,6 +25,7 @@ public class Notification {
         this.event = event;
         this.message = message;
         this.type = type;
+        this.timestamp = LocalDateTime.now();
     }
 
     public NotificationType getType() {
@@ -52,6 +53,6 @@ public class Notification {
     }
 
     public enum NotificationType {
-        INVITATION, PARTICIPATION_DECLINED, EVENT_CHANGED, CONFLICTING_EVENTS
+        INVITATION, PARTICIPATION_DECLINED, EVENT_CHANGED, CONFLICTING_EVENTS, PARTICIPATION_STATUS
     }
 }

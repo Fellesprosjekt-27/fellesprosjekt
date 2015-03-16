@@ -17,8 +17,10 @@ public class Event {
     HashSet<Group> groupParticipants;
     String name;
     Room room;
+
     public Event() {
         this.creator = null;
+        this.room = null;
         userParticipants = new HashSet<>();
         groupParticipants = new HashSet<>();
     }
@@ -26,6 +28,7 @@ public class Event {
     public Event(String name, User creator, LocalDate date, LocalTime startTime, LocalTime endTime) {
         this.name = name;
         this.creator = creator;
+        this.room = null;
         setDate(date);
         setStartTime(startTime);
         setEndTime(endTime);
@@ -83,8 +86,6 @@ public class Event {
 
     public void setName(String s) {
         this.name = s;
-
-
     }
 
     public User getCreator() {
@@ -131,5 +132,18 @@ public class Event {
         ATTENDING,
         NOT_ATTENDING,
         MAYBE
+    }
+
+    public String statusToString() {
+        switch (this.status) {
+            case ATTENDING:
+                return "Deltar";
+            case MAYBE:
+                return "Kanskje";
+            case NOT_ATTENDING:
+                return "Deltar ikke";
+            default:
+                return this.status.toString();
+        }
     }
 }

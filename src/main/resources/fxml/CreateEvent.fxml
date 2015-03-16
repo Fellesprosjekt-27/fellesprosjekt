@@ -54,12 +54,13 @@
 
 			<Button fx:id="addParticipantButton"
 			onAction="#handleAddParticipant"
-			text="legg til deltaker" 
+			text="legg til deltaker"
+            disable="true"
 			GridPane.rowIndex="7" GridPane.columnSpan="2" />
 
 			<Button fx:id="removeParticipantButton"
 			onAction="#handleRemoveParticipant"
-			text="Fjern markerte deltakere" wrapText="true"
+			text="Fjern markert deltaker" wrapText="true"
 			GridPane.columnIndex="1" GridPane.rowIndex="8" 
 			GridPane.halignment="RIGHT" GridPane.valignment="BOTTOM" />
 			
