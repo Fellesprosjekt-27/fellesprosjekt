@@ -19,12 +19,6 @@ public class ParticipantUser extends User {
         this.busy = busy;
         status = Status.MAYBE;
     }
-    
-    public ParticipantUser(String username, String name, boolean busy, Status status){
-        super(username, name);
-        this.busy = busy;
-        this.status = status;
-    }
 
     @Override
     public String toString() {
@@ -52,5 +46,16 @@ public class ParticipantUser extends User {
     
     public void setParticipantStatus(Status status) {
         this.status = status;
+    }
+    
+    public void setParticipantStatus(String string){
+        if(string.equals("MAYBE"))
+            status = Status.MAYBE;
+        else if(string.equals("ATTENDING"))
+            status = Status.ATTENDING;
+        else if(string.equals("NOT_ATTENDING"))
+            status = Status.NOT_ATTENDING;
+        else
+            status = null;
     }
 }
