@@ -3,6 +3,8 @@ package com.gruppe27.fellesprosjekt.client.components;
 import com.gruppe27.fellesprosjekt.client.controllers.CalendarController;
 import com.gruppe27.fellesprosjekt.client.events.EventBoxClicked;
 import com.gruppe27.fellesprosjekt.common.Event;
+import com.mysql.fabric.xmlrpc.base.Value;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
@@ -13,6 +15,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+
 import org.controlsfx.control.PopOver;
 
 public class EventPopOver {
