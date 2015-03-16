@@ -289,11 +289,12 @@ public class CreateEventController implements Initializable {
         //TODO: add functions backend to invite all users from the eventmessage
         //TODO: make an invite message
         CalendarClient.getInstance().sendMessage(message);
+        application.gotoCalendar();
     }
 
     @FXML
     private void handleCancelAction() {
-        application.cancelCreateNewEvent();
+        application.gotoCalendar();
     }
 
     private boolean isTimeDateSet(){
