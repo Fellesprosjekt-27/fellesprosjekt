@@ -46,7 +46,7 @@ public class EventPopOver {
                 break;
         }
         String str = String.format(formatStr, event.getName(), event.getDate(), event.getStartTime(),
-                event.getEndTime(), event.getRoom());
+                event.getEndTime(), event.getRoom().getRoomName());
         Text text = new Text(str);
 
         status.getSelectionModel().select(participationStatusChoice.indexOf(sValue));
