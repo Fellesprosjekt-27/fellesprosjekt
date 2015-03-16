@@ -1,17 +1,29 @@
 package com.gruppe27.fellesprosjekt.common;
 
+import com.gruppe27.fellesprosjekt.common.Event.Status;
+
 public class ParticipantUser extends User {
 
     private boolean busy;
+    //Status is defined in the Event class.
+    private Status status;
 
     public ParticipantUser() {
         super();
         this.busy = false;
+        status = Status.MAYBE;
     }
 
     public ParticipantUser(String username, String name, boolean busy) {
         super(username, name);
         this.busy = busy;
+        status = Status.MAYBE;
+    }
+    
+    public ParticipantUser(String username, String name, boolean busy, Status status){
+        super(username, name);
+        this.busy = busy;
+        this.status = status;
     }
 
     @Override
@@ -34,4 +46,11 @@ public class ParticipantUser extends User {
         this.busy = busy;
     }
 
+    public Status getParticipantStatus() {
+        return status;
+    }
+    
+    public void setParticipantStatus(Status status) {
+        this.status = status;
+    }
 }

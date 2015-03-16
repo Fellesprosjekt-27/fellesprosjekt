@@ -175,7 +175,7 @@ public class CreateEventController implements Initializable {
         //TODO Validering
     }
 
-    LocalTime toLocalTime(String time) {
+    private LocalTime toLocalTime(String time) {
         boolean isValid = time.matches("([0-1]?[0-9]|2[0-3]):[0-5][0-9]");
         if(isValid){
             // LocalTime.parse requires exactly 2 digit hours.
@@ -242,7 +242,6 @@ public class CreateEventController implements Initializable {
         });
     }
 
-
     @FXML
     private void handleAddParticipant() {
 
@@ -265,7 +264,6 @@ public class CreateEventController implements Initializable {
         participantComboBox.init(availableUsersObservable);
     }
 
-
     @FXML
     private void handleCreateEventAction() {
 
@@ -284,8 +282,6 @@ public class CreateEventController implements Initializable {
         event.setRoom(availableRooms.get(roomChoiceBox.getValue()));
 
         EventMessage message = new EventMessage(EventMessage.Command.CREATE_EVENT, event);
-        //TODO: add functions backend to invite all users from the eventmessage
-        //TODO: make an invite message
         CalendarClient.getInstance().sendMessage(message);
     }
 
@@ -352,7 +348,6 @@ public class CreateEventController implements Initializable {
 
     }
 
-
     private void registerValidators() {
         vd.registerValidator(emne, Validator.createEmptyValidator("Tittel mangler", Severity.WARNING));
         vd.registerValidator(datePicker, Validator.createEmptyValidator("Dato mangler", Severity.WARNING));
@@ -374,7 +369,3 @@ public class CreateEventController implements Initializable {
         vd.setValidationDecorator(new ValidationDecoration());
     }
 }
-
-
-
-

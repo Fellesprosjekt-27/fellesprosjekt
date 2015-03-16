@@ -45,7 +45,7 @@ public class RequestMessage {
 
     public enum Command {
         ROOM_REQUEST,
-        USER_REQUEST
+        USER_REQUEST,
     }
 
 }
