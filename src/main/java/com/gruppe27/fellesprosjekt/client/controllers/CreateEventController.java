@@ -99,6 +99,8 @@ public class CreateEventController implements Initializable {
         roomsArray = new ArrayList<>();
         availableUsersObservable = FXCollections.observableArrayList();
         currentRoom = null;
+        currentEvent = new Event();
+        currentEvent.setId(-1);
         availableUsersObservable.addListener((ListChangeListener<SortableText>) c -> {
             System.out.println(c);
         });
@@ -306,7 +308,7 @@ public class CreateEventController implements Initializable {
     @FXML
     private void handleCreateEventAction() {
 
-        Event event = new Event();
+        Event event = getCurrentEvent();
         event.setName(emne.getText());
 
         event.setDate(datePicker.getValue());
@@ -324,6 +326,7 @@ public class CreateEventController implements Initializable {
         EventMessage message = new EventMessage(EventMessage.Command.CREATE_EVENT, event);
         //TODO: make an invite message
         CalendarClient.getInstance().sendMessage(message);
+        System.out.println(event.getId());
     }
 
     @FXML
@@ -440,7 +443,3 @@ public class CreateEventController implements Initializable {
         return messageReceived;
     }
 }
-
-
-
-

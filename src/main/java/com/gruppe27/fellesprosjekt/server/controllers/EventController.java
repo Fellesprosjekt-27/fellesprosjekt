@@ -112,11 +112,65 @@ public class EventController {
     }
 
     private void createEvent(CalendarConnection connection, Event event) {
-        try {
+        if (event.getId() != -1) {
+            updateEvent(connection, event);
+        } else {
+            try {
+                PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement(
+                        "INSERT INTO Event(name, date, start, end, creator, room, capacity_need) VALUES (?,?,?,?,?,?,?)",
+                        Statement.RETURN_GENERATED_KEYS
+                );
 
+                statement.setString(1, event.getName());
+                statement.setString(2, event.getDate().toString());
+                statement.setString(3, event.getStartTime().toString());
+                statement.setString(4, event.getEndTime().toString());
+                statement.setString(5, connection.getUser().getUsername());
+                statement.setString(6, event.getRoom().getRoomName());
+                statement.setInt(7, event.getCapacityNeed());
+                int result = statement.executeUpdate();
+
+                int eventId;
+                ResultSet eventIdResultSet = statement.getGeneratedKeys();
+                eventIdResultSet.next();
+                eventId = eventIdResultSet.getInt(1);
+                event.setId(eventId);
+
+                int number_of_participants = 0;
+                for (User participant : event.getUserParticipants()) {
+                    PreparedStatement participantStatement = DatabaseConnector.getConnection().prepareStatement(
+                            "INSERT INTO UserEvent(username,event_id) VALUES (?,?)"
+                    );
+                    participantStatement.setString(1, participant.getUsername());
+                    participantStatement.setInt(2, eventId);
+                    int participantResult = participantStatement.executeUpdate();
+                    number_of_participants += participantResult;
+
+                    NotificationController.getInstance().newEventNotification(event, participant);
+                }
+
+                System.out.println(number_of_participants + " participants added to event.");
+                System.out.println(result + " rows affected");
+                GeneralMessage createdMessage = new GeneralMessage(GeneralMessage.Command.SUCCESSFUL_CREATE,
+                        "Avtalen " + event.getName() + " opprettet.");
+                connection.sendTCP(createdMessage);
+            } catch (SQLException e) {
+                e.printStackTrace();
+                ErrorMessage error = new ErrorMessage();
+                connection.sendTCP(error);
+            }
+
+        }
+
+    }
+
+    private void updateEvent(CalendarConnection connection, Event event) {
+        try {
             PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement(
-                    "INSERT INTO Event(name, date, start, end, creator, room, capacity_need) VALUES (?,?,?,?,?,?,?)",
-                    Statement.RETURN_GENERATED_KEYS
+                    "UPDATE Event " +
+                            "SET Event.name=?, Event.date=?, Event.start=?, Event.end=?, " +
+                            "Event.creator=?, Event.room=?, Event.capacity_need=? " +
+                            "WHERE Event.id= ?"
             );
 
             statement.setString(1, event.getName());
@@ -126,13 +180,14 @@ public class EventController {
             statement.setString(5, connection.getUser().getUsername());
             statement.setString(6, event.getRoom().getRoomName());
             statement.setInt(7, event.getCapacityNeed());
+            statement.setInt(8, event.getId());
             int result = statement.executeUpdate();
 
-            int eventId;
-            ResultSet eventIdResultSet = statement.getGeneratedKeys();
-            eventIdResultSet.next();
-            eventId = eventIdResultSet.getInt(1);
-            event.setId(eventId);
+            PreparedStatement removeUsersStatement = DatabaseConnector.getConnection().prepareStatement(
+                    "DELETE FROM UserEvent WHERE event_id =?"
+            );
+            removeUsersStatement.setInt(1,event.getId());
+            removeUsersStatement.execute();
 
             int number_of_participants = 0;
             for (User participant : event.getUserParticipants()) {
@@ -140,7 +195,7 @@ public class EventController {
                         "INSERT INTO UserEvent(username,event_id) VALUES (?,?)"
                 );
                 participantStatement.setString(1, participant.getUsername());
-                participantStatement.setInt(2, eventId);
+                participantStatement.setInt(2, event.getId());
                 int participantResult = participantStatement.executeUpdate();
                 number_of_participants += participantResult;
 
@@ -150,7 +205,7 @@ public class EventController {
             System.out.println(number_of_participants + " participants added to event.");
             System.out.println(result + " rows affected");
             GeneralMessage createdMessage = new GeneralMessage(GeneralMessage.Command.SUCCESSFUL_CREATE,
-                    "Avtalen " + event.getName() + " opprettet.");
+                    "Avtalen " + event.getName() + " oppdatert.");
             connection.sendTCP(createdMessage);
         } catch (SQLException e) {
             e.printStackTrace();
