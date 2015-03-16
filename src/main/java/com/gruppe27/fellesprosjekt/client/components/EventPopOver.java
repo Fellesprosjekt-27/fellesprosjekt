@@ -5,6 +5,7 @@ import com.gruppe27.fellesprosjekt.client.events.EventBoxClicked;
 import com.gruppe27.fellesprosjekt.common.Event;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.input.MouseEvent;
@@ -31,10 +32,6 @@ public class EventPopOver {
         VBox box = new VBox();
         HBox hBox = new HBox();
 
-        String str = String.format(formatStr, event.getName(), event.getDate(), event.getStartTime(),
-                event.getEndTime(), event.getRoom());
-        Text text = new Text(str);
-
         ChoiceBox<String> status = new ChoiceBox<String>(participationStatusChoice);
         String sValue = "Kanskje";
         switch (event.getStatus()) {
@@ -48,6 +45,10 @@ public class EventPopOver {
                 sValue = "Deltar ikke";
                 break;
         }
+        String str = String.format(formatStr, event.getName(), event.getDate(), event.getStartTime(),
+                event.getEndTime(), event.getRoom().getRoomName());
+        Text text = new Text(str);
+
         status.getSelectionModel().select(participationStatusChoice.indexOf(sValue));
         Button button = new Button("Endre");
         button.setOnMouseClicked((MouseEvent mEvent) -> {
@@ -71,13 +72,18 @@ public class EventPopOver {
         if (e.getConflictingEvents().size() != 0) {
             String conflicts = "Overlappende avtaler: ";
             for (Event conflictingEvent : e.getConflictingEvents()) {
-                conflicts = conflicts + conflictingEvent.getName() + " ";
+                conflicts = conflicts + "\n" + conflictingEvent.getName();
             }
             Text conflictsText = new Text(conflicts);
             box.getChildren().add(conflictsText);
             conflictsText.setFill(Color.RED);
         }
         pane.getChildren().add(box);
+
+        box.setPadding(new Insets(10));
+        box.setSpacing(6);
+        hBox.setSpacing(5);
+        text.setLineSpacing(2);
 
         popOver = new PopOver(pane);
         popOver.setDetachable(false);
