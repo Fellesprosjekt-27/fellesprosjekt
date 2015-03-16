@@ -11,6 +11,10 @@ public class Group {
     private Set<User> users;
     private HashSet<Event> events;
 
+    public Group() {
+
+    }
+
     public Group(int number, String name) {
         this.number = number;
         this.name = name;

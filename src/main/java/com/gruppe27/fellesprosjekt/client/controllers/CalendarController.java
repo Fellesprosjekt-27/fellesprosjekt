@@ -115,6 +115,7 @@ public class CalendarController implements Initializable {
     }
 
     public void editEvent(Event event) {
+        dismissPopOver();
         application.editEvent(event);
     }
 }

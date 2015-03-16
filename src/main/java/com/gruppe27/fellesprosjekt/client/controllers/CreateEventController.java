@@ -18,6 +18,7 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -35,13 +36,7 @@ import org.controlsfx.validation.Validator;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.function.Predicate;
 
 
@@ -97,10 +92,12 @@ public class CreateEventController implements Initializable {
 
     private ValidationSupport vd = new ValidationSupport();
     private Event currentEvent;
+    private boolean messageReceived;
 
     public CreateEventController() {
         participants = new LinkedHashSet<>();
         roomsArray = new ArrayList<>();
+        availableUsersObservable = FXCollections.observableArrayList();
         currentRoom = null;
     }
 
@@ -157,6 +154,7 @@ public class CreateEventController implements Initializable {
                     switch (message.getCommand()) {
                         case RECEIVE_ROOMS:
                             updateChoiceBox(message.getRooms());
+                            setMessageReceived(true);
                             break;
                     }
                     client.removeListener(this);
@@ -166,6 +164,7 @@ public class CreateEventController implements Initializable {
         };
 
         client.addListener(roomListener);
+        setMessageReceived(false);
         client.sendMessage(message);
 
     }
@@ -220,7 +219,6 @@ public class CreateEventController implements Initializable {
                     client.removeListener(this);
                 }
             }
-
         };
         client.addListener(getUsersListener);
         client.sendMessage(message);
@@ -228,7 +226,7 @@ public class CreateEventController implements Initializable {
 
     private void setAllUsers(HashSet<ParticipantUser> allUsers) {
         this.allUsers = new HashMap<>();
-        availableUsersObservable = FXCollections.observableArrayList();
+        Collection<SortableText> availableUsers = new ArrayList<>();
         for (ParticipantUser participantUser : allUsers) {
 
             this.allUsers.put(participantUser.getUsername(), participantUser);
@@ -238,9 +236,10 @@ public class CreateEventController implements Initializable {
             } else {
                 text.setFill(Color.GREEN);
             }
-            availableUsersObservable.add(text);
+            availableUsers.add(text);
         }
 
+        availableUsersObservable.setAll(availableUsers);
         Collections.sort(availableUsersObservable);
         Platform.runLater(() -> {
             participantComboBox.init(availableUsersObservable);
@@ -250,12 +249,22 @@ public class CreateEventController implements Initializable {
 
     @FXML
     private void handleAddParticipant() {
-        String username = participantComboBox.getValue().getText();
+        addParticipant(participantComboBox.getValue().getText());
+    }
+    private void addParticipant(String username) {
+        System.out.println("adding user " + username);
+        System.out.println("all users: " + allUsers);
         participants.add(allUsers.get(username));
         updateListView();
-        availableUsersObservable.remove(participantComboBox.getValue());
+        removeUserFromAvailableUsers(username);
         participantComboBox.setValue(null);
         participantComboBox.init(availableUsersObservable);
+    }
+
+    private void removeUserFromAvailableUsers(String username) {
+        availableUsersObservable.stream()
+                .filter(text -> text.getText().equals(username))
+                .forEach(availableUsersObservable::remove);
     }
 
     private void updateListView() {
@@ -286,9 +295,9 @@ public class CreateEventController implements Initializable {
         event.setEndTime(endTime);
         event.setAllParticipants(participants);
         event.setRoom(currentRoom);
+        event.setCapacityNeed(Integer.parseInt(capacityField.getText()));
 
         EventMessage message = new EventMessage(EventMessage.Command.CREATE_EVENT, event);
-        //TODO: add functions backend to invite all users from the eventmessage
         //TODO: make an invite message
         CalendarClient.getInstance().sendMessage(message);
     }
@@ -387,15 +396,22 @@ public class CreateEventController implements Initializable {
         datePicker.setValue(event.getDate());
         fromTimeField.setText(event.getStartTime().toString());
         toTimeField.setText(event.getEndTime().toString());
-        roomChoiceBox.setValue(event.getRoom().toString());
+//        roomChoiceBox.setValue(event.getRoom().toString());
 
         getAllUsers();
+        availableUsersObservable.addListener(new ListChangeListener<SortableText>() {
+            @Override
+            public void onChanged(Change<? extends SortableText> c) {
+                availableUsersObservable.removeListener(this);
+                for(User user : event.getUserParticipants()) {
+                    addParticipant(user.getUsername());
+                }
 
-        participantsListView.getItems().clear();
-        for(User user : event.getUserParticipants()) {
-            participantsListView.getItems().add(user.getUsername());
-            //TODO update userCombobox
-        }
+            }
+
+        });
+
+
 
 
     }
@@ -405,6 +421,14 @@ public class CreateEventController implements Initializable {
     }
     public Event getCurrentEvent() {
         return this.currentEvent;
+    }
+
+    public void setMessageReceived(boolean messageReceived) {
+        this.messageReceived = messageReceived;
+    }
+
+    public boolean isMessageReceived() {
+        return messageReceived;
     }
 }
 

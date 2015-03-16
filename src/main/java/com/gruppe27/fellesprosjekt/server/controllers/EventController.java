@@ -1,6 +1,7 @@
 package com.gruppe27.fellesprosjekt.server.controllers;
 
 import com.gruppe27.fellesprosjekt.common.Event;
+import com.gruppe27.fellesprosjekt.common.Room;
 import com.gruppe27.fellesprosjekt.common.User;
 import com.gruppe27.fellesprosjekt.common.messages.ErrorMessage;
 import com.gruppe27.fellesprosjekt.common.messages.EventMessage;
@@ -18,7 +19,7 @@ import java.util.HashSet;
 public class EventController {
     private static final String EVENT_QUERY =
             "SELECT Event.id, Event.name, Event.date, Event.start, Event.end, Creator.username, Creator.name, " +
-                    "Participant.username, Participant.name, UserEvent.status " +
+                    "Participant.username, Participant.name, UserEvent.status, Event.capacity_need " +
                     "FROM Event JOIN User AS Creator ON Event.creator = Creator.username " +
                     "JOIN UserEvent ON Event.id = UserEvent.event_id " +
                     "JOIN User AS Participant ON UserEvent.username = Participant.username ";
@@ -114,7 +115,7 @@ public class EventController {
         try {
 
             PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement(
-                    "INSERT INTO Event(name, date, start, end, creator, room) VALUES (?,?,?,?,?,?)",
+                    "INSERT INTO Event(name, date, start, end, creator, room, capacity_need) VALUES (?,?,?,?,?,?,?)",
                     Statement.RETURN_GENERATED_KEYS
             );
 
@@ -124,6 +125,7 @@ public class EventController {
             statement.setString(4, event.getEndTime().toString());
             statement.setString(5, connection.getUser().getUsername());
             statement.setString(6, event.getRoom().getRoomName());
+            statement.setInt(7, event.getCapacityNeed());
             int result = statement.executeUpdate();
 
             int eventId;

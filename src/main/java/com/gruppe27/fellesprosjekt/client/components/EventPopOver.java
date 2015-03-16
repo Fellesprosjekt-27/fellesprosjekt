@@ -71,7 +71,7 @@ public class EventPopOver {
         });
 
 
-        hBox.getChildren().addAll(status, button);1
+        hBox.getChildren().addAll(status, button, editEventButton);
         box.getChildren().addAll(text, hBox);
         pane.getChildren().add(box);
 

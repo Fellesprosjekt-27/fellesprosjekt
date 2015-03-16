@@ -37,6 +37,7 @@ CREATE TABLE Event (
   end     TIME        NOT NULL,
   creator VARCHAR(32) NOT NULL,
   room    VARCHAR(32),
+  capacity_need INT,
   PRIMARY KEY (id),
   FOREIGN KEY (creator) REFERENCES User (username),
   FOREIGN KEY (room) REFERENCES Room (name)
@@ -61,7 +62,7 @@ CREATE TABLE UserEvent (
 
 CREATE TABLE Notification (
   id INT NOT NULL AUTO_INCREMENT,
-  timestamp DATETIME NOT NULL DEFAULT NOW(),
+  timestamp DATETIME NOT NULL,
   event_id INT NOT NULL,
   user_username VARCHAR(32) NOT NULL,
   message VARCHAR(200),
