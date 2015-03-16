@@ -3,6 +3,7 @@ package com.gruppe27.fellesprosjekt.client;
 import com.gruppe27.fellesprosjekt.client.controllers.CalendarController;
 import com.gruppe27.fellesprosjekt.client.controllers.CreateEventController;
 import com.gruppe27.fellesprosjekt.client.controllers.LogInController;
+import com.gruppe27.fellesprosjekt.common.Event;
 import com.gruppe27.fellesprosjekt.common.User;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -57,6 +58,12 @@ public class CalendarApplication extends Application {
         controller.setApp(this);
     }
 
+    private void gotoEditEvent(Event event) {
+        CreateEventController controller = (CreateEventController) replaceSceneContent("/fxml/CreateEvent.fxml");
+        controller.setApp(this);
+        controller.editEvent(event);
+    }
+
     private void gotoCalendar() {
         CalendarController controller = (CalendarController) replaceSceneContent("/fxml/Calendar.fxml");
         controller.setApp(this);
@@ -90,5 +97,9 @@ public class CalendarApplication extends Application {
 
     public void cancelCreateNewEvent() {
         this.gotoCalendar();
+    }
+
+    public void editEvent(Event event) {
+        gotoEditEvent(event);
     }
 }

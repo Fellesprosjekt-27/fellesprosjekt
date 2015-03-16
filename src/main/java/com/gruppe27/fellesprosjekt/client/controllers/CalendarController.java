@@ -113,4 +113,8 @@ public class CalendarController implements Initializable {
     public AnchorPane getRoot() {
         return root;
     }
+
+    public void editEvent(Event event) {
+        application.editEvent(event);
+    }
 }

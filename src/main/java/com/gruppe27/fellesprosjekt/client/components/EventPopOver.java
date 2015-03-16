@@ -5,6 +5,7 @@ import com.gruppe27.fellesprosjekt.client.events.EventBoxClicked;
 import com.gruppe27.fellesprosjekt.common.Event;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.input.MouseEvent;
@@ -49,7 +50,7 @@ public class EventPopOver {
         }
         status.getSelectionModel().select(participationStatusChoice.indexOf(sValue));
         Button button = new Button("Endre");
-        button.setOnMouseClicked((MouseEvent mEvent) -> {
+        button.setOnAction((ActionEvent changeStatusEvent) -> {
             switch (status.getValue()) {
                 case "Deltar":
                     event.setStatus(Event.Status.ATTENDING);
@@ -64,8 +65,13 @@ public class EventPopOver {
 
             controller.handleChangeParticipationStatus(event.getStatus(), event.getId());
         });
+        Button editEventButton = new Button("Rediger Avtale");
+        editEventButton.setOnAction((ActionEvent editEventEvent) -> {
+            controller.editEvent(event);
+        });
 
-        hBox.getChildren().addAll(status, button);
+
+        hBox.getChildren().addAll(status, button);1
         box.getChildren().addAll(text, hBox);
         pane.getChildren().add(box);
 

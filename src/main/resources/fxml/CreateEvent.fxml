@@ -14,7 +14,7 @@
 		<GridPane id="postItPane" alignment="CENTER" style="-fx-padding: 20;"
 		hgap="10" vgap="10">
 
-			<Text text="OPPRETT AVTALE" 
+			<Text text="OPPRETT AVTALE" fx:id="titleText"
 			GridPane.rowIndex="0" GridPane.columnSpan="5" GridPane.halignment="CENTER" />
 
 			<Text text="Emne" GridPane.rowIndex="1" />

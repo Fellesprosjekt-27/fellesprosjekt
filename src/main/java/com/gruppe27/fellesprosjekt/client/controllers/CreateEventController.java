@@ -27,6 +27,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import org.controlsfx.validation.Severity;
 import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
@@ -45,6 +46,9 @@ import java.util.function.Predicate;
 
 
 public class CreateEventController implements Initializable {
+
+    @FXML
+    Text titleText;
 
     @FXML
     TextField emne;
@@ -92,6 +96,7 @@ public class CreateEventController implements Initializable {
     private HashSet<User> participants;
 
     private ValidationSupport vd = new ValidationSupport();
+    private Event currentEvent;
 
     public CreateEventController() {
         participants = new LinkedHashSet<>();
@@ -370,6 +375,36 @@ public class CreateEventController implements Initializable {
 
 
         vd.setValidationDecorator(new ValidationDecoration());
+    }
+
+    public void editEvent(Event event) {
+        setCurrentEvent(event);
+
+        titleText.setText("ENDRE AVTALE");
+        createEventButton.setText("ENDRE AVTALE");
+        emne.setText(event.getName());
+
+        datePicker.setValue(event.getDate());
+        fromTimeField.setText(event.getStartTime().toString());
+        toTimeField.setText(event.getEndTime().toString());
+        roomChoiceBox.setValue(event.getRoom().toString());
+
+        getAllUsers();
+
+        participantsListView.getItems().clear();
+        for(User user : event.getUserParticipants()) {
+            participantsListView.getItems().add(user.getUsername());
+            //TODO update userCombobox
+        }
+
+
+    }
+
+    public void setCurrentEvent(Event currentEvent) {
+        this.currentEvent = currentEvent;
+    }
+    public Event getCurrentEvent() {
+        return this.currentEvent;
     }
 }
 
