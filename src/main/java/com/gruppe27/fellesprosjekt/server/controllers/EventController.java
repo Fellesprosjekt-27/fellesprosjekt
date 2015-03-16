@@ -138,6 +138,14 @@ public class EventController {
             eventId = eventIdResultSet.getInt(1);
             event.setId(eventId);
 
+            PreparedStatement creatorStatus = DatabaseConnector.getConnection().prepareStatement(
+                    "INSERT INTO UserEvent(username, event_id, status) VALUES (?,?,?)"
+            );
+            creatorStatus.setString(1, event.getCreator().getUsername());
+            creatorStatus.setInt(2, eventId);
+            creatorStatus.setString(3, Event.Status.ATTENDING.toString());
+            result = creatorStatus.executeUpdate();
+
             int number_of_participants = 0;
             for (User participant : event.getUserParticipants()) {
                 PreparedStatement participantStatement = DatabaseConnector.getConnection().prepareStatement(
