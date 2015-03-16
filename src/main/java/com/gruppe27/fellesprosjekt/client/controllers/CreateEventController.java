@@ -242,7 +242,6 @@ public class CreateEventController implements Initializable {
         });
     }
 
-
     @FXML
     private void handleAddParticipant() {
 
@@ -267,7 +266,6 @@ public class CreateEventController implements Initializable {
         participantComboBox.init(availableUsersObservable);
     }
 
-
     @FXML
     private void handleCreateEventAction() {
 
@@ -275,18 +273,19 @@ public class CreateEventController implements Initializable {
         event.setName(emne.getText());
 
         event.setDate(datePicker.getValue());
-
+        
         LocalTime startTime = toLocalTime(fromTimeField.getText());
         LocalTime endTime = toLocalTime(toTimeField.getText());
         event.setCreator(application.getUser());
         event.setStartTime(startTime);
         event.setEndTime(endTime);
         event.setAllParticipants(participants);
-        event.setRoom(availableRooms.get(roomChoiceBox.getValue()));
+        if(roomChoiceBox.getValue() == null)
+            event.setRoom(null);
+        else
+            event.setRoom(availableRooms.get(roomChoiceBox.getValue()));
 
         EventMessage message = new EventMessage(EventMessage.Command.CREATE_EVENT, event);
-        //TODO: add functions backend to invite all users from the eventmessage
-        //TODO: make an invite message
         CalendarClient.getInstance().sendMessage(message);
     }
 
@@ -352,7 +351,6 @@ public class CreateEventController implements Initializable {
         participantComboBox.getEditor().textProperty().addListener(enableActionListener);
 
     }
-
 
     private void registerValidators() {
         vd.registerValidator(emne, Validator.createEmptyValidator("Tittel mangler", Severity.WARNING));
