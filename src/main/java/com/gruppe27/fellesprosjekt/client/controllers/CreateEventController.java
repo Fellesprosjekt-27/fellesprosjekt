@@ -247,6 +247,7 @@ public class CreateEventController implements Initializable {
     private void handleAddParticipant() {
 
         String username = participantComboBox.getValue().getText();
+        participantsListView.getItems().add(username);
         participants.add(allUsers.get(username));
 
         availableUsersObservable.remove(participantComboBox.getValue());
@@ -255,13 +256,14 @@ public class CreateEventController implements Initializable {
     }
 
     @FXML
-    private void handleRemoveParticipant(){
-        String selectedItem = participantsListView.getSelectionModel().getSelectedItem();
+    private void handleRemoveParticipant() {
+        String username = participantsListView.getSelectionModel().getSelectedItem();
 
+        participants.remove(allUsers.get(username));
         participantsListView.getSelectionModel().select(null);
-        participantsListView.getItems().remove(selectedItem);
+        participantsListView.getItems().remove(username);
 
-        availableUsersObservable.addAll(new SortableText(selectedItem));
+        availableUsersObservable.addAll(new SortableText(username));
         participantComboBox.init(availableUsersObservable);
     }
 
