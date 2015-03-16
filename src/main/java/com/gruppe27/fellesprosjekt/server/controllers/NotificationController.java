@@ -13,7 +13,6 @@ import com.gruppe27.fellesprosjekt.server.DatabaseConnector;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class NotificationController {
@@ -121,10 +120,34 @@ public class NotificationController {
         }
     }
 
+    public void statusNotification(Event event, User participant) {
+        String message = String.format("%s har endret status til %s på avtale %s", participant.getName(),
+                event.statusToString().toLowerCase(),
+                event.getName());
+        Notification notification = new Notification(participant.getUsername(), event, message,
+                Notification.NotificationType.PARTICIPATION_STATUS);
+
+        try {
+            createNotification(notification);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        CalendarConnection connection = findConnectedUser(event.getCreator());
+        if (connection != null) {
+            NotificationMessage notificationMessage = new NotificationMessage(
+                    NotificationMessage.Command.RECEIVE_NOTIFICATION,
+                    notification
+            );
+
+            connection.sendTCP(notificationMessage);
+        }
+    }
+
     public void newEventNotification(Event event, User user) {
         String message = "You have been invited to join: " + event.getName();
         Notification notification = new Notification(user.getUsername(), event, message,
-                LocalDateTime.now(),
                 Notification.NotificationType.INVITATION);
 
         try {

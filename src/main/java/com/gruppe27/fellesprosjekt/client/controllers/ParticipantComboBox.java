@@ -55,7 +55,8 @@ public class ParticipantComboBox extends ComboBox<SortableText> {
         this.configAutoFilterListener();
     }
 
-    private void configAutoFilterListener() {
+
+    private void configAutoFilterListener(){
         final ParticipantComboBox currentInstance = this;
         this.getEditor().textProperty().addListener(new ChangeListener<String>() {
 

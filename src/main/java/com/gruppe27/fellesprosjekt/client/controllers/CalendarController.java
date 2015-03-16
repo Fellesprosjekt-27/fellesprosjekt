@@ -23,10 +23,10 @@ import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 public class CalendarController implements Initializable {
-    Event.Status pStatus;
     private CalendarApplication application;
     private boolean popOverFlag;
     private EventPopOver popOver;
+    
     @FXML
     private MonthCalendarComponent calendar;
 
@@ -96,11 +96,10 @@ public class CalendarController implements Initializable {
         client.sendMessage(eventMessage);
     }
 
-    public void handleChangeParticipationStatus(Event.Status status, int id) {
+    public void handleChangeParticipationStatus(Event event) {
         CalendarClient client = CalendarClient.getInstance();
-        pStatus = status;
         ParticipantStatusMessage statusMessage = new ParticipantStatusMessage(
-                ParticipantStatusMessage.Command.CHANGE_STATUS, status, id);
+                ParticipantStatusMessage.Command.CHANGE_STATUS, event);
         client.sendMessage(statusMessage);
     }
 
@@ -116,6 +115,6 @@ public class CalendarController implements Initializable {
 
     public void editEvent(Event event) {
         dismissPopOver();
-        application.editEvent(event);
+        application.gotoEditEvent(event);
     }
 }

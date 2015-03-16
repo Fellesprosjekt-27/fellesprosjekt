@@ -3,33 +3,27 @@ package com.gruppe27.fellesprosjekt.common.messages;
 import com.gruppe27.fellesprosjekt.common.Event;
 
 public class ParticipantStatusMessage {
+    public enum Command {
+        CHANGE_STATUS
+    }
 
-    Event.Status status;
     Command command;
-    int eventId;
+    Event event;
+
     public ParticipantStatusMessage() {
     }
 
-    public ParticipantStatusMessage(Command command, Event.Status status, int eventId) {
+    public ParticipantStatusMessage(Command command, Event event) {
         this.command = command;
-        this.status = status;
-        this.eventId = eventId;
+        this.event = event;
     }
 
     public Command getCommand() {
         return command;
     }
 
-    public Event.Status getStatus() {
-        return status;
-    }
-
-    public int getEventId() {
-        return eventId;
-    }
-
-    public enum Command {
-        CHANGE_STATUS
+    public Event getEvent() {
+        return event;
     }
 }
 

@@ -10,6 +10,19 @@ public class SortableText extends Text implements Comparable {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if(obj == null){
+            return false;
+        }
+        else if(obj instanceof SortableText){
+            return compareTo(obj) == 0;
+        }
+        else{
+            return super.equals(obj);
+        }
+    }
+
+    @Override
     public int compareTo(Object o) {
         if (o instanceof SortableText) {
             String you = ((SortableText) o).getText();
