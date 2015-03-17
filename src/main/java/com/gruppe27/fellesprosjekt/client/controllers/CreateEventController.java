@@ -243,6 +243,8 @@ public class CreateEventController implements Initializable {
         }
 
         Collections.sort(availableUsersObservable);
+        removeListViewParticipants();
+
 
         Platform.runLater(() -> {
             participantComboBox.init(availableUsersObservable);
@@ -252,6 +254,13 @@ public class CreateEventController implements Initializable {
             getInvited(eventId);
         }
     }
+
+    private void removeListViewParticipants() {
+        for (String string : participantsListView.getItems()) {
+            removeUserFromObservable(string.split(":")[0]);
+        }
+    }
+
 
     @FXML
     private void handleAddParticipant() {
