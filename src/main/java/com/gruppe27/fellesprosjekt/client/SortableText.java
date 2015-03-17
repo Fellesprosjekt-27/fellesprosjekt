@@ -8,7 +8,7 @@ public class SortableText extends Text implements Comparable {
     public SortableText(String username) {
         super(username);
     }
-
+    
     @Override
     public boolean equals(Object obj) {
         if(obj == null){
