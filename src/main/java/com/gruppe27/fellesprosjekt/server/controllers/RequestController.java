@@ -72,15 +72,11 @@ public class RequestController {
 
 
             HashSet<ParticipantUser> participantUsers = new HashSet<>();
-
-            System.out.println(busyUsersStatement);
-            System.out.println(freeUsersStatement);
-
-
+            
             ResultSet busyUsersResult = busyUsersStatement.executeQuery();
             ResultSet freeUsersResult = freeUsersStatement.executeQuery();
 
-
+            
             while (busyUsersResult.next()) {
                 ParticipantUser busyUser = new ParticipantUser(
                         busyUsersResult.getString(1),
