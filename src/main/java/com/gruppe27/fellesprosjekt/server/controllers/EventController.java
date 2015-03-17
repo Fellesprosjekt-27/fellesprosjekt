@@ -155,10 +155,11 @@ public class EventController {
             int number_of_participants = 0;
             for (User participant : event.getUserParticipants()) {
                 PreparedStatement participantStatement = DatabaseConnector.getConnection().prepareStatement(
-                        "INSERT INTO UserEvent(username,event_id) VALUES (?,?)"
+                        "INSERT INTO UserEvent(username,event_id, status) VALUES (?,?,?)"
                 );
                 participantStatement.setString(1, participant.getUsername());
                 participantStatement.setInt(2, eventId);
+                participantStatement.setString(3, Event.Status.MAYBE.toString());
                 int participantResult = participantStatement.executeUpdate();
                 number_of_participants += participantResult;
 

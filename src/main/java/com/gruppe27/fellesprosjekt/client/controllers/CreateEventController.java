@@ -181,6 +181,9 @@ public class CreateEventController implements Initializable {
         if (teams == null) {
             getAllTeams();
         }
+        if (allUsers == null) {
+            getAllUsers();
+        }
     }
 
     LocalTime toLocalTime(String time) {
@@ -381,7 +384,6 @@ public class CreateEventController implements Initializable {
         event.setStartTime(startTime);
         event.setEndTime(endTime);
         HashSet<User> participants = getListViewParticipant();
-        participants.add(event.getCreator());
         event.setAllParticipants(participants);
         event.setRoom(availableRooms.get(roomChoiceBox.getValue()));
 
