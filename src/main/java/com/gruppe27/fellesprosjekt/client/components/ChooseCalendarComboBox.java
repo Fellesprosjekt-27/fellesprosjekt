@@ -11,12 +11,18 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 import javafx.util.StringConverter;
 
+import java.util.ArrayList;
+import java.util.stream.Collectors;
+
 public class ChooseCalendarComboBox extends ComboBox<User> {
+    private ArrayList<User> allUsers;
     private ObservableList<User> users;
     private CalendarController controller;
 
     public ChooseCalendarComboBox() {
         super();
+        allUsers = new ArrayList<>();
+
         this.setConverter(new StringConverter<User>() {
             @Override
             public String toString(User user) {
@@ -36,16 +42,24 @@ public class ChooseCalendarComboBox extends ComboBox<User> {
 
         this.setEditable(true);
         users = FXCollections.observableArrayList();
-        this.valueProperty().addListener((observable, newValue, oldValue) -> {
+        this.valueProperty().addListener((observable, oldValue, newValue) -> {
             this.controller.setCurrentUser(newValue);
         });
 
-        this.getEditor().textProperty().addListener((observable, newValue, oldValue) -> {
-
-        });
+        this.getEditor().textProperty().addListener((observable, oldValue, newValue) ->
+            filterUsers(newValue)
+        );
 
         this.setItems(users);
         findUsers();
+    }
+
+    private void filterUsers(String name) {
+        users.setAll(allUsers
+                .stream()
+                .filter(user -> user.getName().toLowerCase().startsWith(name.toLowerCase()))
+                .collect(Collectors.toList()));
+        this.show();
     }
 
     public void setController(CalendarController controller) {
@@ -62,6 +76,7 @@ public class ChooseCalendarComboBox extends ComboBox<User> {
                     UserMessage message = (UserMessage) object;
                     if (message.getCommand() == UserMessage.Command.RECEIVE_ALL) {
                         users.addAll(message.getUsers());
+                        allUsers.addAll(message.getUsers());
                         client.removeListener(this);
                     }
                 }
@@ -70,6 +85,11 @@ public class ChooseCalendarComboBox extends ComboBox<User> {
 
         client.addListener(listener);
         client.sendMessage(userMessage);
+    }
+
+    public void resetUser() {
+        this.setValue(null);
+        this.hide();
     }
 
     public User getUser() {

@@ -138,5 +138,6 @@ public class CalendarController implements Initializable {
 
     public void resetCurrentUser() {
         setCurrentUser(null);
+        this.chooseCalendarComboBox.resetUser();
     }
 }

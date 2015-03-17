@@ -12,7 +12,7 @@ public class CalendarClient {
     private Client client;
 
     protected CalendarClient() {
-        client = new Client();
+        client = new Client(128000, 6000);
         client.start();
 
         Network.register(client);
