@@ -26,6 +26,6 @@ public class FrontendListener extends Listener {
 
     public void disconnected(Connection connection) {
         System.out.println("disconnected");
-        System.exit(0);
+        //System.exit(0);
     }
 }

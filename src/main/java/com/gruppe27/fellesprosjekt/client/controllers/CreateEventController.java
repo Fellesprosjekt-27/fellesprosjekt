@@ -16,7 +16,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 import org.controlsfx.validation.Severity;
 import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
@@ -78,11 +77,11 @@ public class CreateEventController implements Initializable {
     private Map<String, ParticipantUser> allUsers;
     private Map<Integer, Team> teams;
     private ObservableList<SortableText> availableUsersObservable;
-    private ObservableList<Text> availableTeamsObservable;
+    private ObservableList<String> availableTeamsObservable;
 
     private ObservableList<String> availableRoomsObservable;
 
-    private HashSet<User> participants;
+    private ArrayList<String> membersAdded;
 
     private ValidationSupport vd = new ValidationSupport();
 
@@ -92,8 +91,8 @@ public class CreateEventController implements Initializable {
     }
 
     public CreateEventController() {
-        participants = new LinkedHashSet<>();
         availableRooms = new HashMap<>();
+        membersAdded = new ArrayList<>();
     }
 
     @Override
@@ -137,7 +136,6 @@ public class CreateEventController implements Initializable {
             public void received(Connection connection, Object object) {
                 if (object instanceof RoomMessage) {
                     RoomMessage message = (RoomMessage) object;
-
                     switch (message.getCommand()) {
                         case RECEIVE_ROOMS:
                             updateChoiceBox(message.getRooms());
@@ -184,7 +182,6 @@ public class CreateEventController implements Initializable {
             getAllTeams();
         }
     }
-
 
     LocalTime toLocalTime(String time) {
         boolean isValid = time.matches("([0-1]?[0-9]|2[0-3]):[0-5][0-9]");
@@ -237,7 +234,7 @@ public class CreateEventController implements Initializable {
         TeamMessage message = new TeamMessage(TeamMessage.Command.SEND_TEAMS);
         CalendarClient client = CalendarClient.getInstance();
 
-        Listener getUsersListener = new Listener() {
+        Listener getTeamsListener = new Listener() {
             public void received(Connection connection, Object object) {
                 if (object instanceof TeamMessage) {
                     TeamMessage complete = (TeamMessage) object;
@@ -253,7 +250,7 @@ public class CreateEventController implements Initializable {
             }
 
         };
-        client.addListener(getUsersListener);
+        client.addListener(getTeamsListener);
         client.sendMessage(message);
     }
 
@@ -285,8 +282,7 @@ public class CreateEventController implements Initializable {
         availableTeamsObservable = FXCollections.observableArrayList();
         for (Team team : teams) {
             this.teams.put(team.getNumber(), team);
-            Text text = new Text(team.getNumber() + "");
-            availableTeamsObservable.add(text);
+            availableTeamsObservable.add(team.getNumber() + "");
         }
         Platform.runLater(() -> {
             initComboBox();
@@ -302,8 +298,10 @@ public class CreateEventController implements Initializable {
     private void handleAddParticipant() {
 
         String username = participantComboBox.getValue().getText();
-        participantsListView.getItems().add(username);
-        participants.add(allUsers.get(username));
+        if (participantsListView.getItems().indexOf(username) == -1) {
+            participantsListView.getItems().add(username);
+        }
+
 
         availableUsersObservable.remove(participantComboBox.getValue());
         participantComboBox.setValue(null);
@@ -317,28 +315,55 @@ public class CreateEventController implements Initializable {
         Integer number = Integer.parseInt((String) teamComboBox.getValue());
         Team team = teams.get(number);
         for (User member : team.getTeamMembers()) {
-            participantsListView.getItems().add(member.getUsername());
+            if ((participantsListView.getItems().indexOf(member.getUsername()) == -1) &&
+                    !member.getUsername().equals(application.getUser().getUsername())) {
+                participantsListView.getItems().add(member.getUsername());
+                membersAdded.add(member.getUsername());
+            }
         }
         availableTeamsObservable.remove(teamComboBox.getValue());
         teamComboBox.getItems().clear();
+        teamComboBox.setValue(null);
         initComboBox();
     }
 
     @FXML
     private void handleRemoveParticipant() {
         String username = participantsListView.getSelectionModel().getSelectedItem();
-        participantsListView.getSelectionModel().select(null);
-        participantsListView.getItems().remove(username);
-        
-        SortableText text = new SortableText(username);
-        if(allUsers.get(username).isBusy()){
-            text.setFill(Color.RED);
-        }else {
-            text.setFill(Color.GREEN);
+        if (membersAdded.indexOf(username) == -1) {
+            participantsListView.getSelectionModel().select(null);
+            participantsListView.getItems().remove(username);
+
+            SortableText text = new SortableText(username);
+            if(allUsers.get(username).isBusy()){
+                text.setFill(Color.RED);
+            }else {
+                text.setFill(Color.GREEN);
+            }
+            availableUsersObservable.add(text);
+            Collections.sort(availableUsersObservable);
+            participantComboBox.init(availableUsersObservable);
+        } else {
+            membersAdded.remove(username);
+            participantsListView.getItems().remove(username);
+            reAddTeams();
         }
-        availableUsersObservable.add(text);
-        Collections.sort(availableUsersObservable);
-        participantComboBox.init(availableUsersObservable);
+
+    }
+
+    private void reAddTeams() {
+        for (Map.Entry<Integer, Team> teamEntry : teams.entrySet()) {
+            boolean canAdd = true;
+            for (User member : teamEntry.getValue().getTeamMembers()) {
+                if (participantsListView.getItems().indexOf(member.getUsername()) != -1) {
+                    canAdd = false;
+                }
+            }
+            if (canAdd) {
+                availableTeamsObservable.add(teamEntry.getKey() + "");
+                initComboBox();
+            }
+        }
     }
 
 
@@ -396,6 +421,10 @@ public class CreateEventController implements Initializable {
         return isTimeDateSet() &&  participantComboBox.getItems().contains(participantComboBox.getValue());
     }
 
+    private  boolean canAddMembers() {
+        return isTimeDateSet() && teamComboBox.getItems().contains(teamComboBox.getValue());
+    }
+
     private void enableStates(){
         createEventButton.setDisable(!canCreateEvent());
 
@@ -404,6 +433,10 @@ public class CreateEventController implements Initializable {
         participantComboBox.setDisable(!isTimeDateSet());
 
         addParticipantButton.setDisable(!canAddParticipant());
+
+        teamComboBox.setDisable(!isTimeDateSet());
+
+        addTeamButton.setDisable(!canAddMembers());
 
 
     }
@@ -435,6 +468,7 @@ public class CreateEventController implements Initializable {
         capacityField.textProperty().addListener(clearRoomChoice);
 
         participantComboBox.getEditor().textProperty().addListener(enableActionListener);
+        teamComboBox.getEditor().textProperty().addListener(enableActionListener);
 
     }
 
