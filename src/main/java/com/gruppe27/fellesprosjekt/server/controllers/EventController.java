@@ -18,10 +18,10 @@ import java.util.HashSet;
 
 public class EventController {
     public static final String EVENT_QUERY =
-            "SELECT Event.id, Event.name, Event.date, Event.start, Event.end, " +
+            "SELECT Event.id, Event.name, Event.date, Event.start, Event.end, Event.capacity_need " +
                     "Room.name, Room.capacity, " +
                     "Creator.username, Creator.name, " +
-                    "Participant.username, Participant.name, UserEvent.status, Event.capacity_need " +
+                    "Participant.username, Participant.name, UserEvent.status " +
                     "FROM Event JOIN User AS Creator ON Event.creator = Creator.username " +
                     "JOIN UserEvent ON Event.id = UserEvent.event_id " +
                     "JOIN User AS Participant ON UserEvent.username = Participant.username " +
