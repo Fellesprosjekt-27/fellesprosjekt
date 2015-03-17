@@ -11,6 +11,7 @@ public class RequestMessage {
     LocalTime startTime;
     LocalTime endTime;
     int capacity;
+    int event_id;
     public RequestMessage() {
     }
 
@@ -22,9 +23,18 @@ public class RequestMessage {
         this.capacity = capacity;
 
     }
+    
+    public RequestMessage(Command command, int event_id){
+        this.command = command;
+        this.event_id = event_id;
+    }
 
     public Command getCommand() {
         return command;
+    }
+    
+    public int getEventId(){
+        return event_id;
     }
 
     public LocalTime getEndTime() {
@@ -45,7 +55,8 @@ public class RequestMessage {
 
     public enum Command {
         ROOM_REQUEST,
-        USER_REQUEST
+        USER_REQUEST,
+        INVITED_USERS_REQUEST
     }
 
 }

@@ -188,7 +188,7 @@ public class CreateEventController implements Initializable {
 
     }
 
-    LocalTime toLocalTime(String time) {
+    private LocalTime toLocalTime(String time) {
         boolean isValid = time.matches("([0-1]?[0-9]|2[0-3]):[0-5][0-9]");
         if(isValid){
             // LocalTime.parse requires exactly 2 digit hours.
@@ -263,7 +263,6 @@ public class CreateEventController implements Initializable {
         }
     }
 
-
     @FXML
     private void handleAddParticipant() {
         addParticipant(participantComboBox.getValue().getText());
@@ -309,7 +308,6 @@ public class CreateEventController implements Initializable {
         Collections.sort(availableUsersObservable);
         participantComboBox.init(availableUsersObservable);
     }
-
 
     @FXML
     private void handleCreateEventAction() {
@@ -409,7 +407,6 @@ public class CreateEventController implements Initializable {
         participantComboBox.getEditor().textProperty().addListener(enableActionListener);
 
     }
-
 
     private void registerValidators() {
         vd.registerValidator(emne, Validator.createEmptyValidator("Tittel mangler", Severity.WARNING));

@@ -40,6 +40,43 @@ public class RequestController {
             case USER_REQUEST:
                 sendAllParticipantUsers(connection, requestMessage);
                 break;
+            case INVITED_USERS_REQUEST:
+                sendAllInvitedUsers(connection, requestMessage);
+                break;
+        }
+    }
+
+    private void sendAllInvitedUsers(CalendarConnection connection, RequestMessage message) {
+        try{
+            PreparedStatement usersStatus = DatabaseConnector.getConnection().prepareStatement(
+                    "SELECT User.username, User.name, UserEvent.status FROM User JOIN UserEvent "
+                    + "ON User.username = UserEvent.username JOIN Event ON Event.id = UserEvent.event_id "
+                    + "WHERE Event.id = ?"
+                    );
+            
+            usersStatus.setInt(1, message.getEventId());
+            
+            ResultSet usersStatusResult = usersStatus.executeQuery();
+            HashSet<ParticipantUser> invitedUsers = new HashSet<>();
+            
+            while(usersStatusResult.next()){
+                ParticipantUser statusUser = new ParticipantUser(
+                        usersStatusResult.getString(1),
+                        usersStatusResult.getString(2),
+                        false
+                        );
+                statusUser.setParticipantStatus(usersStatusResult.getString(3));
+                invitedUsers.add(statusUser);
+            }
+            
+            System.out.println(invitedUsers.size() + "invited users found.");
+            ParticipantUserMessage createdMessage = new ParticipantUserMessage(ParticipantUserMessage.Command.RECEIVE_ALL, invitedUsers);
+            connection.sendTCP(createdMessage);
+            
+        }catch (SQLException e) {
+            e.printStackTrace();
+            ErrorMessage error = new ErrorMessage();
+            connection.sendTCP(error);
         }
     }
 
@@ -76,7 +113,6 @@ public class RequestController {
 
 
             HashSet<ParticipantUser> participantUsers = new HashSet<>();
-            
             ResultSet busyUsersResult = busyUsersStatement.executeQuery();
             ResultSet freeUsersResult = freeUsersStatement.executeQuery();
 
