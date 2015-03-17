@@ -258,7 +258,6 @@ public class CreateEventController implements Initializable {
         addParticipant(participantComboBox.getValue().getText());
     }
     private void addParticipant(String username) {
-        participants.add(allUsers.get(username));
         participantComboBox.setValue(null);
         removeUserFromObservable(username);
         Platform.runLater(() -> {

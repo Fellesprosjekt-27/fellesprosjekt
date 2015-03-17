@@ -190,7 +190,11 @@ public class EventController {
             statement.setString(3, event.getStartTime().toString());
             statement.setString(4, event.getEndTime().toString());
             statement.setString(5, connection.getUser().getUsername());
-            statement.setString(6, event.getRoom().getRoomName());
+            if (event.getRoom() == null) {
+                statement.setString(6, null);
+            } else {
+                statement.setString(6, event.getRoom().getRoomName());
+            }
 
             if (event.getRoom() == null) {
                 statement.setString(6, null);

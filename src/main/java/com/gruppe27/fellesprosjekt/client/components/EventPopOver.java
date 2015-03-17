@@ -62,8 +62,14 @@ public class EventPopOver {
         });
 
 
-        hBox.getChildren().addAll(status, button, editEventButton);
+        hBox.getChildren().addAll(status, button);
+
+
+
         box.getChildren().addAll(text, hBox);
+        if(event.getCreator().getUsername().equals(controller.getConnectedUser().getUsername())){
+            box.getChildren().add(editEventButton);
+        }
         if (e.getConflictingEvents().size() != 0) {
             String conflicts = "Overlappende avtaler: ";
             for (Event conflictingEvent : e.getConflictingEvents()) {

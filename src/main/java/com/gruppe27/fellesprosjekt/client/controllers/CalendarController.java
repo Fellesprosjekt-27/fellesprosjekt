@@ -9,6 +9,7 @@ import com.gruppe27.fellesprosjekt.client.components.MonthCalendarComponent;
 import com.gruppe27.fellesprosjekt.client.components.NotificationList;
 import com.gruppe27.fellesprosjekt.client.events.EventBoxClicked;
 import com.gruppe27.fellesprosjekt.common.Event;
+import com.gruppe27.fellesprosjekt.common.User;
 import com.gruppe27.fellesprosjekt.common.messages.EventMessage;
 import com.gruppe27.fellesprosjekt.common.messages.ParticipantStatusMessage;
 import javafx.collections.ObservableList;
@@ -74,6 +75,9 @@ public class CalendarController implements Initializable {
             dismissPopOver();
         }
         application.createNewEvent();
+    }
+    public User getConnectedUser(){
+        return application.getUser();
     }
 
     public void getEventsForPeriod(LocalDate from, LocalDate to, ObservableList<Event> observableEvents) {
