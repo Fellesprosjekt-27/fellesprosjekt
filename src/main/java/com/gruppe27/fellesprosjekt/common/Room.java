@@ -9,10 +9,7 @@ public class Room {
 
     @Override
     public String toString() {
-        return "Room{" +
-                "roomName='" + roomName + '\'' +
-                ", capacity=" + capacity +
-                '}';
+        return "" + roomName + ", kapasitet: " + capacity;
     }
 
     public int getCapacity() {
