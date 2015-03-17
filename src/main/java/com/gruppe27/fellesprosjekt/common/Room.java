@@ -7,12 +7,16 @@ public class Room {
 
     private int capacity;
 
+    public Room() {
+
+    }
+    public Room(String roomName) {
+        this.roomName = roomName;
+    }
+
     @Override
     public String toString() {
-        return "Room{" +
-                "roomName='" + roomName + '\'' +
-                ", capacity=" + capacity +
-                '}';
+        return "" + roomName + ", kapasitet: " + capacity;
     }
 
     public int getCapacity() {
