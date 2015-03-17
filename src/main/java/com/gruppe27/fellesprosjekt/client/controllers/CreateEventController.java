@@ -88,7 +88,6 @@ public class CreateEventController implements Initializable {
 
     private ValidationSupport vd = new ValidationSupport();
     private Event currentEvent;
-    private boolean messageReceived;
 
     public CreateEventController() {
         participants = new LinkedHashSet<>();
@@ -151,7 +150,6 @@ public class CreateEventController implements Initializable {
                     switch (message.getCommand()) {
                         case RECEIVE_ROOMS:
                             updateChoiceBox(message.getRooms());
-                            setMessageReceived(true);
                             break;
                     }
                     client.removeListener(this);
@@ -160,7 +158,6 @@ public class CreateEventController implements Initializable {
         };
 
         client.addListener(roomListener);
-        setMessageReceived(false);
         client.sendMessage(message);
 
     }
@@ -260,7 +257,9 @@ public class CreateEventController implements Initializable {
             for(User user : currentEvent.getUserParticipants()) {
                 addParticipant(user.getUsername());
             }
+            currentEvent.getUserParticipants().clear();
         }
+
     }
 
     @FXML
@@ -456,9 +455,5 @@ public class CreateEventController implements Initializable {
     }
     public Event getCurrentEvent() {
         return this.currentEvent;
-    }
-
-    public void setMessageReceived(boolean messageReceived) {
-        this.messageReceived = messageReceived;
     }
 }
