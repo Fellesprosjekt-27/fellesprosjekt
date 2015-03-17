@@ -227,6 +227,7 @@ public class EventController {
                 number_of_participants += participantResult;
 
                 NotificationController.getInstance().newEventNotification(event, participant);
+                //TODO update notification, not new event notification.
             }
 
             System.out.println(number_of_participants + " participants added to event.");

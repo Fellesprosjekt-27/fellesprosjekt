@@ -17,7 +17,7 @@ import java.util.HashSet;
 public class RequestController {
     private static final String FIND_TIME_OVERLAP = " WHERE Event.date = ? AND (" +
             " (? < Event.end AND Event.end <= ?) OR " +
-            " (? <= Event.start AND Event.start < ?) OR" +
+            " (? <= Event.start AND Event.start < ?) OR " +
             " (Event.start <= ? AND ? <= Event.end))";
     private static RequestController instance = null;
 
@@ -44,11 +44,15 @@ public class RequestController {
     }
 
     private void sendAllParticipantUsers(CalendarConnection connection, RequestMessage message) {
-        String busyQuery = " FROM User JOIN UserEvent" +
-                " ON User.username = UserEvent.username JOIN Event ON Event.id = UserEvent.event_id" + FIND_TIME_OVERLAP;
+        String busyQuery = " FROM User " +
+                "JOIN UserEvent ON User.username = UserEvent.username " +
+                "JOIN Event ON Event.id = UserEvent.event_id " +
+                FIND_TIME_OVERLAP;
         try {
 
-            PreparedStatement busyUsersStatement = DatabaseConnector.getConnection().prepareStatement("SELECT User.username, User.name" + busyQuery);
+            PreparedStatement busyUsersStatement = DatabaseConnector.getConnection().prepareStatement("SELECT User.username, User.name " +
+                    "FROM User WHERE User.username IN (SELECT User.username " + busyQuery + ")"
+            );
 
             busyUsersStatement.setString(1, message.getDate().toString());
             busyUsersStatement.setString(2, message.getStartTime().toString());
@@ -59,7 +63,7 @@ public class RequestController {
             busyUsersStatement.setString(7, message.getEndTime().toString());
 
             PreparedStatement freeUsersStatement = DatabaseConnector.getConnection().prepareStatement(
-                    "SELECT User.username, User.name FROM User WHERE User.username NOT IN (SELECT User.username" + busyQuery + ")"
+                    "SELECT User.username, User.name FROM User WHERE User.username NOT IN (SELECT User.username " + busyQuery + ")"
             );
 
             freeUsersStatement.setString(1, message.getDate().toString());

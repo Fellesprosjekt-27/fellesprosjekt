@@ -184,10 +184,7 @@ public class CreateEventController implements Initializable {
 
     @FXML
     private void handleComboBoxClicked() {
-        if (allUsers == null) {
-            getAllUsers();
-        }
-        //TODO Validering
+        getAllUsers();
 
     }
 
