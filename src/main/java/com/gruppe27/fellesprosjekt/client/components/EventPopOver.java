@@ -56,7 +56,7 @@ public class EventPopOver {
 
             controller.handleChangeParticipationStatus(event);
         });
-        Button editEventButton = new Button("Rediger Avtale");
+        Button editEventButton = new Button("Vis Info/Endre Avtale");
         editEventButton.setOnAction((ActionEvent editEventEvent) -> {
             controller.editEvent(event);
         });

@@ -284,11 +284,11 @@ public class CreateEventController implements Initializable {
     
     @FXML
     private void handleRemoveParticipant(){
-        String username = participantsListView.getSelectionModel().getSelectedItem().split(":")[0];
-        System.out.println("trying to remove " + username);
+        String removeString = participantsListView.getSelectionModel().getSelectedItem();
+        String username = removeString.split(":")[0];
         participantsListView.getSelectionModel().select(null);
-        participantsListView.getItems().remove(username);
-        
+        participantsListView.getItems().remove(removeString);
+
         SortableText text = new SortableText(username);
         System.out.println("allusers:" + allUsers);
         if(allUsers.get(username).isBusy()){
