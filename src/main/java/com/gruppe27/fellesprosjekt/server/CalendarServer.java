@@ -16,7 +16,7 @@ public class CalendarServer {
 
     public static Server getServer() {
         if (server == null) {
-            server = new Server() {
+            server = new Server(128000, 16000) {
                 protected Connection newConnection() {
                     return new CalendarConnection();
                 }

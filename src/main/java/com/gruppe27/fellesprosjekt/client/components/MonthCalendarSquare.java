@@ -1,7 +1,7 @@
 package com.gruppe27.fellesprosjekt.client.components;
 
 import com.gruppe27.fellesprosjekt.common.Event;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -11,7 +11,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class MonthCalendarSquare extends Pane {
+public class MonthCalendarSquare extends AnchorPane {
     private final static Font labelFont = new Font("Helvetica", 12);
     private ArrayList<Event> events;
     private ArrayList<Event> conflictingEvents;
@@ -30,15 +30,15 @@ public class MonthCalendarSquare extends Pane {
             dayLabel.setFill(Color.valueOf("#fa403f"));
         }
 
-        dayLabel.setLayoutX(125);
-        dayLabel.setLayoutY(15);
+        AnchorPane.setRightAnchor(dayLabel, 10.0);
+        AnchorPane.setTopAnchor(dayLabel, 15.0);
 
         this.events = new ArrayList<>();
         squares = new ArrayList<>();
 
         eventBox = new VBox();
-        eventBox.setLayoutX(5);
-        eventBox.setLayoutY(30);
+        AnchorPane.setLeftAnchor(eventBox, 5.0);
+        AnchorPane.setTopAnchor(eventBox, 30.0);
         eventBox.setSpacing(5);
 
         this.getChildren().addAll(dayLabel, eventBox);

@@ -4,13 +4,17 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.gruppe27.fellesprosjekt.client.CalendarApplication;
 import com.gruppe27.fellesprosjekt.client.CalendarClient;
+import com.gruppe27.fellesprosjekt.client.components.ChooseCalendarComboBox;
 import com.gruppe27.fellesprosjekt.client.components.EventPopOver;
 import com.gruppe27.fellesprosjekt.client.components.MonthCalendarComponent;
 import com.gruppe27.fellesprosjekt.client.components.NotificationList;
 import com.gruppe27.fellesprosjekt.client.events.EventBoxClicked;
 import com.gruppe27.fellesprosjekt.common.Event;
+import com.gruppe27.fellesprosjekt.common.User;
 import com.gruppe27.fellesprosjekt.common.messages.EventMessage;
 import com.gruppe27.fellesprosjekt.common.messages.ParticipantStatusMessage;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -26,7 +30,11 @@ public class CalendarController implements Initializable {
     private CalendarApplication application;
     private boolean popOverFlag;
     private EventPopOver popOver;
-    
+    private ObjectProperty<User> currentUser;
+
+    @FXML
+    private ChooseCalendarComboBox chooseCalendarComboBox;
+
     @FXML
     private MonthCalendarComponent calendar;
 
@@ -45,6 +53,13 @@ public class CalendarController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.calendar.setController(this);
+        this.chooseCalendarComboBox.setController(this);
+
+        currentUser = new SimpleObjectProperty<>();
+        currentUser.addListener((observable, oldValue, newValue) ->
+            this.calendar.findEvents()
+        );
+
         this.calendar.findEvents();
         popOverFlag = false;
         root.addEventFilter(MouseEvent.MOUSE_RELEASED, event -> {
@@ -77,7 +92,7 @@ public class CalendarController implements Initializable {
     }
 
     public void getEventsForPeriod(LocalDate from, LocalDate to, ObservableList<Event> observableEvents) {
-        EventMessage eventMessage = new EventMessage(EventMessage.Command.SEND_EVENTS, from, to);
+        EventMessage eventMessage = new EventMessage(currentUser.getValue(), EventMessage.Command.SEND_EVENTS, from, to);
         CalendarClient client = CalendarClient.getInstance();
 
         Listener listener = new Listener() {
@@ -111,5 +126,18 @@ public class CalendarController implements Initializable {
 
     public AnchorPane getRoot() {
         return root;
+    }
+
+    public User getCurrentUser() {
+        return currentUser.getValue();
+    }
+
+    public void setCurrentUser(User user) {
+        this.currentUser.setValue(user);
+    }
+
+    public void resetCurrentUser() {
+        setCurrentUser(null);
+        this.chooseCalendarComboBox.resetUser();
     }
 }

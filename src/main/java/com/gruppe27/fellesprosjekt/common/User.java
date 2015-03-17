@@ -31,7 +31,6 @@ public class User {
                 ", username='" + username + '\'' +
                 ", name='" + name + '\'' +
                 '}';
-
     }
 
     /**

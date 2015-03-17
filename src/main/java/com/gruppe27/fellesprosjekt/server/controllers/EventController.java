@@ -43,12 +43,12 @@ public class EventController {
                 createEvent(connection, eventMessage.getEvent());
                 break;
             case SEND_EVENTS:
-                sendEvents(connection, eventMessage.getFrom(), eventMessage.getTo());
+                sendEvents(connection, eventMessage.getFrom(), eventMessage.getTo(), eventMessage.getUser());
                 break;
         }
     }
 
-    private void sendEvents(CalendarConnection connection, LocalDate from, LocalDate to) {
+    private void sendEvents(CalendarConnection connection, LocalDate from, LocalDate to, User user) {
         try {
             String query = EVENT_QUERY + "WHERE (Event.date >= ? AND Event.date <= ?) AND " +
                     "? IN (SELECT username FROM UserEvent WHERE event_id=Event.id) " +
@@ -57,7 +57,12 @@ public class EventController {
             PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement(query);
             statement.setString(1, from.toString());
             statement.setString(2, to.toString());
-            statement.setString(3, connection.getUser().getUsername());
+
+            if (user == null) {
+                statement.setString(3, connection.getUser().getUsername());
+            } else {
+                statement.setString(3, user.getUsername());
+            }
 
             ResultSet resultSet = statement.executeQuery();
             HashSet<Event> events = parseEventResult(resultSet, connection.getUser().getUsername());

@@ -336,8 +336,6 @@ public class CreateEventController implements Initializable {
         participantComboBox.setDisable(!isTimeDateSet());
 
         addParticipantButton.setDisable(!canAddParticipant());
-
-
     }
 
     private void addListeners() {
