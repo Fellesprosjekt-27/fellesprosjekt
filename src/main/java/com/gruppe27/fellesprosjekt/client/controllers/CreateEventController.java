@@ -330,7 +330,11 @@ public class CreateEventController implements Initializable {
         HashSet<User> participants = getListViewParticipant();
         participants.add(event.getCreator());
         event.setAllParticipants(participants);
-        event.setCapacityNeed(Integer.parseInt(capacityField.getText()));
+        if(capacityField.getText() != "") {
+            event.setCapacityNeed(Integer.parseInt(capacityField.getText()));
+        } else {
+            event.setCapacityNeed(0);
+        }
         event.setRoom(availableRooms.get(roomChoiceBox.getValue()));
 
         EventMessage message = new EventMessage(EventMessage.Command.CREATE_EVENT, event);
@@ -462,9 +466,5 @@ public class CreateEventController implements Initializable {
 
     public void setMessageReceived(boolean messageReceived) {
         this.messageReceived = messageReceived;
-    }
-
-    public boolean isMessageReceived() {
-        return messageReceived;
     }
 }
