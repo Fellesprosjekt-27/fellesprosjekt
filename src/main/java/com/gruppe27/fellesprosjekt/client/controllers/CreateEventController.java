@@ -79,8 +79,6 @@ public class CreateEventController implements Initializable {
 
     private ObservableList<String> availableRoomsObservable;
 
-    private HashSet<User> participants;
-
     private ValidationSupport vd = new ValidationSupport();
 
 
@@ -89,7 +87,6 @@ public class CreateEventController implements Initializable {
     }
 
     public CreateEventController() {
-        participants = new LinkedHashSet<>();
         availableRooms = new HashMap<>();
     }
 
@@ -251,7 +248,6 @@ public class CreateEventController implements Initializable {
 
         String username = participantComboBox.getValue().getText();
         participantsListView.getItems().add(username);
-        participants.add(allUsers.get(username));
 
         availableUsersObservable.remove(participantComboBox.getValue());
         participantComboBox.setValue(null);
