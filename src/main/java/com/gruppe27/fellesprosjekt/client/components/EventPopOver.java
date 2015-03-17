@@ -33,18 +33,8 @@ public class EventPopOver {
         HBox hBox = new HBox();
 
         ChoiceBox<String> status = new ChoiceBox<String>(participationStatusChoice);
-        String sValue = "Kanskje";
-        switch (event.getStatus()) {
-            case ATTENDING:
-                sValue = "Deltar";
-                break;
-            case MAYBE:
-                sValue = "Kanskje";
-                break;
-            case NOT_ATTENDING:
-                sValue = "Deltar ikke";
-                break;
-        }
+        String sValue = event.statusToString();
+
         String str = String.format(formatStr, event.getName(), event.getDate(), event.getStartTime(),
                 event.getEndTime(), event.getRoom().getRoomName());
         Text text = new Text(str);
@@ -64,7 +54,7 @@ public class EventPopOver {
                     break;
             }
 
-            controller.handleChangeParticipationStatus(event.getStatus(), event.getId());
+            controller.handleChangeParticipationStatus(event);
         });
 
         hBox.getChildren().addAll(status, button);

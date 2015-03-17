@@ -2,7 +2,6 @@ package com.gruppe27.fellesprosjekt.server.controllers;
 
 import com.gruppe27.fellesprosjekt.common.User;
 import com.gruppe27.fellesprosjekt.common.messages.ErrorMessage;
-import com.gruppe27.fellesprosjekt.common.messages.GeneralMessage;
 import com.gruppe27.fellesprosjekt.common.messages.ParticipantStatusMessage;
 import com.gruppe27.fellesprosjekt.server.CalendarConnection;
 import com.gruppe27.fellesprosjekt.server.DatabaseConnector;
@@ -38,22 +37,15 @@ public class ParticipantStatusController {
         User user = connection.getUser();
 
         try {
-
             PreparedStatement statement = DatabaseConnector.getConnection().prepareStatement(
                     "UPDATE UserEvent SET status = ? WHERE username = ? AND event_id = ?"
             );
-            statement.setString(1, participantStatusMessage.getStatus().toString());
+            statement.setString(1, participantStatusMessage.getEvent().getStatus().toString());
             statement.setString(2, user.getUsername());
-            statement.setInt(3, participantStatusMessage.getEventId());
+            statement.setInt(3, participantStatusMessage.getEvent().getId());
+            statement.executeUpdate();
 
-            int result = statement.executeUpdate();
-
-
-            GeneralMessage createdMessage = new GeneralMessage(GeneralMessage.Command.SUCCESSFUL_CREATE,
-                    user.getName() + " har endret status på avtale nummer " + participantStatusMessage.getEventId());
-            connection.sendTCP(createdMessage);
-
-
+            NotificationController.getInstance().statusNotification(participantStatusMessage.getEvent(), user);
         } catch (SQLException e) {
             e.printStackTrace();
             ErrorMessage error = new ErrorMessage();

@@ -57,7 +57,7 @@ public class CreateEventController implements Initializable {
     Button addTeamButton;
 
     @FXML
-    Button fjernDeltakere;
+    Button removeParticipantButton;
 
     @FXML
     ChoiceBox<String> roomChoiceBox;
@@ -218,6 +218,7 @@ public class CreateEventController implements Initializable {
                     ParticipantUserMessage complete = (ParticipantUserMessage) object;
                     switch (complete.getCommand()) {
                         case RECEIVE_ALL:
+                            //TODO The HashSet returned contains a duplicate of user 'a', something wrong with the request.
                             setAllUsers(complete.getParticipantUsers());
                             break;
                         case SEND_ALL:
@@ -260,6 +261,8 @@ public class CreateEventController implements Initializable {
         this.allUsers = new HashMap<>();
         availableUsersObservable = FXCollections.observableArrayList();
         for (ParticipantUser participantUser : allUsers) {
+            if(participantUser.getUsername().equals(application.getUser().getUsername()))
+                continue;
 
             this.allUsers.put(participantUser.getUsername(), participantUser);
             SortableText text = new SortableText(participantUser.getUsername());
@@ -304,9 +307,11 @@ public class CreateEventController implements Initializable {
 
         availableUsersObservable.remove(participantComboBox.getValue());
         participantComboBox.setValue(null);
+//        Don't remember why this method is here.
+//        participantComboBox.getItems().clear();
         participantComboBox.init(availableUsersObservable);
     }
-
+    
     @FXML
     private void handleAddTeam() {
         Integer number = Integer.parseInt((String) teamComboBox.getValue());
@@ -322,12 +327,17 @@ public class CreateEventController implements Initializable {
     @FXML
     private void handleRemoveParticipant() {
         String username = participantsListView.getSelectionModel().getSelectedItem();
-
-        participants.remove(allUsers.get(username));
         participantsListView.getSelectionModel().select(null);
         participantsListView.getItems().remove(username);
-
-        availableUsersObservable.addAll(new SortableText(username));
+        
+        SortableText text = new SortableText(username);
+        if(allUsers.get(username).isBusy()){
+            text.setFill(Color.RED);
+        }else {
+            text.setFill(Color.GREEN);
+        }
+        availableUsersObservable.add(text);
+        Collections.sort(availableUsersObservable);
         participantComboBox.init(availableUsersObservable);
     }
 
@@ -345,18 +355,29 @@ public class CreateEventController implements Initializable {
         event.setCreator(application.getUser());
         event.setStartTime(startTime);
         event.setEndTime(endTime);
+        HashSet<User> participants = getListViewParticipant();
+        participants.add(event.getCreator());
         event.setAllParticipants(participants);
         event.setRoom(availableRooms.get(roomChoiceBox.getValue()));
 
         EventMessage message = new EventMessage(EventMessage.Command.CREATE_EVENT, event);
-        //TODO: add functions backend to invite all users from the eventmessage
-        //TODO: make an invite message
         CalendarClient.getInstance().sendMessage(message);
+
+        //application.cancelCreateNewEvent();
+        application.gotoCalendar();
+    }
+    
+    private HashSet<User> getListViewParticipant(){
+        HashSet<User> participants = new HashSet<>();
+         for (String username : participantsListView.getItems()) {
+            participants.add(allUsers.get(username));
+        }
+        return participants;
     }
 
     @FXML
     private void handleCancelAction() {
-        application.cancelCreateNewEvent();
+        application.gotoCalendar();
     }
 
     private boolean isTimeDateSet(){
@@ -421,13 +442,16 @@ public class CreateEventController implements Initializable {
     private void registerValidators() {
         vd.registerValidator(emne, Validator.createEmptyValidator("Tittel mangler", Severity.WARNING));
         vd.registerValidator(datePicker, Validator.createEmptyValidator("Dato mangler", Severity.WARNING));
-        vd.registerValidator(capacityField, Validator.createRegexValidator("Kapasiteten må være et tall lavere enn 20", "^$|[0-9]+", Severity.ERROR));
+        vd.registerValidator(capacityField, Validator.createRegexValidator("Kapasiteten må være et tall", "[0-9]*",
+                Severity.ERROR));
 
         vd.registerValidator(toTimeField,
                 Validator.combine(
                         Validator.createEmptyValidator("Sluttidspunkt mangler", Severity.WARNING),
-                        Validator.createRegexValidator("Tid må være på formen hh:mm", "^$|([0-1]?[0-9]|2[0-3]):[0-5][0-9]", Severity.ERROR),
-                        Validator.createPredicateValidator(o -> isTimeValid(), "Sluttidspunkt må være etter starttidspunkt", Severity.ERROR)));
+                        Validator.createRegexValidator("Tid må være på formen hh:mm",
+                                "^$|([0-1]?[0-9]|2[0-3]):[0-5][0-9]", Severity.ERROR),
+                        Validator.createPredicateValidator(o -> isTimeValid(),
+                                "Sluttidspunkt må være etter starttidspunkt", Severity.ERROR)));
 
 
         vd.registerValidator(fromTimeField,

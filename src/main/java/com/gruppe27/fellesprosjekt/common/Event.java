@@ -133,4 +133,17 @@ public class Event {
         NOT_ATTENDING,
         MAYBE
     }
+
+    public String statusToString() {
+        switch (this.status) {
+            case ATTENDING:
+                return "Deltar";
+            case MAYBE:
+                return "Kanskje";
+            case NOT_ATTENDING:
+                return "Deltar ikke";
+            default:
+                return this.status.toString();
+        }
+    }
 }

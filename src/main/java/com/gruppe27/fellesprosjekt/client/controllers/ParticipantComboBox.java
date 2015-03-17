@@ -43,7 +43,6 @@ public class ParticipantComboBox extends ComboBox<SortableText> {
     }
 
     public void init(ObservableList<SortableText> usernameTexts) {
-        this.getItems().clear();
         this.setItems(usernameTexts);
         stringTextMap = new HashMap<>();
         allUserNameStrings = FXCollections.observableArrayList();
