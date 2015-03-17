@@ -18,7 +18,7 @@ import java.util.HashSet;
 
 public class EventController {
     public static final String EVENT_QUERY =
-            "SELECT Event.id, Event.name, Event.date, Event.start, Event.end, Event.capacity_need " +
+            "SELECT Event.id, Event.name, Event.date, Event.start, Event.end, Event.capacity_need, " +
                     "Room.name, Room.capacity, " +
                     "Creator.username, Creator.name, " +
                     "Participant.username, Participant.name, UserEvent.status " +
@@ -108,9 +108,9 @@ public class EventController {
                 if (event == null) {
                     return events;
                 }
-                User participant = new User(result.getString(9), result.getString(10));
+                User participant = new User(result.getString("Participant.username"), result.getString("Participant.name"));
                 if (participant.getUsername().equals(username)) {
-                    event.setStatus(Event.Status.valueOf(result.getString(11)));
+                    event.setStatus(Event.Status.valueOf(result.getString("UserEvent.status")));
                 }
                 event.addParticipant(participant);
                 System.out.println("Add user");
