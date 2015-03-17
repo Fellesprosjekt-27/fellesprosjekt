@@ -34,3 +34,11 @@ MonthCalendarSquare.first-in-row {
     -fx-font-size: 20;
     -fx-fill: RED;
 }
+
+.h1 {
+    -fx-font-size: 26;
+}
+
+.h2 {
+    -fx-font-size: 20;
+}
