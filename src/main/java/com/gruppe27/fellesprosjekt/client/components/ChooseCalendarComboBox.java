@@ -12,7 +12,6 @@ import javafx.scene.control.ComboBox;
 import javafx.util.StringConverter;
 
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 public class ChooseCalendarComboBox extends ComboBox<User> {
     private ArrayList<User> allUsers;
@@ -46,20 +45,8 @@ public class ChooseCalendarComboBox extends ComboBox<User> {
             this.controller.setCurrentUser(newValue);
         });
 
-        this.getEditor().textProperty().addListener((observable, oldValue, newValue) ->
-            filterUsers(newValue)
-        );
-
         this.setItems(users);
         findUsers();
-    }
-
-    private void filterUsers(String name) {
-        users.setAll(allUsers
-                .stream()
-                .filter(user -> user.getName().toLowerCase().startsWith(name.toLowerCase()))
-                .collect(Collectors.toList()));
-        this.show();
     }
 
     public void setController(CalendarController controller) {
