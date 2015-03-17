@@ -158,7 +158,7 @@ public class CreateEventController implements Initializable {
         }
 
         Platform.runLater(() -> {
-        roomChoiceBox.setItems(availableRoomsObservable);
+            roomChoiceBox.setItems(availableRoomsObservable);
             roomChoiceBox.show();
         });
     }
@@ -258,19 +258,26 @@ public class CreateEventController implements Initializable {
     
     @FXML
     private void handleRemoveParticipant(){
-        String username = participantsListView.getSelectionModel().getSelectedItem();
-        participantsListView.getSelectionModel().select(null);
-        participantsListView.getItems().remove(username);
-        
-        SortableText text = new SortableText(username);
-        if(allUsers.get(username).isBusy()){
-            text.setFill(Color.RED);
-        }else {
-            text.setFill(Color.GREEN);
+        if(participantsListView.getSelectionModel().getSelectedItem() == null){
+            return;
         }
-        availableUsersObservable.add(text);
-        Collections.sort(availableUsersObservable);
-        participantComboBox.init(availableUsersObservable);
+        else {
+
+            String username = participantsListView.getSelectionModel().getSelectedItem();
+            participantsListView.getSelectionModel().select(null);
+            participantsListView.getItems().remove(username);
+
+
+            SortableText text = new SortableText(username);
+            if (allUsers.get(username).isBusy()) {
+                text.setFill(Color.RED);
+            } else {
+                text.setFill(Color.GREEN);
+            }
+            availableUsersObservable.add(text);
+            Collections.sort(availableUsersObservable);
+            participantComboBox.init(availableUsersObservable);
+        }
     }
 
 
