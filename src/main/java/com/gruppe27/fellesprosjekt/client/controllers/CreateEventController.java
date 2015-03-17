@@ -174,10 +174,11 @@ public class CreateEventController implements Initializable {
             this.availableRooms.put(r.toString(), r);
             availableRoomsObservable.add(r.toString());
         }
-
+        if(currentEvent.getRoom() != null) {
+            availableRoomsObservable.add(currentEvent.getRoom().toString() + " (opprinnelig rom.)");
+        }
         Platform.runLater(() -> {
-        roomChoiceBox.setItems(availableRoomsObservable);
-            roomChoiceBox.show();
+            roomChoiceBox.setItems(availableRoomsObservable);
         });
     }
 
@@ -186,8 +187,8 @@ public class CreateEventController implements Initializable {
         if (allUsers == null) {
             getAllUsers();
         }
-        System.out.println(availableUsersObservable);
         //TODO Validering
+
     }
 
     LocalTime toLocalTime(String time) {
@@ -255,11 +256,8 @@ public class CreateEventController implements Initializable {
 
         this.availableUsersObservable.setAll(availableUsers);
         Collections.sort(availableUsersObservable);
-        System.out.println("sorted " + availableUsersObservable);
         Platform.runLater(() -> {
-            System.out.println("to init: " + availableUsersObservable);
             participantComboBox.init(availableUsersObservable);
-            System.out.println("Init ran.");
         });
         if(currentEvent.getUserParticipants() != null) {
             for(User user : currentEvent.getUserParticipants()) {
@@ -446,7 +444,11 @@ public class CreateEventController implements Initializable {
         datePicker.setValue(event.getDate());
         fromTimeField.setText(event.getStartTime().toString());
         toTimeField.setText(event.getEndTime().toString());
-//        roomChoiceBox.setValue(event.getRoom().toString());
+        capacityField.setText(Integer.toString(event.getCapacityNeed()));
+
+        System.out.println("event.getRoom: " + event.getRoom().toString());
+        handleChoiceboxClicked();
+        roomChoiceBox.getItems().add(event.getRoom().toString());
 
         getAllUsers();
     }

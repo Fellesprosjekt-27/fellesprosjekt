@@ -18,12 +18,14 @@ import java.util.HashSet;
 
 public class EventController {
     public static final String EVENT_QUERY =
-            "SELECT Event.id, Event.name, Event.date, Event.start, Event.end, Event.room," +
-                    " Creator.username, Creator.name, " +
-                    "Participant.username, Participant.name, UserEvent.status " +
+            "SELECT Event.id, Event.name, Event.date, Event.start, Event.end, " +
+                    "Room.name, Room.capacity, " +
+                    "Creator.username, Creator.name, " +
+                    "Participant.username, Participant.name, UserEvent.status, Event.capacity_need " +
                     "FROM Event JOIN User AS Creator ON Event.creator = Creator.username " +
                     "JOIN UserEvent ON Event.id = UserEvent.event_id " +
-                    "JOIN User AS Participant ON UserEvent.username = Participant.username ";
+                    "JOIN User AS Participant ON UserEvent.username = Participant.username " +
+                    "JOIN Room ON Room.name = Event.room ";
     private static EventController instance = null;
 
     protected EventController() {
@@ -78,20 +80,21 @@ public class EventController {
         while (result.next()) {
             if (result.getInt(1) != currentEventId) {
                 event = new Event();
-                currentEventId = result.getInt(1);
-                event.setName(result.getString(2));
-                event.setDate(result.getDate(3).toLocalDate());
-                event.setStartTime(result.getTime(4).toLocalTime());
-                event.setEndTime(result.getTime(5).toLocalTime());
+                currentEventId = result.getInt("Event.id");
+                event.setName(result.getString("Event.name"));
+                event.setDate(result.getDate("Event.date").toLocalDate());
+                event.setStartTime(result.getTime("Event.start").toLocalTime());
+                event.setEndTime(result.getTime("Event.end").toLocalTime());
 
-                Room room =  new Room(result.getString(6));
+                Room room =  new Room(result.getString("Room.name"),result.getInt("Room.capacity"));
                 event.setRoom(room);
 
-                User creator = new User(result.getString(7), result.getString(8));
-                User participant = new User(result.getString(9), result.getString(10));
+                User creator = new User(result.getString("Creator.username"), result.getString("Creator.name"));
+                User participant = new User(result.getString("Participant.username"), result.getString("Participant.name"));
                 if (participant.getUsername().equals(username)) {
-                    event.setStatus(Event.Status.valueOf(result.getString(11)));
+                    event.setStatus(Event.Status.valueOf(result.getString("UserEvent.status")));
                 }
+                event.setCapacityNeed(result.getInt("Event.capacity_need"));
 
 
 
@@ -131,7 +134,11 @@ public class EventController {
                 statement.setString(3, event.getStartTime().toString());
                 statement.setString(4, event.getEndTime().toString());
                 statement.setString(5, connection.getUser().getUsername());
-                statement.setString(6, event.getRoom().getRoomName());
+                if (event.getRoom() == null) {
+                    statement.setString(6, null);
+                } else {
+                    statement.setString(6, event.getRoom().getRoomName());
+                }
                 statement.setInt(7, event.getCapacityNeed());
                 int result = statement.executeUpdate();
 
