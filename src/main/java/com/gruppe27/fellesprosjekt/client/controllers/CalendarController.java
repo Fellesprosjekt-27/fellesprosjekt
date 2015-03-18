@@ -90,6 +90,9 @@ public class CalendarController implements Initializable {
         }
         application.createNewEvent();
     }
+    public User getConnectedUser(){
+        return application.getUser();
+    }
 
     public void getEventsForPeriod(LocalDate from, LocalDate to, ObservableList<Event> observableEvents) {
         EventMessage eventMessage = new EventMessage(currentUser.getValue(), EventMessage.Command.SEND_EVENTS, from, to);
@@ -139,5 +142,10 @@ public class CalendarController implements Initializable {
     public void resetCurrentUser() {
         setCurrentUser(null);
         this.chooseCalendarComboBox.resetUser();
+    }
+
+    public void editEvent(Event event) {
+        dismissPopOver();
+        application.gotoEditEvent(event);
     }
 }

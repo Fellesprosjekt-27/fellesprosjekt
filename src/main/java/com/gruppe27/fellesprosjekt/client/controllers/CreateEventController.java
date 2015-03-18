@@ -22,6 +22,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import org.controlsfx.validation.Severity;
 import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
@@ -33,6 +34,9 @@ import java.util.*;
 
 
 public class CreateEventController implements Initializable {
+
+    @FXML
+    Text titleText;
 
     @FXML
     TextField emne;
@@ -80,14 +84,18 @@ public class CreateEventController implements Initializable {
     private ObservableList<String> availableRoomsObservable;
 
     private ValidationSupport vd = new ValidationSupport();
+    private Event currentEvent;
 
+    public CreateEventController() {
+        availableUsersObservable = FXCollections.observableArrayList();
+        currentEvent = new Event();
+        availableRooms = new HashMap<>();
+
+        currentEvent.setId(-1);
+    }
 
     public void emptyRoomsArray() {
         this.availableRooms = new HashMap<>();
-    }
-
-    public CreateEventController() {
-        availableRooms = new HashMap<>();
     }
 
     @Override
@@ -117,8 +125,6 @@ public class CreateEventController implements Initializable {
         LocalTime end = toLocalTime(toTimeField.getText());
         int capacity = Integer.parseInt(capacityField.getText());
         this.updateCurrentRooms(date, start, end, capacity);
-        //TODO needs time to update rooms before I can do something.
-
     }
 
     @FXML
@@ -156,23 +162,21 @@ public class CreateEventController implements Initializable {
             this.availableRooms.put(r.toString(), r);
             availableRoomsObservable.add(r.toString());
         }
-
+        if(currentEvent.getRoom() != null) {
+            availableRoomsObservable.add(currentEvent.getRoom().toString() + " (opprinnelig rom.)");
+        }
         Platform.runLater(() -> {
             roomChoiceBox.setItems(availableRoomsObservable);
-            roomChoiceBox.show();
         });
     }
 
     @FXML
     private void handleComboBoxClicked() {
-        System.out.println("combobox clicked");
-        if (allUsers == null) {
-            getAllUsers();
-        }
-        //TODO Validering
+        getAllUsers(-1);
+
     }
 
-    LocalTime toLocalTime(String time) {
+    private LocalTime toLocalTime(String time) {
         boolean isValid = time.matches("([0-1]?[0-9]|2[0-3]):[0-5][0-9]");
         if(isValid){
             // LocalTime.parse requires exactly 2 digit hours.
@@ -185,7 +189,7 @@ public class CreateEventController implements Initializable {
         }
     }
 
-    private void getAllUsers() {
+    private void getAllUsers(int eventId) {
         LocalDate date = datePicker.getValue();
         LocalTime start = toLocalTime(fromTimeField.getText());
         LocalTime end = toLocalTime(toTimeField.getText());
@@ -204,8 +208,7 @@ public class CreateEventController implements Initializable {
                     ParticipantUserMessage complete = (ParticipantUserMessage) object;
                     switch (complete.getCommand()) {
                         case RECEIVE_ALL:
-                            //TODO The HashSet returned contains a duplicate of user 'a', something wrong with the request.
-                            setAllUsers(complete.getParticipantUsers());
+                            setAllUsers(complete.getParticipantUsers(), eventId);
                             break;
                         case SEND_ALL:
                             break;
@@ -213,15 +216,15 @@ public class CreateEventController implements Initializable {
                     client.removeListener(this);
                 }
             }
-
         };
         client.addListener(getUsersListener);
         client.sendMessage(message);
     }
 
-    private void setAllUsers(HashSet<ParticipantUser> allUsers) {
+    private void setAllUsers(HashSet<ParticipantUser> allUsers, int eventId) {
         this.allUsers = new HashMap<>();
         availableUsersObservable = FXCollections.observableArrayList();
+
         for (ParticipantUser participantUser : allUsers) {
             if(participantUser.getUsername().equals(application.getUser().getUsername()))
                 continue;
@@ -237,54 +240,82 @@ public class CreateEventController implements Initializable {
         }
 
         Collections.sort(availableUsersObservable);
+        removeListViewParticipants();
+
+
         Platform.runLater(() -> {
             participantComboBox.init(availableUsersObservable);
         });
+
+        if (eventId > 0) {
+            getInvited(eventId);
+        }
+    }
+
+    private void removeListViewParticipants() {
+        for (String string : participantsListView.getItems()) {
+            removeUserFromObservable(string.split(":")[0]);
+        }
     }
 
 
     @FXML
     private void handleAddParticipant() {
+        addParticipant(participantComboBox.getValue().getText());
+    }
 
-        String username = participantComboBox.getValue().getText();
-        participantsListView.getItems().add(username);
-
-        availableUsersObservable.remove(participantComboBox.getValue());
+    private void addParticipant(String username) {
         participantComboBox.setValue(null);
-//        Don't remember why this method is here.
-//        participantComboBox.getItems().clear();
-        participantComboBox.init(availableUsersObservable);
+        removeUserFromObservable(username);
+        Platform.runLater(() -> {
+            participantComboBox.init(availableUsersObservable);
+            participantsListView.getItems().add(username);
+        });
+    }
+
+    private boolean removeUserFromObservable(String username) {
+        SortableText removeText = null;
+        for(SortableText text: availableUsersObservable) {
+            if(text.getText().equals(username)) {
+                removeText = text;
+                break;
+            }
+        }
+        if(removeText != null) {
+            availableUsersObservable.remove(removeText);
+            return true;
+        } else {
+            return false;
+        }
     }
     
     @FXML
-    private void handleRemoveParticipant(){
-        if(participantsListView.getSelectionModel().getSelectedItem() == null){
+    private void handleRemoveParticipant() {
+        if (participantsListView.getSelectionModel().getSelectedItem() == null) {
             return;
         }
-        else {
 
-            String username = participantsListView.getSelectionModel().getSelectedItem();
-            participantsListView.getSelectionModel().select(null);
-            participantsListView.getItems().remove(username);
+        String removeString = participantsListView.getSelectionModel().getSelectedItem();
+        String username = removeString.split(":")[0];
+        participantsListView.getSelectionModel().select(null);
+        participantsListView.getItems().remove(removeString);
 
-
-            SortableText text = new SortableText(username);
-            if (allUsers.get(username).isBusy()) {
-                text.setFill(Color.RED);
-            } else {
-                text.setFill(Color.GREEN);
-            }
-            availableUsersObservable.add(text);
-            Collections.sort(availableUsersObservable);
-            participantComboBox.init(availableUsersObservable);
+        SortableText text = new SortableText(username);
+        System.out.println("allusers:" + allUsers);
+        if (allUsers.get(username).isBusy()) {
+            text.setFill(Color.RED);
+        } else {
+            text.setFill(Color.GREEN);
         }
+        availableUsersObservable.add(text);
+        Collections.sort(availableUsersObservable);
+        participantComboBox.init(availableUsersObservable);
     }
-
 
     @FXML
     private void handleCreateEventAction() {
 
-        Event event = new Event();
+        Event event = getCurrentEvent();
         event.setName(emne.getText());
 
         event.setDate(datePicker.getValue());
@@ -294,22 +325,26 @@ public class CreateEventController implements Initializable {
         event.setCreator(application.getUser());
         event.setStartTime(startTime);
         event.setEndTime(endTime);
-        HashSet<User> participants = getListViewParticipant();
+        HashSet<User> participants = getListViewParticipants();
         participants.add(event.getCreator());
         event.setAllParticipants(participants);
+        if(capacityField.getText().isEmpty()) {
+            event.setCapacityNeed(Integer.parseInt(capacityField.getText()));
+        } else {
+            event.setCapacityNeed(0);
+        }
         event.setRoom(availableRooms.get(roomChoiceBox.getValue()));
 
         EventMessage message = new EventMessage(EventMessage.Command.CREATE_EVENT, event);
         CalendarClient.getInstance().sendMessage(message);
-
-        //application.cancelCreateNewEvent();
         application.gotoCalendar();
     }
     
-    private HashSet<User> getListViewParticipant(){
+    private HashSet<User> getListViewParticipants(){
         HashSet<User> participants = new HashSet<>();
-         for (String username : participantsListView.getItems()) {
-            participants.add(allUsers.get(username));
+         for (String listItem : participantsListView.getItems()) {
+             String username = listItem.split(":")[0];
+             participants.add(allUsers.get(username));
         }
         return participants;
     }
@@ -375,7 +410,6 @@ public class CreateEventController implements Initializable {
 
     }
 
-
     private void registerValidators() {
         vd.registerValidator(emne, Validator.createEmptyValidator("Tittel mangler", Severity.WARNING));
         vd.registerValidator(datePicker, Validator.createEmptyValidator("Dato mangler", Severity.WARNING));
@@ -399,8 +433,68 @@ public class CreateEventController implements Initializable {
 
         vd.setValidationDecorator(new ValidationDecoration());
     }
+
+    public void editEvent(Event event) {
+        setCurrentEvent(event);
+
+        titleText.setText("ENDRE AVTALE");
+        createEventButton.setText("ENDRE AVTALE");
+        emne.setText(event.getName());
+
+        datePicker.setValue(event.getDate());
+        fromTimeField.setText(event.getStartTime().toString());
+        toTimeField.setText(event.getEndTime().toString());
+        capacityField.setText(Integer.toString(event.getCapacityNeed()));
+
+        handleChoiceboxClicked();
+        roomChoiceBox.getItems().add(event.getRoom().toString());
+        getAllUsers(event.getId());
+    }
+
+    private void getInvited(int id) {
+        RequestMessage message = new RequestMessage(RequestMessage.Command.INVITED_USERS_REQUEST, id);
+
+        CalendarClient client = CalendarClient.getInstance();
+
+        Listener getInvitedListener = new Listener() {
+            public void received(Connection connection, Object object) {
+                if (object instanceof ParticipantUserMessage) {
+                    ParticipantUserMessage complete = (ParticipantUserMessage) object;
+                    switch (complete.getCommand()) {
+                        case RECEIVE_ALL:
+                            setInvited(complete.getParticipantUsers());
+                            break;
+                        case SEND_ALL:
+                            break;
+                    }
+                    client.removeListener(this);
+                }
+            }
+        };
+        client.addListener(getInvitedListener);
+        client.sendMessage(message);
+    }
+
+    private void setInvited(HashSet<ParticipantUser> participantUsers) {
+        for (ParticipantUser participantUser : participantUsers) {
+            addParticipantWithStatus(participantUser);
+        }
+
+    }
+
+    private void addParticipantWithStatus(ParticipantUser participantUser) {
+        participantComboBox.setValue(null);
+        removeUserFromObservable(participantUser.getUsername());
+        Platform.runLater(() -> {
+            participantComboBox.init(availableUsersObservable);
+            participantsListView.getItems().add(participantUser.getUsername() + ": " + participantUser.getParticipantStatus().toString());
+        });
+    }
+
+    public void setCurrentEvent(Event currentEvent) {
+        this.currentEvent = currentEvent;
+    }
+    public Event getCurrentEvent() {
+        return this.currentEvent;
+    }
 }
-
-
-
-

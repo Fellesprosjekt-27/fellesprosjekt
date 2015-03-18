@@ -37,6 +37,7 @@ CREATE TABLE Event (
   end     TIME        NOT NULL,
   creator VARCHAR(32) NOT NULL,
   room    VARCHAR(32),
+  capacity_need INT,
   PRIMARY KEY (id),
   FOREIGN KEY (creator) REFERENCES User (username),
   FOREIGN KEY (room) REFERENCES Room (name)

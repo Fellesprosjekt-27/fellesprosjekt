@@ -17,7 +17,7 @@ import java.util.HashSet;
 public class RequestController {
     private static final String FIND_TIME_OVERLAP = " WHERE Event.date = ? AND (" +
             " (? < Event.end AND Event.end <= ?) OR " +
-            " (? <= Event.start AND Event.start < ?) OR" +
+            " (? <= Event.start AND Event.start < ?) OR " +
             " (Event.start <= ? AND ? <= Event.end))";
     private static RequestController instance = null;
 
@@ -40,15 +40,56 @@ public class RequestController {
             case USER_REQUEST:
                 sendAllParticipantUsers(connection, requestMessage);
                 break;
+            case INVITED_USERS_REQUEST:
+                sendAllInvitedUsers(connection, requestMessage);
+                break;
+        }
+    }
+
+    private void sendAllInvitedUsers(CalendarConnection connection, RequestMessage message) {
+        try{
+            PreparedStatement usersStatus = DatabaseConnector.getConnection().prepareStatement(
+                    "SELECT User.username, User.name, UserEvent.status FROM User JOIN UserEvent "
+                    + "ON User.username = UserEvent.username JOIN Event ON Event.id = UserEvent.event_id "
+                    + "WHERE Event.id = ?"
+                    );
+            
+            usersStatus.setInt(1, message.getEventId());
+            
+            ResultSet usersStatusResult = usersStatus.executeQuery();
+            HashSet<ParticipantUser> invitedUsers = new HashSet<>();
+            
+            while(usersStatusResult.next()){
+                ParticipantUser statusUser = new ParticipantUser(
+                        usersStatusResult.getString(1),
+                        usersStatusResult.getString(2),
+                        false
+                        );
+                statusUser.setParticipantStatus(usersStatusResult.getString(3));
+                invitedUsers.add(statusUser);
+            }
+            
+            System.out.println(invitedUsers.size() + "invited users found.");
+            ParticipantUserMessage createdMessage = new ParticipantUserMessage(ParticipantUserMessage.Command.RECEIVE_ALL, invitedUsers);
+            connection.sendTCP(createdMessage);
+            
+        }catch (SQLException e) {
+            e.printStackTrace();
+            ErrorMessage error = new ErrorMessage();
+            connection.sendTCP(error);
         }
     }
 
     private void sendAllParticipantUsers(CalendarConnection connection, RequestMessage message) {
-        String busyQuery = " FROM User JOIN UserEvent" +
-                " ON User.username = UserEvent.username JOIN Event ON Event.id = UserEvent.event_id" + FIND_TIME_OVERLAP;
+        String busyQuery = " FROM User " +
+                "JOIN UserEvent ON User.username = UserEvent.username " +
+                "JOIN Event ON Event.id = UserEvent.event_id " +
+                FIND_TIME_OVERLAP;
         try {
 
-            PreparedStatement busyUsersStatement = DatabaseConnector.getConnection().prepareStatement("SELECT User.username, User.name" + busyQuery);
+            PreparedStatement busyUsersStatement = DatabaseConnector.getConnection().prepareStatement("SELECT User.username, User.name " +
+                    "FROM User WHERE User.username IN (SELECT User.username " + busyQuery + ")"
+            );
 
             busyUsersStatement.setString(1, message.getDate().toString());
             busyUsersStatement.setString(2, message.getStartTime().toString());
@@ -59,7 +100,7 @@ public class RequestController {
             busyUsersStatement.setString(7, message.getEndTime().toString());
 
             PreparedStatement freeUsersStatement = DatabaseConnector.getConnection().prepareStatement(
-                    "SELECT User.username, User.name FROM User WHERE User.username NOT IN (SELECT User.username" + busyQuery + ")"
+                    "SELECT User.username, User.name FROM User WHERE User.username NOT IN (SELECT User.username " + busyQuery + ")"
             );
 
             freeUsersStatement.setString(1, message.getDate().toString());
@@ -72,7 +113,6 @@ public class RequestController {
 
 
             HashSet<ParticipantUser> participantUsers = new HashSet<>();
-            
             ResultSet busyUsersResult = busyUsersStatement.executeQuery();
             ResultSet freeUsersResult = freeUsersStatement.executeQuery();
 

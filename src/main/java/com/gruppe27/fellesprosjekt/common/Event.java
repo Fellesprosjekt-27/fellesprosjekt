@@ -17,6 +17,7 @@ public class Event {
     HashSet<Group> groupParticipants;
     String name;
     Room room;
+    int capacityNeed;
 
     public Event() {
         this.creator = null;
@@ -25,13 +26,14 @@ public class Event {
         groupParticipants = new HashSet<>();
     }
 
-    public Event(String name, User creator, LocalDate date, LocalTime startTime, LocalTime endTime) {
+    public Event(String name, User creator, LocalDate date, LocalTime startTime, LocalTime endTime, int capacityNeed) {
         this.name = name;
         this.creator = creator;
         this.room = null;
         setDate(date);
         setStartTime(startTime);
         setEndTime(endTime);
+        setCapacityNeed(capacityNeed);
     }
 
     public void addParticipant(User participant) {
@@ -48,6 +50,14 @@ public class Event {
 
     public HashSet<User> getUserParticipants() {
         return new HashSet<>(userParticipants);
+    }
+
+    public int getCapacityNeed() {
+        return capacityNeed;
+    }
+
+    public void setCapacityNeed(int capacityNeed) {
+        this.capacityNeed = capacityNeed;
     }
 
     public LocalDate getDate() {

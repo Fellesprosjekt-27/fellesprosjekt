@@ -10,8 +10,9 @@ public class Room {
     public Room() {
 
     }
-    public Room(String roomName) {
+    public Room(String roomName, int capacity) {
         this.roomName = roomName;
+        this.capacity = capacity;
     }
 
     @Override

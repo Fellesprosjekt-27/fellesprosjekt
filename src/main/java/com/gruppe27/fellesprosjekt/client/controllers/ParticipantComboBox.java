@@ -21,6 +21,7 @@ public class ParticipantComboBox extends ComboBox<SortableText> {
     private String previousValue = "";
 
     public ParticipantComboBox() {
+        this.configAutoFilterListener();
         this.setConverter(new StringConverter<SortableText>() {
             @Override
             public String toString(SortableText object) {
@@ -43,6 +44,8 @@ public class ParticipantComboBox extends ComboBox<SortableText> {
     }
 
     public void init(ObservableList<SortableText> usernameTexts) {
+
+
         this.setItems(usernameTexts);
         stringTextMap = new HashMap<>();
         allUserNameStrings = FXCollections.observableArrayList();
@@ -51,7 +54,6 @@ public class ParticipantComboBox extends ComboBox<SortableText> {
             stringTextMap.put(text.getText(), text);
             allUserNameStrings.add(text.getText());
         }
-        this.configAutoFilterListener();
     }
 
 

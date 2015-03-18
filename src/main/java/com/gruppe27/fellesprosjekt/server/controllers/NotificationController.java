@@ -54,7 +54,8 @@ public class NotificationController {
                     creator,
                     resultSet.getDate("event.date").toLocalDate(),
                     resultSet.getTime("event.start").toLocalTime(),
-                    resultSet.getTime("event.end").toLocalTime()
+                    resultSet.getTime("event.end").toLocalTime(),
+                    0
             );
             Notification notification = new Notification(
                     resultSet.getString("user_username"),

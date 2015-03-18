@@ -5,10 +5,10 @@ import com.gruppe27.fellesprosjekt.client.events.EventBoxClicked;
 import com.gruppe27.fellesprosjekt.common.Event;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -41,7 +41,7 @@ public class EventPopOver {
 
         status.getSelectionModel().select(participationStatusChoice.indexOf(sValue));
         Button button = new Button("Endre");
-        button.setOnMouseClicked((MouseEvent mEvent) -> {
+        button.setOnAction((ActionEvent changeStatusEvent) -> {
             switch (status.getValue()) {
                 case "Deltar":
                     event.setStatus(Event.Status.ATTENDING);
@@ -56,9 +56,20 @@ public class EventPopOver {
 
             controller.handleChangeParticipationStatus(event);
         });
+        Button editEventButton = new Button("Vis Info/Endre Avtale");
+        editEventButton.setOnAction((ActionEvent editEventEvent) -> {
+            controller.editEvent(event);
+        });
+
 
         hBox.getChildren().addAll(status, button);
+
+
+
         box.getChildren().addAll(text, hBox);
+        if(event.getCreator().getUsername().equals(controller.getConnectedUser().getUsername())){
+            box.getChildren().add(editEventButton);
+        }
         if (e.getConflictingEvents().size() != 0) {
             String conflicts = "Overlappende avtaler: ";
             for (Event conflictingEvent : e.getConflictingEvents()) {
