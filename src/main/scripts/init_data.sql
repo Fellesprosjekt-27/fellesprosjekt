@@ -1,11 +1,19 @@
 INSERT INTO User (username, name, password)
-VALUES ('anddor', 'Andreas Dørum', 'passord');
+VALUES ('anddor', 'Andreas Dørum', 'andreaserbest');
 
 INSERT INTO User (username, name, password)
-VALUES ('user1', 'navn navnesen', 'passord1');
+VALUES ('ole', 'ole larssen', 'oleerbest');
 
 INSERT INTO User(username, name, password)
-VALUES ('a','navn','p');
+VALUES ('per','Per Knudsen','pererbest');
+
+INSERT INTO User(username, name, password)
+VALUES ('anders','Anders Dragvoll','anderserbest');
+
+INSERT INTO Team(name) VALUES('Superteam');
+INSERT INTO Team(name) VALUES('Badteam');
+INSERT INTO Team(name) VALUES('Corporate');
+INSERT INTO Team(name) VALUES('NTNU');
 
 INSERT INTO Room(name, capacity) VALUES ('rom 203','10');
 INSERT INTO Room(name, capacity) VALUES ('rom 204','15');
