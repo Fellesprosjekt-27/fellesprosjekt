@@ -585,12 +585,14 @@ public class CreateEventController implements Initializable {
     }
 
     private void addParticipantWithStatus(ParticipantUser participantUser) {
-        participantComboBox.setValue(null);
-        removeUserFromObservable(participantUser.getUsername());
-        Platform.runLater(() -> {
-            participantComboBox.init(availableUsersObservable);
-            participantsListView.getItems().add(participantUser.getUsername() + ": " + participantUser.getParticipantStatus().toString());
-        });
+        if(! participantUser.getUsername().equals(application.getUser().getUsername())){
+            participantComboBox.setValue(null);
+            removeUserFromObservable(participantUser.getUsername());
+            Platform.runLater(() -> {
+                participantComboBox.init(availableUsersObservable);
+                participantsListView.getItems().add(participantUser.getUsername() + ": " + participantUser.getParticipantStatus().toString());
+            });
+        }
     }
 
     public void setCurrentEvent(Event currentEvent) {
